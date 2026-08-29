@@ -1,0 +1,548 @@
+{
+  "packer_ppg": {
+    "claim": "Productivity, protection, and growth is Amex's own GenAI framing, stated by EVP and CTO Hilary Packer.",
+    "value": "productivity, protection, and growth",
+    "source_url": "https://www.americanexpress.com/us/business/american-express-ventures/articles/gen-ai-dinner/",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "tabformer_scale": {
+    "claim": "The IBM TabFormer repository ships a synthetic credit-card transaction dataset of 24 million records under Apache-2.0.",
+    "value": "24 million",
+    "source_url": "https://github.com/IBM/TabFormer",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "tabformer_lineage": {
+    "claim": "TabBERT/TabFormer (ICASSP 2021) introduced hierarchical BERT-style pretraining over tabular transaction sequences.",
+    "value": "arXiv 2011.01843",
+    "source_url": "https://arxiv.org/abs/2011.01843",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "stripe_pfm": {
+    "claim": "Stripe's payments foundation model raised card-testing fraud detection for large users from 59% to 97% with no increase in false positives.",
+    "value": "from 59% to 97%",
+    "source_url": "https://www.ai-street.co/p/stripe-built-a-payments-llm-to-fight-fraud",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "treasure": {
+    "claim": "Visa's TREASURE transaction encoder improves abnormal-behavior detection by 111% over Visa production systems and lifts recommendation models 104% as an embedding provider.",
+    "value": "+111%",
+    "source_url": "https://arxiv.org/abs/2511.19693",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "nuformer": {
+    "claim": "Nubank's nuFormer transaction model runs in production decision engines serving over 100 million customers, with about 1.2% average AUC lift across benchmark tasks.",
+    "value": "100+ million customers",
+    "source_url": "https://arxiv.org/abs/2507.23267",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "pragma": {
+    "claim": "Revolut's PRAGMA scales an encoder-only banking-event model to 1 billion parameters over 24 billion events.",
+    "value": "a billion parameters",
+    "source_url": "https://philippdubach.com/posts/inside-pragma-revoluts-foundation-model-for-banking/",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "pragma_aml": {
+    "claim": "PRAGMA reports a 47.1% drop on AML performance because single-user sequences miss cross-user graph structure.",
+    "value": "47.1%",
+    "source_url": "https://philippdubach.com/posts/inside-pragma-revoluts-foundation-model-for-banking/",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "scam_selfeffected": {
+    "claim": "81.8% of Singapore scam cases in 2025 involved self-effected transfers, per the SPF Annual Scam and Cybercrime Brief 2025.",
+    "value": "81.8%",
+    "source_url": "https://www.police.gov.sg/-/media/SPF/Media-Room/Statistics/Annual-Scams-and-Cybercrime-Brief-2025/Annual-Scam-and-Cybercrime-Brief-2025.pdf",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "squeri_intl_coverage": {
+    "claim": "On the Q4 2025 earnings call, CEO Steve Squeri said Amex will continue to build coverage in international as the fastest-growing part of the business.",
+    "value": "continue to build coverage, obviously, in international as that continues to grow and continues to be the fastest-growing overall part of our business",
+    "source_url": "https://www.fool.com/earnings/call-transcripts/2026/01/30/american-express-axp-q4-2025-earnings-call-transcript/",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "japa_revenue_share": {
+    "claim": "American Express FY2025 total revenues net of interest expense in APAC (Asia Pacific, Australia and New Zealand) were $5,218 million of $72,229 million consolidated, which is 7.2 percent, per Table 23.2 Summary of Total Revenue and Pretax Income by Region in the FY2025 Form 10-K.",
+    "value": "$5.22 billion (7.2% of the company total)",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/4962/000000496226000080/axp-20251231.htm",
+    "accessed": "2026-08-25",
+    "tier": "primary",
+    "note": "Re-sourced 2026-08-25 from a third-party aggregator to Amex's own 10-K after a review pass observed that Amex's own financials were cited to a scraper site in front of Amex judges. The figures were unchanged by the move: the 10-K states 5,218 and 72,229, which is the $5.22 billion and 7.2 percent printed here. The region label follows the 10-K, which calls it APAC."
+  },
+  "amex_countries": {
+    "claim": "American Express maintains relationships with third-party banks and other institutions in approximately 110 countries and territories through its card network business, per the business description in the FY2025 Form 10-K.",
+    "value": "approximately 110 countries and territories",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/4962/000000496226000080/axp-20251231.htm",
+    "accessed": "2026-08-25",
+    "tier": "primary",
+    "note": "Re-sourced 2026-08-25 and the claim was narrowed to what a primary source supports. It previously read '160+ countries, against 200+ for Visa and Mastercard', cited to an affiliate blog; the 10-K states the network-partner footprint rather than a merchant acceptance count, and the network-partner footprint is the one this entry actually builds on, since the customer is a GNS partner bank."
+  },
+  "amex_locations": {
+    "claim": "Amex acceptance reached about 160 million locations globally as of mid-2025, up 16% year over year and about 5x since 2017.",
+    "value": "about 16% in a year, to roughly 160 million",
+    "source_url": "https://finance.yahoo.com/news/american-express-accepted-160-million-123000510.html",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "qris_mdr": {
+    "claim": "Indonesia's QRIS standard merchant discount rate is 0.3%, waived entirely for transactions under Rp500,000 since December 2024.",
+    "value": "0.3%",
+    "source_url": "https://digitalinasia.com/how-digital-payments-work-in-southeast-asia/",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "card_mdr_range": {
+    "claim": "Card merchant discount rates in Southeast Asia run 1.5% to 3% of transaction value.",
+    "value": "1.5% to 3%",
+    "source_url": "https://digitalinasia.com/how-digital-payments-work-in-southeast-asia/",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "nexus_singapore": {
+    "claim": "Nexus Global Payments was incorporated in Singapore in March 2025 by five central banks, with go-live targeted for 2026.",
+    "value": "go-live target 2026",
+    "source_url": "https://www.bis.org/about/bisih/topics/fmis/nexus.htm",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "g20_target": {
+    "claim": "The G20 target is retail cross-border payment cost at or under 1% by end-2027.",
+    "value": "at or under 1%",
+    "source_url": "https://www.fsb.org/2025/10/g20-roadmap-for-cross-border-payments-consolidated-progress-report-for-2025/",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "sg_hawker_acceptance": {
+    "claim": "Hawker stalls and small retailers in Singapore commonly do not accept Amex, citing swipe fees of about 1% to 3%.",
+    "value": "swipe fees of about 1% to 3%",
+    "source_url": "https://www.singsaver.com.sg/credit-card/blog/accept-american-express",
+    "accessed": "2026-08-22",
+    "tier": "anchor"
+  },
+  "merchant_attrition": {
+    "claim": "Industry-average merchant attrition is 23.6% per year (The Strawhecker Group).",
+    "value": "23.6%",
+    "source_url": "https://www.digitaltransactions.net/magazine_articles/a-remedy-for-attrition-headaches/",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "attrition_dollars": {
+    "claim": "Merchant attrition costs acquirers about $2 billion a year in losses plus about $1 billion a year replacing lost merchants.",
+    "value": "$2 billion a year in losses plus about $1 billion replacing lost merchants",
+    "source_url": "https://www.paymentsjournal.com/solving-the-merchant-attrition-problem/",
+    "accessed": "2026-08-22",
+    "note": "The source states the two components separately. An earlier version of this entry printed their sum, $3 billion, as though the source said it; it does not, so the components are printed as given.",
+    "tier": "secondary"
+  },
+  "cac_retention": {
+    "claim": "Acquiring a new merchant costs 5 to 25 times as much as retaining an existing one.",
+    "value": "5 to 25 times",
+    "source_url": "https://www.vahorizon.site/b2b/glossary/attrition-merchant/",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "gns_model": {
+    "claim": "Outside proprietary markets, Amex reaches APAC through Global Network Services licensed bank issuers and acquirers chosen market by market.",
+    "value": "market-by-market licensed partners",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/4962/000119312517047588/d321397d10k.htm",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "maybank": {
+    "claim": "The Amex network partnership with Maybank in Malaysia is live.",
+    "value": "Maybank (Malaysia)",
+    "source_url": "https://www.americanexpress.com/en-my/network/credit-cards/maybank/",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "coe_2024_contest": {
+    "claim": "The 2024 Amex SG hackathon was an uplift-modeling contest scoring 12,604,600 customer x merchant pairs on incremental activation rate against a randomized holdout.",
+    "value": "12.6 million customer x merchant pairs",
+    "source_url": "https://github.com/ZzzhangXiao/Amex-AI-Hackathon",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "coe_profile": {
+    "claim": "Amex's Singapore Decision Science Center of Excellence launched in December 2022 and expanded in November 2023 into marketing and servicing models plus a generative AI R&D practice.",
+    "value": "Singapore Decision Science CoE",
+    "source_url": "https://www.edb.gov.sg/en/about-edb/media-releases-publications/american-express-expands-singapore-decision-science-center-of-excellence.html",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "enigma": {
+    "claim": "Enigma Merchant Transaction Signals sells transaction-derived monthly merchant attributes for 10M+ US small businesses; US-only, raw signals rather than ranked signing propensity.",
+    "value": "US merchants only",
+    "source_url": "https://enigma.com/resources/blog/introducing-merchant-transaction-signals",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "cardlytics": {
+    "claim": "Cardlytics measures card-linked offer incrementality via test and control comparisons, with no published methodology partners can audit.",
+    "value": "test-and-control incrementality",
+    "source_url": "https://www.cardlytics.com/",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "mastercard_mei": {
+    "claim": "Mastercard Economics Institute Travel Trends is a descriptive annual corridor report, not a forward-looking per-corridor scoring product.",
+    "value": "annual report",
+    "source_url": "https://www.mastercard.com/news/ap/en/newsroom/press-releases/en/2025/mastercard-economics-institute-on-travel-in-2025-asia-pacific-leads-trending-summer-destinations-for-second-year-running/",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "ghost_ads": {
+    "claim": "The ghost-ads design (Johnson, Lewis, Nubbemeyer, JMR 2017) measures incremental lift continuously at platform scale and runs in production at DoorDash Ads.",
+    "value": "ghost ads",
+    "source_url": "https://journals.sagepub.com/doi/10.1509/jmr.15.0297",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "red_line_credit": {
+    "claim": "Amex leadership states GenAI is not used for credit line or approval decisions.",
+    "value": "no credit decisions by GenAI",
+    "source_url": "https://www.americanbanker.com/news/american-express-unveils-its-approach-to-generative-ai",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "genai_council": {
+    "claim": "Amex's Generative AI Council triaged about 500 identified use cases down to about 70 in implementation.",
+    "value": "500 use cases triaged to about 70",
+    "source_url": "https://www.americanbanker.com/news/american-express-unveils-its-approach-to-generative-ai",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "connectchain": {
+    "claim": "ConnectChain is Amex's open-source LangChain-derived enterprise orchestration framework for GenAI.",
+    "value": "ConnectChain",
+    "source_url": "https://americanexpress.io/generative-ai-meets-open-source-at-american-express/",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "ai_firewall": {
+    "claim": "Amex envelopes its AI systems in an AI firewall with orchestration layers and human-in-the-loop review.",
+    "value": "AI firewall",
+    "source_url": "https://venturebeat.com/ai/how-amex-uses-ai-to-increase-efficiency-40-fewer-it-escalations-85-travel-assistance-boost",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "veritas": {
+    "claim": "MAS Veritas Toolkit 2.0 (June 2023) is the open-source assessment methodology for fairness and explainability in financial-institution AI.",
+    "value": "Veritas 2.0",
+    "source_url": "https://www.mas.gov.sg/news/media-releases/2023/toolkit-for-responsible-use-of-ai-in-the-financial-sector",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "airg": {
+    "claim": "MAS consulted on Guidelines on AI Risk Management (November 2025), extending supervisory expectations to GenAI and AI agents with lifecycle controls.",
+    "value": "MAS AIRG",
+    "source_url": "https://www.mas.gov.sg/publications/consultations/2025/consultation-paper-on-guidelines-on-artificial-intelligence-risk-management",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "safr": {
+    "claim": "The MAS SAFR white paper (July 3, 2026) defines four runtime components that evaluate every proposed AI-agent action before execution.",
+    "value": "SAFR",
+    "source_url": "https://www.mas.gov.sg/publications/monographs-or-information-paper/2026/safeguards-for-agentic-finance-at-runtime",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "ace": {
+    "claim": "Amex's Agentic Commerce Experiences developer kit defines five services, with two of five still under development as of April 2026.",
+    "value": "two of five services under development",
+    "source_url": "https://www.americanexpress.com/en-us/company/agentic-commerce/",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "ace_unsolved": {
+    "claim": "Amex's engineering blog names traceability from final transaction back to original customer intent as an unsolved problem in agentic commerce.",
+    "value": "intent-to-settlement traceability",
+    "source_url": "https://americanexpress.io/shaping-the-future-of-agentic-commerce/",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "amex_sequence_paper": {
+    "claim": "Amex AI Research published sequential deep learning over card-transaction histories for credit risk monitoring.",
+    "value": "arXiv 2012.15330",
+    "source_url": "https://arxiv.org/abs/2012.15330",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "kaggle_default": {
+    "claim": "The Amex Default Prediction Kaggle competition (2022, about 4,875 teams) was won by GBDT models built on per-customer temporal aggregates, ensembled with transformers.",
+    "value": "per-customer temporal aggregates plus GBDT",
+    "source_url": "https://www.kaggle.com/competitions/amex-default-prediction",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "ascarza": {
+    "claim": "Ascarza (JMR 2018) showed in randomized field experiments that switching from response-based to treatment-effect targeting yielded up to 6.8 percentage points additional churn reduction.",
+    "value": "6.8 percentage points",
+    "source_url": "https://journals.sagepub.com/doi/abs/10.1509/jmr.16.0163",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "xlearner": {
+    "claim": "The X-learner meta-learner (Kunzel et al.) is provably efficient when treatment arms are unbalanced.",
+    "value": "X-learner",
+    "source_url": "https://arxiv.org/abs/1706.03461",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "causalml_30": {
+    "claim": "A published CausalML case reports uplift-targeting 30% of users matching the conversion gain of blanket promotion.",
+    "value": "30%",
+    "source_url": "https://github.com/uber/causalml",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "fsq": {
+    "claim": "Foursquare OS Places is an open dataset of 106M+ points of interest under Apache-2.0, including APAC coverage.",
+    "value": "Foursquare OS Places",
+    "source_url": "https://opensource.foursquare.com/os-places/",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "knomad_gravity": {
+    "claim": "World Bank/KNOMAD bilateral matrices allocate flows in proportion to bilateral migrant stocks and incomes, the standard gravity approach for corridor modeling.",
+    "value": "migrant stocks",
+    "source_url": "https://data360files.worldbank.org/data360-data/metadata/WB_KNOMAD/WB_KNOMAD_BRE.pdf",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "mint": {
+    "claim": "MinT trace-minimization reconciliation (Wickramasuriya, Athanasopoulos, Hyndman, JASA 2019) makes hierarchical forecasts coherent across aggregation levels.",
+    "value": "grouped reconciliation",
+    "source_url": "https://robjhyndman.com/publications/mint/",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "gbta_apac": {
+    "claim": "GBTA forecasts APAC business-travel spend at $700.9 billion in 2026, up 10.9% year over year, the fastest of any region.",
+    "value": "$700.9 billion",
+    "source_url": "https://gbta.org/asia-pacific-business-travel-to-surpass-700-billion-in-2026-leading-global-growth-amid-geopolitical-uncertainty/",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "genx_fraud": {
+    "claim": "Amex's Gen X fraud stack issues about 8 billion automated risk decisions a year over more than $1 trillion of transactions with millisecond scoring.",
+    "value": "8 billion-plus automated risk decisions on over $1 trillion of volume",
+    "source_url": "https://www.nvidia.com/en-us/customer-stories/american-express-prevents-fraud-and-foils-cybercrime-with-nvidia-ai-solutions/",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "fraud_19yr": {
+    "claim": "American Express reported the lowest US credit card fraud rate among major card networks for the 19th consecutive year (July 2026).",
+    "value": "19 straight years",
+    "source_url": "https://www.americanexpress.com/en-us/newsroom/articles/products-and-services/for-the-19th-year-in-a-row--american-express-has-the-lowest-u-s-.html",
+    "accessed": "2026-08-22",
+    "tier": "primary"
+  },
+  "orchestra": {
+    "claim": "Orchestra is Amex's proprietary real-time relevance-prediction engine powering consumer Amex Offers personalization.",
+    "value": "Orchestra",
+    "source_url": "https://www.americanbanker.com/payments/news/inside-amexs-data-driven-effort-to-personalize-customer-service",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "amex_marketing_spend": {
+    "claim": "American Express FY2025 consolidated Marketing expense was $6,252 million, per the consolidated statements of income in the FY2025 Form 10-K (FY2024 $6,040 million, FY2023 $5,213 million).",
+    "value": "$6.25 billion",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/4962/000000496226000080/axp-20251231.htm",
+    "accessed": "2026-08-25",
+    "tier": "primary",
+    "note": "Re-sourced AND CORRECTED 2026-08-25. This previously read $5.5 billion, cited to a LinkedIn post; the 10-K puts FY2025 marketing expense at $6,252 million, so the old figure was wrong as well as weakly sourced. The argument it supports, that single-digit millions per partner is a small planning envelope, only gets stronger."
+  },
+  "mdr_sg_card_range": {
+    "claim": "Card merchant discount rates cited as the acceptance barrier for Singapore small merchants run about 1% to 3% of transaction value.",
+    "value": "1% to 3%",
+    "source_url": "https://www.singsaver.com.sg/credit-card/blog/accept-american-express",
+    "accessed": "2026-08-22",
+    "tier": "anchor"
+  },
+  "sg_small_merchant_mdr_rejection": {
+    "claim": "Hawker stalls, small local retailers and some government payment systems in Singapore do not accept Amex; the cited barrier is higher merchant swipe fees.",
+    "value": "small-merchant rejection on swipe fees",
+    "source_url": "https://www.singsaver.com.sg/credit-card/blog/accept-american-express",
+    "accessed": "2026-08-22",
+    "tier": "anchor"
+  },
+  "qris_mdr_pressure": {
+    "claim": "QRIS standard MDR is 0.3% (waived under Rp500,000) against card MDR of 1.5% to 3%, the low-cost rail squeezing card acceptance economics in APAC.",
+    "value": "0.3% versus 1.5% to 3%",
+    "source_url": "https://digitalinasia.com/how-digital-payments-work-in-southeast-asia/",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "fnb_low_margin_cash_preference": {
+    "claim": "Thin-margin food-and-beverage and small businesses in Singapore avoid higher-fee card acceptance; swipe fees of about 1% to 3% are the cited barrier. Used as a category prior in the whitespace ranking.",
+    "value": "thin-margin fee aversion (category prior)",
+    "source_url": "https://www.singsaver.com.sg/credit-card/blog/accept-american-express",
+    "accessed": "2026-08-22",
+    "tier": "anchor"
+  },
+  "hotel_card_acceptance_norm": {
+    "claim": "Hotels and travel-oriented merchants serving international visitors are treated as standard card acceptors in the whitespace ranking prior; the anchor is record APAC business-travel demand forecast for 2026. This key is a labeled modeling prior with a demand-side anchor, not a direct acceptance measurement.",
+    "value": "acceptance-norm prior",
+    "source_url": "https://gbta.org/asia-pacific-business-travel-to-surpass-700-billion-in-2026-leading-global-growth-amid-geopolitical-uncertainty/",
+    "accessed": "2026-08-22",
+    "tier": "secondary"
+  },
+  "value_model_conservative_total": {
+    "claim": "Conservative-scenario modeled annual total of the bottom-up value model, three lanes summed before rounding; derivation in copy/value-model.md.",
+    "value": "US$0.52M",
+    "source_url": "copy/value-model.md",
+    "accessed": "2026-08-22",
+    "derived": true,
+    "tier": "repository"
+  },
+  "value_model_base_total": {
+    "claim": "Base-scenario modeled annual total of the bottom-up value model by year three of an APAC rollout, three lanes summed before rounding. Every lane is modelled from declared inputs, the offers lane included: its randomized result establishes the targeting mechanism and the counting rule, not the size. Derivation in copy/value-model.md.",
+    "value": "US$10.5M",
+    "source_url": "copy/value-model.md",
+    "accessed": "2026-08-22",
+    "derived": true,
+    "tier": "repository"
+  },
+  "value_model_stretch_total": {
+    "claim": "Stretch-scenario modeled annual total of the bottom-up value model, three lanes summed before rounding; derivation in copy/value-model.md.",
+    "value": "US$108.5M",
+    "source_url": "copy/value-model.md",
+    "accessed": "2026-08-22",
+    "derived": true,
+    "tier": "repository"
+  },
+  "nvidia_tfm_blueprint": {
+    "claim": "NVIDIA published a transaction foundation model blueprint on 16 June 2026 that pretrains a compact Llama-style decoder-only model with a next-token (causal language modelling) objective on the same public IBM TabFormer corpus this page uses, then feeds its pooled embeddings to an XGBoost fraud classifier and reports an average-precision lift over that XGBoost baseline.",
+    "value": "NVIDIA transaction foundation model blueprint, June 2026",
+    "source_url": "https://developer.nvidia.com/blog/build-your-own-transaction-foundation-model-for-financial-intelligence/",
+    "accessed": "2026-08-23",
+    "tier": "primary"
+  },
+  "nvidia_tfm_params": {
+    "claim": "The NVIDIA blueprint's transaction foundation model is a decoder-only Llama architecture of about 29 million parameters, hidden size 512, 8 layers, grouped-query attention with 8 query heads and 2 key-value heads.",
+    "value": "29M",
+    "source_url": "https://developer.nvidia.com/blog/build-your-own-transaction-foundation-model-for-financial-intelligence/",
+    "accessed": "2026-08-23",
+    "tier": "primary"
+  },
+  "nvidia_tfm_repo": {
+    "claim": "The NVIDIA transaction foundation model blueprint ships as an Apache-2.0 repository of notebooks plus a pretrained checkpoint, so the prior art is public and reproducible.",
+    "value": "Apache-2.0",
+    "source_url": "https://github.com/NVIDIA-AI-Blueprints/transaction-foundation-model",
+    "accessed": "2026-08-23",
+    "tier": "primary"
+  },
+  "safr_envelope_p9": {
+    "claim": "SAFR v1.0 page 9 states the framework's own open problem for an agent-declared governance envelope: the envelope is treated as a document to be authenticated against its origin, because its own contents cannot be taken as proof of what the original instruction produced.",
+    "value": "page 9",
+    "source_url": "https://www.mas.gov.sg/-/media/mas-media-library/development/fintech/ai-safr/safr.pdf",
+    "accessed": "2026-08-23",
+    "tier": "primary"
+  },
+  "safr_participation": {
+    "claim": "In the 25-page SAFR v1.0 PDF, both open-loop networks appear as contributors and carry published four-component case-study mappings (Mastercard 5 mentions, Visa 8). American Express appears zero times, in neither the contributor list nor the case studies. Counted by grep over the PDF text by this team on 2026-08-23.",
+    "value": "0 mentions",
+    "source_url": "https://www.mas.gov.sg/-/media/mas-media-library/development/fintech/ai-safr/safr.pdf",
+    "accessed": "2026-08-23",
+    "tier": "primary"
+  },
+  "eide_scam_shift": {
+    "claim": "Amex EVP for global fraud Tina Eide said that as transaction controls became sophisticated enough that bad actors struggled to make money there, attacks came back around to scams, social engineering and fraudulent applications (Payments Dive interview, 19 December 2023).",
+    "value": "coming back around to more of the scams",
+    "source_url": "https://www.paymentsdive.com/news/amex-fraud-trends-social-engineering-payments-ai-cards-tina-eide/702911/",
+    "accessed": "2026-08-23",
+    "tier": "secondary"
+  },
+  "srf_seemingly_authorised": {
+    "claim": "Singapore's Shared Responsibility Framework, effective 16 December 2024, covers seemingly authorised transactions, where a scammer obtains credentials and transacts, and adds an FI duty of real-time fraud surveillance for accounts rapidly drained of a material sum. Self-effected transfers by the account holder sit outside that defined scope.",
+    "value": "16 December 2024",
+    "source_url": "https://www.mas.gov.sg/regulation/guidelines/guidelines-on-shared-responsibility-framework",
+    "accessed": "2026-08-23",
+    "tier": "primary"
+  },
+  "tesseract_bias": {
+    "claim": "Pendlebury, Pierazzi, Jordaney, Kinder and Cavallaro, TESSERACT: Eliminating Experimental Bias in Malware Classification across Space and Time, USENIX Security 2019. Names temporal bias, from an incorrect time split of training and test data, and spatial bias, from an unrepresentative test distribution, as the two sources that inflate reported classifier performance, and treats the experimental protocol as the thing to constrain and measure.",
+    "value": "USENIX Security 2019",
+    "source_url": "https://www.usenix.org/conference/usenixsecurity19/presentation/pendlebury",
+    "accessed": "2026-08-24",
+    "tier": "secondary"
+  },
+  "reco_leakage": {
+    "claim": "Ji, Sun, Zhang and Li, A Critical Study on Data Leakage in Recommender System Offline Evaluation, ACM Transactions on Information Systems 41(3), Article 75, 2023. Shows that a train/test split that ignores the global timeline changes the recommendation lists a model produces and moves its reported accuracy, and that the direction of the change is not predictable, so more future data in training does not reliably mean higher accuracy.",
+    "value": "ACM TOIS 41(3), Article 75, 2023",
+    "source_url": "https://dl.acm.org/doi/10.1145/3569930",
+    "accessed": "2026-08-24",
+    "tier": "primary"
+  },
+  "ru_map": {
+    "claim": "Duncan, Keller-McNulty and Stokes, Disclosure Risk vs. Data Utility: The R-U Confidentiality Map, National Institute of Statistical Sciences Technical Report 121, 2001. Sets out the standard statistical-disclosure-control way to report a protection decision: plot disclosure risk against data utility for a family of disclosure-limiting transformations and read the trade-off off the curve rather than asserting one setting.",
+    "value": "NISS Technical Report 121, 2001",
+    "source_url": "https://www.niss.org/sites/default/files/technicalreports/tr121.pdf",
+    "accessed": "2026-08-24",
+    "tier": "secondary"
+  },
+  "lambda_pricing": {
+    "claim": "Lambda publishes on-demand per-GPU-hour prices for its A100 and H100 instances; these are the rates the One Loop cost model assumes for those cards.",
+    "value": "public on-demand GPU rates",
+    "source_url": "https://lambda.ai/pricing",
+    "accessed": "2026-08-24",
+    "tier": "secondary"
+  },
+  "coreweave_pricing": {
+    "claim": "CoreWeave publishes an on-demand instance price for HGX H200, used because Lambda lists no on-demand H200 rate; CoreWeave sits above the specialist-cloud range, so the mapping overstates cost.",
+    "value": "public on-demand H200 instance rate",
+    "source_url": "https://www.coreweave.com/pricing",
+    "accessed": "2026-08-24",
+    "tier": "secondary"
+  },
+  "aws_cpu_pricing": {
+    "claim": "AWS EC2 c7i.4xlarge on-demand Linux pricing in us-east-1, read from the Vantage mirror of AWS published prices, is the assumed CPU core-hour rate in the cost model.",
+    "value": "public on-demand CPU rate",
+    "source_url": "https://instances.vantage.sh/aws/ec2/c7i.4xlarge",
+    "accessed": "2026-08-24",
+    "tier": "secondary"
+  },
+  "ws_temporal_prereg": {
+    "claim": "Pre-registration of the whitespace forward check: cutoff rule, outcome window, arms and decision rule, committed before any outcome was computed.",
+    "value": "fef8af5",
+    "source_url": "WHITESPACE-TEMPORAL-PREREG.md",
+    "accessed": "2026-08-24",
+    "tier": "repository"
+  },
+  "cj_prereg": {
+    "claim": "Pre-registration of the Complete Journey replication: hypotheses, seeds, split and decision rule, committed before the run.",
+    "value": "6c9c7a9",
+    "source_url": "CJ-REPLICATION-PREREG.md",
+    "accessed": "2026-08-24",
+    "tier": "repository"
+  },
+  "cj_prereg_amendment": {
+    "claim": "Pre-run amendment to the Complete Journey pre-registration: scored unit, pinned evaluation seed and unscorable floor, committed before the run.",
+    "value": "51c69e5",
+    "source_url": "CJ-REPLICATION-PREREG-AMENDMENT-1.md",
+    "accessed": "2026-08-24",
+    "tier": "repository"
+  },
+  "corridor_combination_prereg": {
+    "claim": "Pre-registration of the corridor forecast combination: fixed equal weights and decision rule, committed before any combination number was computed.",
+    "value": "418aef3",
+    "source_url": "CORRIDOR-COMBINATION-PREREG.md",
+    "accessed": "2026-08-24",
+    "tier": "repository"
+  },
+  "uplift_prereg": {
+    "claim": "Pre-registered design of the Criteo uplift exhibit, naming conversion the primary outcome and visit the robustness outcome, committed in scripts/uplift_exhibit.py before the full-data run.",
+    "value": "2fd8c23",
+    "source_url": "scripts/uplift_exhibit.py",
+    "accessed": "2026-08-24",
+    "tier": "repository"
+  }
+}

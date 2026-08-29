@@ -1,0 +1,105 @@
+{
+ "seed": 42,
+ "backbone_seed": 8,
+ "versions": {
+  "python": "3.12.3",
+  "numpy": "2.5.2",
+  "polars": "1.43.2",
+  "pyarrow": "25.0.1",
+  "lightgbm": "4.7.0",
+  "sklearn": "1.9.0",
+  "torch": "2.13.0+cu130"
+ },
+ "generated_by": "scripts/fm/cj_offer_head.py --check-able",
+ "data_sources": [
+  {
+   "name": "dunnhumby The Complete Journey (real retail transactions)",
+   "url": "https://www.dunnhumby.com/source-files/",
+   "sha256": "5e0a3d72fe8562fe0ab995f70fb58b74359e8ec4bbccd1521e2b137da0558f9a",
+   "terms": "dunnhumby terms: data may be used solely for research, personal or non-commercial purposes"
+  },
+  {
+   "name": "coupon_redempt (campaign coupon redemptions)",
+   "url": "/home/e/e1506804/amex-oneloop/cj/coupon_redempt.parquet",
+   "sha256": "d705da6bc6baa74b94935d67510fcab7b0e4d0dcbecb1ce39656bf6ca295f960"
+  },
+  {
+   "name": "hh_demographic (anonymized household attributes, 2023 re-release)",
+   "url": "/home/e/e1506804/amex-oneloop/cj/hh_demographic.parquet",
+   "sha256": "05e0b2c195ab7fa222b833bbba9fc595444f39c80a160f9d7263e3d8f8ef8533"
+  }
+ ],
+ "labels": [
+  "real",
+  "predictive not causal"
+ ],
+ "what_this_is": "a household-level offers head consuming pre-cut backbone household embeddings against a real redemption outcome; the honest question is whether embeddings add anything over counts plus demographics",
+ "not_causal": "campaigns in this corpus were targeted by the retailer, not randomized; nothing here estimates what an offer causes. The causal offers exhibit in this project remains the Criteo randomized-uplift result.",
+ "label": {
+  "definition": "household has >=1 coupon_redempt row with DAY >= 599 (the corpus cut)",
+  "n_households": 2498,
+  "n_positive": 221,
+  "n_test_positive": 47,
+  "n_test_negative": 452
+ },
+ "universe": {
+  "n_train": 1999,
+  "n_test": 499,
+  "n_households_total": 2500,
+  "n_excluded_no_pre_rows": 2,
+  "split": "household-disjoint (one row per household; the row split is the household split)",
+  "n_households_with_demographics": 801,
+  "demographics_note": "the 2023 re-release anonymized demographic columns to classification_1..5 + HOMEOWNER_DESC + KID_CATEGORY_DESC; households without a demographic row carry 'NA' codes"
+ },
+ "arms": {
+  "control": {
+   "features": [
+    "log1p_pre_txn_count",
+    "log1p_pre_distinct_baskets",
+    "log1p_pre_total_sales",
+    "pre_distinct_stores",
+    "log1p_pre_coupon_rows",
+    "log1p_pre_redemptions",
+    "classification_1 (anonymized categorical)",
+    "classification_2 (anonymized categorical)",
+    "classification_3 (anonymized categorical)",
+    "HOMEOWNER_DESC (anonymized categorical)",
+    "classification_5 (anonymized categorical)",
+    "classification_4 (anonymized categorical)",
+    "KID_CATEGORY_DESC (anonymized categorical)"
+   ],
+   "auc": 0.8857089060440595,
+   "prauc": 0.5365905588710261
+  },
+  "control_plus_embeddings": {
+   "features": "control features + pre-cut pooled backbone household embedding (512d) + has_history flag",
+   "auc": 0.9126341555262663,
+   "prauc": 0.6026926481736791
+  }
+ },
+ "delta": {
+  "auc": 0.02692524948220676,
+  "auc_ci": [
+   0.0023144874988983324,
+   0.05506519880694447
+  ],
+  "prauc": 0.06610208930265293,
+  "prauc_ci": [
+   -0.0299757890276525,
+   0.16327723980522887
+  ]
+ },
+ "bootstrap": {
+  "method": "household-clustered paired bootstrap (singleton clusters = row bootstrap; shipped machinery)",
+  "B": 1000,
+  "ci": "percentile 95%"
+ },
+ "scale_caveat": "~2,500 households and a rare positive; the positive counts above are the whole story and the intervals are wide",
+ "required_sentence": "On this corpus the backbone's pre-cut household embeddings add measurable signal over the counts-plus-demographics control for post-cut coupon redemption (AUC delta +0.0269, 95% interval [0.0023, 0.0551] above zero). This is a predictive statement about targeted campaigns, not a causal one.",
+ "call": "embeddings_add_signal",
+ "check": {
+  "command": "python3 scripts/fm/cj_offer_head.py --stage run ... --check",
+  "tolerance": 1e-06,
+  "note": "rerun with the same --threads as the producing run; deterministic LightGBM settings are on"
+ }
+}

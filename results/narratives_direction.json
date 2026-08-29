@@ -1,0 +1,180 @@
+{
+ "what_this_is": "A third, deterministic layer on the generated-text gate, checking the DIRECTION of a comparison rather than the values in it. The two shipped layers pass every narrative here; this one does not, and every numeral in the narratives it fails is correct.",
+ "generated_by": "scripts/narratives_direction_audit.py",
+ "layer_source": "scripts/narratives/directioncheck.py",
+ "labels": [
+  "genai-explanation-layer",
+  "facts-from-committed-results",
+  "explains-never-decides"
+ ],
+ "why_the_earlier_layers_missed_it": "Layer one proves every numeral matches a fact value, which these narratives do. Layer two is a cross-examination by the same served model that wrote the text, given the same fact bundle, and that bundle contained the false rule 'MASE below 1 beats the seasonal-naive baseline'. Every reversed narrative has a model MASE below one, so the model applied the rule it was handed and then confirmed its own application of it. A gate that checks whether numbers are right is not a gate that checks whether the sentence about them is right.",
+ "root_cause_fixed_in": "scripts/narratives/make_inputs.py, which now states that MASE is an error measure, that lower is better, and that comparing either number to 1 says nothing about which of the two won",
+ "regeneration_status": "NOT REGENERATED. Generation needs a self-hosted Qwen3-32B on a cluster GPU, which is a manual action, so the corrected fact bundle has not yet produced new text. The narratives in results/narratives.json are the ones that were generated under the false rule, and this file is what stops them being read as clean.",
+ "n_examples_total": 30,
+ "n_checkable": 10,
+ "n_unchecked": 20,
+ "n_direction_failures": 5,
+ "comparisons_declared": [
+  "corridor MASE against the seasonal naive"
+ ],
+ "coverage_note": "Only comparisons declared in directioncheck.py are checked. A bundle this layer does not understand is counted as UNCHECKED rather than passed, because a gate that silently passes what it cannot read is the failure this whole exercise is about.",
+ "failures": [
+  {
+   "id": "corridor-01",
+   "gate_verdict_before_this_layer": "pass",
+   "mase_model": 0.594087,
+   "mase_seasonal_naive": 0.239812,
+   "reason": "corridor MASE against the seasonal naive: the narrative says the subject beat the baseline, but mase_model=0.594087 against mase_seasonal_naive=0.239812 and lower is better, so the subject actually lost to it"
+  },
+  {
+   "id": "corridor-02",
+   "gate_verdict_before_this_layer": "pass",
+   "mase_model": 0.904513,
+   "mase_seasonal_naive": 0.662448,
+   "reason": "corridor MASE against the seasonal naive: the narrative says the subject beat the baseline, but mase_model=0.904513 against mase_seasonal_naive=0.662448 and lower is better, so the subject actually lost to it"
+  },
+  {
+   "id": "corridor-03",
+   "gate_verdict_before_this_layer": "pass",
+   "mase_model": 0.430026,
+   "mase_seasonal_naive": 0.292646,
+   "reason": "corridor MASE against the seasonal naive: the narrative says the subject beat the baseline, but mase_model=0.430026 against mase_seasonal_naive=0.292646 and lower is better, so the subject actually lost to it"
+  },
+  {
+   "id": "corridor-06",
+   "gate_verdict_before_this_layer": "pass",
+   "mase_model": 0.516833,
+   "mase_seasonal_naive": 0.375929,
+   "reason": "corridor MASE against the seasonal naive: the narrative says the subject beat the baseline, but mase_model=0.516833 against mase_seasonal_naive=0.375929 and lower is better, so the subject actually lost to it"
+  },
+  {
+   "id": "corridor-07",
+   "gate_verdict_before_this_layer": "pass",
+   "mase_model": 0.829143,
+   "mase_seasonal_naive": 0.43616,
+   "reason": "corridor MASE against the seasonal naive: the narrative says the subject beat the baseline, but mase_model=0.829143 against mase_seasonal_naive=0.43616 and lower is better, so the subject actually lost to it"
+  }
+ ],
+ "by_id": {
+  "corridor-00": {
+   "direction": "pass",
+   "reason": "the declared comparison holds in the direction stated"
+  },
+  "corridor-01": {
+   "direction": "fail",
+   "reason": "corridor MASE against the seasonal naive: the narrative says the subject beat the baseline, but mase_model=0.594087 against mase_seasonal_naive=0.239812 and lower is better, so the subject actually lost to it"
+  },
+  "corridor-02": {
+   "direction": "fail",
+   "reason": "corridor MASE against the seasonal naive: the narrative says the subject beat the baseline, but mase_model=0.904513 against mase_seasonal_naive=0.662448 and lower is better, so the subject actually lost to it"
+  },
+  "corridor-03": {
+   "direction": "fail",
+   "reason": "corridor MASE against the seasonal naive: the narrative says the subject beat the baseline, but mase_model=0.430026 against mase_seasonal_naive=0.292646 and lower is better, so the subject actually lost to it"
+  },
+  "corridor-04": {
+   "direction": "pass",
+   "reason": "the declared comparison holds in the direction stated"
+  },
+  "corridor-05": {
+   "direction": "pass",
+   "reason": "the declared comparison holds in the direction stated"
+  },
+  "corridor-06": {
+   "direction": "fail",
+   "reason": "corridor MASE against the seasonal naive: the narrative says the subject beat the baseline, but mase_model=0.516833 against mase_seasonal_naive=0.375929 and lower is better, so the subject actually lost to it"
+  },
+  "corridor-07": {
+   "direction": "fail",
+   "reason": "corridor MASE against the seasonal naive: the narrative says the subject beat the baseline, but mase_model=0.829143 against mase_seasonal_naive=0.43616 and lower is better, so the subject actually lost to it"
+  },
+  "corridor-08": {
+   "direction": "pass",
+   "reason": "the declared comparison holds in the direction stated"
+  },
+  "corridor-09": {
+   "direction": "pass",
+   "reason": "the declared comparison holds in the direction stated"
+  },
+  "whitespace-10": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "whitespace-11": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "whitespace-12": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "whitespace-13": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "whitespace-14": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "whitespace-15": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "whitespace-16": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "whitespace-17": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "whitespace-18": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "whitespace-19": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "uplift-20": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "uplift-21": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "uplift-22": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "uplift-23": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "uplift-24": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "uplift-25": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "uplift-26": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "uplift-27": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "uplift-28": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  },
+  "uplift-29": {
+   "direction": "unchecked",
+   "reason": "no declared comparison applies to this bundle, so this layer makes no claim about it"
+  }
+ }
+}

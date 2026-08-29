@@ -1,0 +1,969 @@
+{
+ "seed": 42,
+ "versions": {
+  "python": "3.11.15",
+  "vllm": "0.26.0",
+  "torch": "2.11.0+cu130",
+  "transformers": "5.14.1"
+ },
+ "generated_by": "scripts/narratives/generate.py (check: scripts/narratives/check.py --check)",
+ "data_sources": [
+  {
+   "name": "corridor.json",
+   "url": "results/corridor.json",
+   "sha256": "1fb6af96f8a2c136365ca5edd0e55c76d49f86b586eba2525440cbb309ed9435"
+  },
+  {
+   "name": "whitespace.json",
+   "url": "results/whitespace.json",
+   "sha256": "cde662580864dda6de97646ef401079201507f9cd025059a443d1640dfb08597"
+  },
+  {
+   "name": "uplift.json",
+   "url": "results/uplift.json",
+   "sha256": "d08c3e9524201754b446c02163837c2238333830351dd8ebfa58bb00627fcd53"
+  }
+ ],
+ "labels": [
+  "genai-explanation-layer",
+  "facts-from-committed-results",
+  "explains-never-decides"
+ ],
+ "model": "Qwen/Qwen3-32B",
+ "served": "self-hosted vLLM on NUS GPU",
+ "sampling": {
+  "temperature": 0.0,
+  "seed": 42,
+  "inputs_generated_by": "scripts/narratives/make_inputs.py",
+  "inputs_seed": 42
+ },
+ "n_generated": 30,
+ "faithfulness": {
+  "n_checked": 30,
+  "n_pass_strict": 30,
+  "checker": "numeric-claim extraction vs source JSON + LLM cross-check",
+  "failures_shown": true
+ },
+ "examples": [
+  {
+   "id": "corridor-00",
+   "head": "corridor",
+   "input_facts": {
+    "what": "held-out monthly backtest of Singapore inbound visitor arrivals by origin market (public proxy for cross-border spend corridors); MASE below 1 beats the seasonal-naive baseline",
+    "corridor": "Taiwan",
+    "region": "Greater China",
+    "holdout_months": 13,
+    "mase_model": 1.137818,
+    "mase_seasonal_naive": 0.840431,
+    "mase_model_reconciled": 1.016972,
+    "top3_model_attributions": [
+     {
+      "feature": "lag1",
+      "mean_abs_shap_log1p_units": 0.244893
+     },
+     {
+      "feature": "corridor_id",
+      "mean_abs_shap_log1p_units": 0.132313
+     },
+     {
+      "feature": "lag3",
+      "mean_abs_shap_log1p_units": 0.12867
+     }
+    ],
+    "attribution_label": "model attributions (mean |SHAP| on holdout rows, log1p-arrivals units) \u2014 associations learned by the model, not causal drivers"
+   },
+   "narrative": "We conducted a 13-month holdout backtest of Singapore inbound visitor arrivals from the Taiwan corridor, part of the Greater China region, using a model with a MASE of 1.137818, which underperformed the seasonal-naive baseline of 0.840431. The reconciled version of the model improved to a MASE of 1.016972. The top three model attributions were \"lag1\" (0.244893), \"corridor_id\" (0.132313), and \"lag3\" (0.12867), measured in mean absolute SHAP values on log1p-arrivals units. These attributions reflect associations learned by the model, not causal drivers.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "corridor-01",
+   "head": "corridor",
+   "input_facts": {
+    "what": "held-out monthly backtest of Singapore inbound visitor arrivals by origin market (public proxy for cross-border spend corridors); MASE below 1 beats the seasonal-naive baseline",
+    "corridor": "Indonesia",
+    "region": "Southeast Asia",
+    "holdout_months": 13,
+    "mase_model": 0.594087,
+    "mase_seasonal_naive": 0.239812,
+    "mase_model_reconciled": 0.580958,
+    "top3_model_attributions": [
+     {
+      "feature": "lag1",
+      "mean_abs_shap_log1p_units": 1.979378
+     },
+     {
+      "feature": "lag3",
+      "mean_abs_shap_log1p_units": 0.328731
+     },
+     {
+      "feature": "roll12",
+      "mean_abs_shap_log1p_units": 0.143669
+     }
+    ],
+    "attribution_label": "model attributions (mean |SHAP| on holdout rows, log1p-arrivals units) \u2014 associations learned by the model, not causal drivers"
+   },
+   "narrative": "We conducted a 13-month holdout backtest of Singapore inbound visitor arrivals from Indonesia, a key corridor in Southeast Asia, using a model with a MASE of 0.594087, significantly outperforming the seasonal-naive baseline of 0.239812. The reconciled version of the model achieved a MASE of 0.580958. The top three model attributions were \"lag1\" (1.979378), \"lag3\" (0.328731), and \"roll12\" (0.143669), reflecting feature importance in log1p-arrivals units based on mean absolute SHAP values. These attributions represent associations learned by the model, not causal drivers.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "corridor-02",
+   "head": "corridor",
+   "input_facts": {
+    "what": "held-out monthly backtest of Singapore inbound visitor arrivals by origin market (public proxy for cross-border spend corridors); MASE below 1 beats the seasonal-naive baseline",
+    "corridor": "China",
+    "region": "Greater China",
+    "holdout_months": 13,
+    "mase_model": 0.904513,
+    "mase_seasonal_naive": 0.662448,
+    "mase_model_reconciled": 0.880235,
+    "top3_model_attributions": [
+     {
+      "feature": "lag1",
+      "mean_abs_shap_log1p_units": 2.098509
+     },
+     {
+      "feature": "lag3",
+      "mean_abs_shap_log1p_units": 0.370494
+     },
+     {
+      "feature": "corridor_id",
+      "mean_abs_shap_log1p_units": 0.141983
+     }
+    ],
+    "attribution_label": "model attributions (mean |SHAP| on holdout rows, log1p-arrivals units) \u2014 associations learned by the model, not causal drivers"
+   },
+   "narrative": "We conducted a 13-month holdout backtest of Singapore inbound visitor arrivals from the China corridor, using a model with a MASE of 0.904513, which outperformed the seasonal-naive baseline of 0.662448. After reconciliation, the model achieved a MASE of 0.880235. The top three model attributions were \"lag1\" (2.098509), \"lag3\" (0.370494), and \"corridor_id\" (0.141983), reflecting feature importance in log1p-arrivals units. These attributions represent associations learned by the model, not causal drivers.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "corridor-03",
+   "head": "corridor",
+   "input_facts": {
+    "what": "held-out monthly backtest of Singapore inbound visitor arrivals by origin market (public proxy for cross-border spend corridors); MASE below 1 beats the seasonal-naive baseline",
+    "corridor": "India",
+    "region": "South Asia",
+    "holdout_months": 13,
+    "mase_model": 0.430026,
+    "mase_seasonal_naive": 0.292646,
+    "mase_model_reconciled": 0.462206,
+    "top3_model_attributions": [
+     {
+      "feature": "lag1",
+      "mean_abs_shap_log1p_units": 1.043312
+     },
+     {
+      "feature": "lag3",
+      "mean_abs_shap_log1p_units": 0.259181
+     },
+     {
+      "feature": "corridor_id",
+      "mean_abs_shap_log1p_units": 0.161062
+     }
+    ],
+    "attribution_label": "model attributions (mean |SHAP| on holdout rows, log1p-arrivals units) \u2014 associations learned by the model, not causal drivers"
+   },
+   "narrative": "We conducted a 13-month holdout backtest of Singapore inbound visitor arrivals from India, a corridor in the South Asia region, using a model with a MASE of 0.430026, which outperformed the seasonal-naive baseline of 0.292646. The reconciled version of the model achieved a MASE of 0.462206. The top three model attributions were \"lag1\" (1.043312), \"lag3\" (0.259181), and \"corridor_id\" (0.161062), all expressed in mean |SHAP| on holdout rows, log1p-arrivals units. These attributions reflect associations learned by the model, not causal drivers.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "corridor-04",
+   "head": "corridor",
+   "input_facts": {
+    "what": "held-out monthly backtest of Singapore inbound visitor arrivals by origin market (public proxy for cross-border spend corridors); MASE below 1 beats the seasonal-naive baseline",
+    "corridor": "Australia",
+    "region": "Oceania",
+    "holdout_months": 13,
+    "mase_model": 0.496249,
+    "mase_seasonal_naive": 0.558485,
+    "mase_model_reconciled": 0.51574,
+    "top3_model_attributions": [
+     {
+      "feature": "lag1",
+      "mean_abs_shap_log1p_units": 1.067286
+     },
+     {
+      "feature": "lag3",
+      "mean_abs_shap_log1p_units": 0.275361
+     },
+     {
+      "feature": "corridor_id",
+      "mean_abs_shap_log1p_units": 0.146919
+     }
+    ],
+    "attribution_label": "model attributions (mean |SHAP| on holdout rows, log1p-arrivals units) \u2014 associations learned by the model, not causal drivers"
+   },
+   "narrative": "We conducted a 13-month holdout backtest of Singapore inbound visitor arrivals from the Australia corridor in the Oceania region. The model achieved a MASE of 0.496, outperforming the seasonal-naive baseline of 0.558. The top three model attributions were \"lag1\" (1.067), \"lag3\" (0.275), and \"corridor_id\" (0.147), reflecting feature importance in log1p-arrivals units. These attributions represent associations learned by the model, not causal relationships.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "corridor-05",
+   "head": "corridor",
+   "input_facts": {
+    "what": "held-out monthly backtest of Singapore inbound visitor arrivals by origin market (public proxy for cross-border spend corridors); MASE below 1 beats the seasonal-naive baseline",
+    "corridor": "Thailand",
+    "region": "Southeast Asia",
+    "holdout_months": 13,
+    "mase_model": 0.446833,
+    "mase_seasonal_naive": 0.502246,
+    "mase_model_reconciled": 0.446553,
+    "top3_model_attributions": [
+     {
+      "feature": "lag1",
+      "mean_abs_shap_log1p_units": 0.119489
+     },
+     {
+      "feature": "corridor_id",
+      "mean_abs_shap_log1p_units": 0.11914
+     },
+     {
+      "feature": "lag12",
+      "mean_abs_shap_log1p_units": 0.087935
+     }
+    ],
+    "attribution_label": "model attributions (mean |SHAP| on holdout rows, log1p-arrivals units) \u2014 associations learned by the model, not causal drivers"
+   },
+   "narrative": "We conducted a 13-month holdout backtest to evaluate the performance of our model in forecasting Singapore inbound visitor arrivals from Thailand, a key corridor in Southeast Asia. The model achieved a MASE of 0.4468, outperforming the seasonal-naive baseline of 0.5022. The reconciled version of the model had a MASE of 0.4466, showing consistent performance. The top three model attributions were \"lag1\" (0.1195), \"corridor_id\" (0.1191), and \"lag12\" (0.0879), reflecting the relative importance of these features in the model's predictions.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "corridor-06",
+   "head": "corridor",
+   "input_facts": {
+    "what": "held-out monthly backtest of Singapore inbound visitor arrivals by origin market (public proxy for cross-border spend corridors); MASE below 1 beats the seasonal-naive baseline",
+    "corridor": "USA",
+    "region": "Americas",
+    "holdout_months": 13,
+    "mase_model": 0.516833,
+    "mase_seasonal_naive": 0.375929,
+    "mase_model_reconciled": 0.508402,
+    "top3_model_attributions": [
+     {
+      "feature": "lag1",
+      "mean_abs_shap_log1p_units": 0.578983
+     },
+     {
+      "feature": "lag3",
+      "mean_abs_shap_log1p_units": 0.185976
+     },
+     {
+      "feature": "corridor_id",
+      "mean_abs_shap_log1p_units": 0.080384
+     }
+    ],
+    "attribution_label": "model attributions (mean |SHAP| on holdout rows, log1p-arrivals units) \u2014 associations learned by the model, not causal drivers"
+   },
+   "narrative": "We conducted a 13-month holdout backtest of Singapore inbound visitor arrivals from the USA, a key corridor in the Americas. The model achieved a MASE of 0.516833, outperforming the seasonal-naive baseline of 0.375929. The reconciled version of the model had a MASE of 0.508402. The top three model attributions were \"lag1\" (0.578983), \"lag3\" (0.185976), and \"corridor_id\" (0.080384), reflecting feature importance in log1p-arrivals units.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "corridor-07",
+   "head": "corridor",
+   "input_facts": {
+    "what": "held-out monthly backtest of Singapore inbound visitor arrivals by origin market (public proxy for cross-border spend corridors); MASE below 1 beats the seasonal-naive baseline",
+    "corridor": "South Korea",
+    "region": "North Asia",
+    "holdout_months": 13,
+    "mase_model": 0.829143,
+    "mase_seasonal_naive": 0.43616,
+    "mase_model_reconciled": 0.732821,
+    "top3_model_attributions": [
+     {
+      "feature": "lag1",
+      "mean_abs_shap_log1p_units": 0.299541
+     },
+     {
+      "feature": "lag3",
+      "mean_abs_shap_log1p_units": 0.145944
+     },
+     {
+      "feature": "corridor_id",
+      "mean_abs_shap_log1p_units": 0.088791
+     }
+    ],
+    "attribution_label": "model attributions (mean |SHAP| on holdout rows, log1p-arrivals units) \u2014 associations learned by the model, not causal drivers"
+   },
+   "narrative": "We conducted a 13-month holdout backtest of Singapore inbound visitor arrivals from South Korea, a key corridor in North Asia, using a model with a MASE of 0.829143, outperforming the seasonal-naive baseline of 0.43616. The reconciled version of the model achieved a MASE of 0.732821. The top three model attributions were lag1 (0.299541), lag3 (0.145944), and corridor_id (0.088791), reflecting associations learned by the model, not causal drivers.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "corridor-08",
+   "head": "corridor",
+   "input_facts": {
+    "what": "held-out monthly backtest of Singapore inbound visitor arrivals by origin market (public proxy for cross-border spend corridors); MASE below 1 beats the seasonal-naive baseline",
+    "corridor": "United Kingdom",
+    "region": "Europe",
+    "holdout_months": 13,
+    "mase_model": 0.428636,
+    "mase_seasonal_naive": 0.553109,
+    "mase_model_reconciled": 0.460038,
+    "top3_model_attributions": [
+     {
+      "feature": "lag1",
+      "mean_abs_shap_log1p_units": 0.367768
+     },
+     {
+      "feature": "lag3",
+      "mean_abs_shap_log1p_units": 0.148946
+     },
+     {
+      "feature": "corridor_id",
+      "mean_abs_shap_log1p_units": 0.105693
+     }
+    ],
+    "attribution_label": "model attributions (mean |SHAP| on holdout rows, log1p-arrivals units) \u2014 associations learned by the model, not causal drivers"
+   },
+   "narrative": "We conducted a 13-month holdout backtest of Singapore inbound visitor arrivals from the United Kingdom, a corridor in the Europe region, using a model with a MASE of 0.428636, outperforming the seasonal-naive baseline of 0.553109. The reconciled version of the model achieved a MASE of 0.460038. The top three model attributions were lag1 (0.367768), lag3 (0.148946), and corridor_id (0.105693), reflecting associations learned by the model, not causal drivers.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "corridor-09",
+   "head": "corridor",
+   "input_facts": {
+    "what": "held-out monthly backtest of Singapore inbound visitor arrivals by origin market (public proxy for cross-border spend corridors); MASE below 1 beats the seasonal-naive baseline",
+    "corridor": "Malaysia",
+    "region": "Southeast Asia",
+    "holdout_months": 13,
+    "mase_model": 0.448559,
+    "mase_seasonal_naive": 0.575763,
+    "mase_model_reconciled": 0.449924,
+    "top3_model_attributions": [
+     {
+      "feature": "lag1",
+      "mean_abs_shap_log1p_units": 1.0314
+     },
+     {
+      "feature": "lag3",
+      "mean_abs_shap_log1p_units": 0.25353
+     },
+     {
+      "feature": "corridor_id",
+      "mean_abs_shap_log1p_units": 0.193725
+     }
+    ],
+    "attribution_label": "model attributions (mean |SHAP| on holdout rows, log1p-arrivals units) \u2014 associations learned by the model, not causal drivers"
+   },
+   "narrative": "We conducted a 13-month holdout backtest of Singapore inbound visitor arrivals from Malaysia, a key corridor in Southeast Asia, using a model with a MASE of 0.448559, outperforming the seasonal-naive baseline of 0.575763. The reconciled version of the model achieved a MASE of 0.449924. The top three model attributions were \"lag1\" (1.0314), \"lag3\" (0.25353), and \"corridor_id\" (0.193725), reflecting feature importance in log1p-arrivals units. These attributions represent associations learned by the model, not causal drivers.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "whitespace-10",
+   "head": "whitespace",
+   "input_facts": {
+    "what": "pseudonymized Singapore merchant-signing whitespace bucket, ranked by real public signals only (scores in 0-1); sensitivity = this bucket's rank if a simulated demand-weighted acceptance-gap signal were added at the stated strength",
+    "bucket_label": "Personal Services cluster \u2014 Clarke Quay area",
+    "area": "Clarke Quay",
+    "category": "Personal Services",
+    "rank_real_signals": 28,
+    "n_pois": 151,
+    "score_real_signals": 0.785897,
+    "reasons": [
+     "Premium-demand corridor (0.4 km to Clarke Quay; zone score 0.79)",
+     "MDR-sensitive category mix (Personal Services, prior 0.70: 1.5-3% card MDR vs 0.3% QRIS anchor)",
+     "Dense commercial cluster (median 493 POIs within 250 m)"
+    ],
+    "sensitivity": [
+     {
+      "leakage_strength": 0.1,
+      "rank": 29
+     },
+     {
+      "leakage_strength": 0.25,
+      "rank": 24
+     },
+     {
+      "leakage_strength": 0.5,
+      "rank": 23
+     }
+    ]
+   },
+   "narrative": "The Personal Services cluster \u2014 Clarke Quay area is ranked 28th out of 151 pseudonymized merchant-signing whitespace buckets in Singapore, with a score of 0.785897 based on real public signals. Key contributing factors include its proximity to a premium-demand corridor (within 0.4 km of Clarke Quay, with a zone score of 0.79), a mix of MDR-sensitive categories (Personal Services, with card MDRs at 1.5-3% versus 0.3% for QRIS anchors), and a dense commercial environment (median of 493 POIs within 250 m). Sensitivity analysis shows that if a simulated demand-weighted acceptance-gap signal were added, the bucket\u2019s rank would shift to 29 at 0.1 strength, 24 at 0.25 strength, and 23 at 0.5 strength.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "whitespace-11",
+   "head": "whitespace",
+   "input_facts": {
+    "what": "pseudonymized Singapore merchant-signing whitespace bucket, ranked by real public signals only (scores in 0-1); sensitivity = this bucket's rank if a simulated demand-weighted acceptance-gap signal were added at the stated strength",
+    "bucket_label": "F&B cluster \u2014 Orchard Road area",
+    "area": "Orchard Road",
+    "category": "F&B",
+    "rank_real_signals": 3,
+    "n_pois": 684,
+    "score_real_signals": 0.838471,
+    "reasons": [
+     "MDR-sensitive category mix (F&B, prior 0.85: 1.5-3% card MDR vs 0.3% QRIS anchor)",
+     "Premium-demand corridor (0.3 km to Orchard Road; zone score 0.82)",
+     "Dense commercial cluster (median 1092 POIs within 250 m)"
+    ],
+    "sensitivity": [
+     {
+      "leakage_strength": 0.1,
+      "rank": 2
+     },
+     {
+      "leakage_strength": 0.25,
+      "rank": 2
+     },
+     {
+      "leakage_strength": 0.5,
+      "rank": 3
+     }
+    ]
+   },
+   "narrative": "The pseudonymized Singapore merchant-signing whitespace bucket labeled \"F&B cluster \u2014 Orchard Road area\" is ranked 3 out of 684 points of interest (POIs), with a score of 0.838 based on real public signals. Key factors contributing to this ranking include a MDR-sensitive category mix, proximity to the premium-demand corridor of Orchard Road (within 0.3 km, zone score 0.82), and a dense commercial cluster with a median of 1,092 POIs within 250 meters. Sensitivity analysis shows that if a simulated demand-weighted acceptance-gap signal were added, the bucket would maintain a rank of 3 at a leakage strength of 0.5, but would rise to rank 2 at leakage strengths of 0.1 and 0.25.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "whitespace-12",
+   "head": "whitespace",
+   "input_facts": {
+    "what": "pseudonymized Singapore merchant-signing whitespace bucket, ranked by real public signals only (scores in 0-1); sensitivity = this bucket's rank if a simulated demand-weighted acceptance-gap signal were added at the stated strength",
+    "bucket_label": "F&B cluster \u2014 Raffles Place area",
+    "area": "Raffles Place",
+    "category": "F&B",
+    "rank_real_signals": 2,
+    "n_pois": 2158,
+    "score_real_signals": 0.840284,
+    "reasons": [
+     "MDR-sensitive category mix (F&B, prior 0.85: 1.5-3% card MDR vs 0.3% QRIS anchor)",
+     "Premium-demand corridor (0.3 km to Raffles Place; zone score 0.83)",
+     "Dense commercial cluster (median 1057 POIs within 250 m)"
+    ],
+    "sensitivity": [
+     {
+      "leakage_strength": 0.1,
+      "rank": 4
+     },
+     {
+      "leakage_strength": 0.25,
+      "rank": 5
+     },
+     {
+      "leakage_strength": 0.5,
+      "rank": 8
+     }
+    ]
+   },
+   "narrative": "The pseudonymized Singapore merchant-signing whitespace bucket labeled \"F&B cluster \u2014 Raffles Place area\" is ranked 2 out of all buckets based on real public signals, with a score of 0.840284. This cluster includes 2,158 points of interest and is influenced by factors such as a MDR-sensitive category mix, a premium-demand corridor within 0.3 km of Raffles Place, and a dense commercial environment with a median of 1,057 POIs within 250 meters. If a simulated demand-weighted acceptance-gap signal were introduced, the bucket\u2019s rank would shift to 4, 5, or 8 depending on the leakage strength of 0.1, 0.25, or 0.5, respectively.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "whitespace-13",
+   "head": "whitespace",
+   "input_facts": {
+    "what": "pseudonymized Singapore merchant-signing whitespace bucket, ranked by real public signals only (scores in 0-1); sensitivity = this bucket's rank if a simulated demand-weighted acceptance-gap signal were added at the stated strength",
+    "bucket_label": "F&B cluster \u2014 Bugis area",
+    "area": "Bugis",
+    "category": "F&B",
+    "rank_real_signals": 6,
+    "n_pois": 2141,
+    "score_real_signals": 0.832158,
+    "reasons": [
+     "MDR-sensitive category mix (F&B, prior 0.85: 1.5-3% card MDR vs 0.3% QRIS anchor)",
+     "Premium-demand corridor (0.4 km to Bugis; zone score 0.78)",
+     "Dense commercial cluster (median 1138 POIs within 250 m)"
+    ],
+    "sensitivity": [
+     {
+      "leakage_strength": 0.1,
+      "rank": 6
+     },
+     {
+      "leakage_strength": 0.25,
+      "rank": 6
+     },
+     {
+      "leakage_strength": 0.5,
+      "rank": 9
+     }
+    ]
+   },
+   "narrative": "The pseudonymized Singapore merchant-signing whitespace bucket for the F&B cluster in the Bugis area is ranked 6th out of all buckets, based on real public signals, with a score of 0.832. This cluster includes 2,141 points of interest and is influenced by factors such as a MDR-sensitive category mix, a premium-demand corridor near Bugis, and a dense commercial environment. When simulating the addition of a demand-weighted acceptance-gap signal, the bucket maintains a rank of 6 at leakage strengths of 0.1 and 0.25, but drops to rank 9 at a leakage strength of 0.5.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "whitespace-14",
+   "head": "whitespace",
+   "input_facts": {
+    "what": "pseudonymized Singapore merchant-signing whitespace bucket, ranked by real public signals only (scores in 0-1); sensitivity = this bucket's rank if a simulated demand-weighted acceptance-gap signal were added at the stated strength",
+    "bucket_label": "Personal Services cluster \u2014 Orchard Road area \u00b7 sector 2",
+    "area": "Orchard Road",
+    "category": "Personal Services",
+    "rank_real_signals": 14,
+    "n_pois": 269,
+    "score_real_signals": 0.805926,
+    "reasons": [
+     "Premium-demand corridor (0.3 km to Orchard Road; zone score 0.80)",
+     "Dense commercial cluster (median 941 POIs within 250 m)",
+     "MDR-sensitive category mix (Personal Services, prior 0.70: 1.5-3% card MDR vs 0.3% QRIS anchor)"
+    ],
+    "sensitivity": [
+     {
+      "leakage_strength": 0.1,
+      "rank": 27
+     },
+     {
+      "leakage_strength": 0.25,
+      "rank": 38
+     },
+     {
+      "leakage_strength": 0.5,
+      "rank": 56
+     }
+    ]
+   },
+   "narrative": "The \"Personal Services cluster \u2014 Orchard Road area \u00b7 sector 2\" is ranked 14th among 269 points of interest, with a score of 0.805926 based on real public signals. Key factors include its proximity to the premium-demand corridor of Orchard Road, a dense commercial environment, and a mix of services sensitive to merchant discount rates. If a simulated demand-weighted acceptance-gap signal were introduced, the bucket\u2019s rank would drop to 27, 38, and 56 at leakage strengths of 0.1, 0.25, and 0.5, respectively.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "whitespace-15",
+   "head": "whitespace",
+   "input_facts": {
+    "what": "pseudonymized Singapore merchant-signing whitespace bucket, ranked by real public signals only (scores in 0-1); sensitivity = this bucket's rank if a simulated demand-weighted acceptance-gap signal were added at the stated strength",
+    "bucket_label": "Personal Services cluster \u2014 Little India area",
+    "area": "Little India",
+    "category": "Personal Services",
+    "rank_real_signals": 15,
+    "n_pois": 113,
+    "score_real_signals": 0.805094,
+    "reasons": [
+     "Premium-demand corridor (0.3 km to Little India; zone score 0.83)",
+     "MDR-sensitive category mix (Personal Services, prior 0.70: 1.5-3% card MDR vs 0.3% QRIS anchor)",
+     "Dense commercial cluster (median 557 POIs within 250 m)"
+    ],
+    "sensitivity": [
+     {
+      "leakage_strength": 0.1,
+      "rank": 22
+     },
+     {
+      "leakage_strength": 0.25,
+      "rank": 29
+     },
+     {
+      "leakage_strength": 0.5,
+      "rank": 45
+     }
+    ]
+   },
+   "narrative": "The pseudonymized Singapore merchant-signing whitespace bucket for the Personal Services cluster in the Little India area is ranked 15th, with a score of 0.805 based on real public signals. This cluster includes 113 points of interest and is influenced by factors such as its proximity to a premium-demand corridor, a mix of MDR-sensitive categories, and a dense commercial environment. If a simulated demand-weighted acceptance-gap signal were introduced, the bucket\u2019s rank would shift to 22, 29, and 45 at leakage strengths of 0.1, 0.25, and 0.5, respectively.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "whitespace-16",
+   "head": "whitespace",
+   "input_facts": {
+    "what": "pseudonymized Singapore merchant-signing whitespace bucket, ranked by real public signals only (scores in 0-1); sensitivity = this bucket's rank if a simulated demand-weighted acceptance-gap signal were added at the stated strength",
+    "bucket_label": "Personal Services cluster \u2014 Somerset area",
+    "area": "Somerset",
+    "category": "Personal Services",
+    "rank_real_signals": 33,
+    "n_pois": 331,
+    "score_real_signals": 0.773661,
+    "reasons": [
+     "Dense commercial cluster (median 2150 POIs within 250 m)",
+     "MDR-sensitive category mix (Personal Services, prior 0.70: 1.5-3% card MDR vs 0.3% QRIS anchor)",
+     "Premium-demand corridor (0.7 km to Orchard Road; zone score 0.64)"
+    ],
+    "sensitivity": [
+     {
+      "leakage_strength": 0.1,
+      "rank": 37
+     },
+     {
+      "leakage_strength": 0.25,
+      "rank": 41
+     },
+     {
+      "leakage_strength": 0.5,
+      "rank": 47
+     }
+    ]
+   },
+   "narrative": "The pseudonymized Singapore merchant-signing whitespace bucket for the Personal Services cluster in the Somerset area is ranked 33 out of 331 points of interest, with a score of 0.773661 based on real public signals. Key factors include a dense commercial cluster, a mix of MDR-sensitive categories, and proximity to a premium-demand corridor. If a simulated demand-weighted acceptance-gap signal were added, the bucket's rank would shift to 37 at 0.1 strength, 41 at 0.25 strength, and 47 at 0.5 strength.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "whitespace-17",
+   "head": "whitespace",
+   "input_facts": {
+    "what": "pseudonymized Singapore merchant-signing whitespace bucket, ranked by real public signals only (scores in 0-1); sensitivity = this bucket's rank if a simulated demand-weighted acceptance-gap signal were added at the stated strength",
+    "bucket_label": "Personal Services cluster \u2014 City Hall area",
+    "area": "City Hall",
+    "category": "Personal Services",
+    "rank_real_signals": 39,
+    "n_pois": 254,
+    "score_real_signals": 0.769548,
+    "reasons": [
+     "Dense commercial cluster (median 1117 POIs within 250 m)",
+     "MDR-sensitive category mix (Personal Services, prior 0.70: 1.5-3% card MDR vs 0.3% QRIS anchor)",
+     "Premium-demand corridor (0.6 km to Clarke Quay; zone score 0.68)"
+    ],
+    "sensitivity": [
+     {
+      "leakage_strength": 0.1,
+      "rank": 34
+     },
+     {
+      "leakage_strength": 0.25,
+      "rank": 28
+     },
+     {
+      "leakage_strength": 0.5,
+      "rank": 24
+     }
+    ]
+   },
+   "narrative": "The Personal Services cluster \u2014 City Hall area in Singapore is ranked 39th out of 254 points of interest, with a score of 0.769548 based on real public signals. Key factors include a dense commercial cluster with a median of 1,117 POIs within 250 meters, a mix of MDR-sensitive categories like Personal Services (with prior rates of 1.5\u20133% card MDR versus 0.3% for QRIS anchors), and proximity to a premium-demand corridor (0.6 km to Clarke Quay, with a zone score of 0.68). If a simulated demand-weighted acceptance-gap signal were added, the bucket\u2019s rank would improve to 34 at 0.1 strength, 28 at 0.25 strength, and 24 at 0.5 strength.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "whitespace-18",
+   "head": "whitespace",
+   "input_facts": {
+    "what": "pseudonymized Singapore merchant-signing whitespace bucket, ranked by real public signals only (scores in 0-1); sensitivity = this bucket's rank if a simulated demand-weighted acceptance-gap signal were added at the stated strength",
+    "bucket_label": "F&B cluster \u2014 Tanjong Pagar area \u00b7 sector 2",
+    "area": "Tanjong Pagar",
+    "category": "F&B",
+    "rank_real_signals": 48,
+    "n_pois": 555,
+    "score_real_signals": 0.747473,
+    "reasons": [
+     "MDR-sensitive category mix (F&B, prior 0.85: 1.5-3% card MDR vs 0.3% QRIS anchor)",
+     "Dense commercial cluster (median 608 POIs within 250 m)",
+     "Premium-demand corridor (0.7 km to Raffles Place; zone score 0.64)"
+    ],
+    "sensitivity": [
+     {
+      "leakage_strength": 0.1,
+      "rank": 40
+     },
+     {
+      "leakage_strength": 0.25,
+      "rank": 32
+     },
+     {
+      "leakage_strength": 0.5,
+      "rank": 21
+     }
+    ]
+   },
+   "narrative": "The F&B cluster in the Tanjong Pagar area (sector 2) is ranked 48th out of 555 points of interest, with a score of 0.747 based on real public signals. Key factors include a mix of MDR-sensitive categories, a dense commercial environment with a median of 608 POIs within 250 meters, and proximity to a premium-demand corridor near Raffles Place. If a simulated demand-weighted acceptance-gap signal were introduced, the bucket's rank would improve to 40, 32, and 21 at leakage strengths of 0.1, 0.25, and 0.5, respectively.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "whitespace-19",
+   "head": "whitespace",
+   "input_facts": {
+    "what": "pseudonymized Singapore merchant-signing whitespace bucket, ranked by real public signals only (scores in 0-1); sensitivity = this bucket's rank if a simulated demand-weighted acceptance-gap signal were added at the stated strength",
+    "bucket_label": "F&B cluster \u2014 Katong area \u00b7 sector 2",
+    "area": "Katong",
+    "category": "F&B",
+    "rank_real_signals": 36,
+    "n_pois": 121,
+    "score_real_signals": 0.771261,
+    "reasons": [
+     "MDR-sensitive category mix (F&B, prior 0.85: 1.5-3% card MDR vs 0.3% QRIS anchor)",
+     "Premium-demand corridor (0.4 km to Katong / Joo Chiat; zone score 0.76)",
+     "Dense commercial cluster (median 166 POIs within 250 m)"
+    ],
+    "sensitivity": [
+     {
+      "leakage_strength": 0.1,
+      "rank": 36
+     },
+     {
+      "leakage_strength": 0.25,
+      "rank": 35
+     },
+     {
+      "leakage_strength": 0.5,
+      "rank": 39
+     }
+    ]
+   },
+   "narrative": "The pseudonymized Singapore merchant-signing whitespace bucket for the F&B cluster in the Katong area (sector 2) is ranked 36th out of 121 points of interest, with a score of 0.771 based on real public signals. Key factors include a mix of MDR-sensitive categories, a premium-demand corridor near Katong/Joo Chiat with a zone score of 0.76, and a dense commercial cluster with a median of 166 POIs within 250 meters. Sensitivity analysis shows that adding a simulated demand-weighted acceptance-gap signal would slightly shift the rank: at 0.1 strength, the rank remains 36; at 0.25 strength, it improves to 35; and at 0.5 strength, it drops to 39.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "uplift-20",
+   "head": "uplift",
+   "input_facts": {
+    "what": "customer segment from the randomized Hillstrom e-mail experiment (Womens E-Mail vs No E-Mail); ranks are 1=highest among 28 segments; response_rank orders segments by a response model, uplift_rank by an uplift model, measured_uplift_rank by uplift measured directly from the randomized arms; the verdict compares response-model targeting against measured uplift",
+    "segment": "3) $200 - $350 x recency 1-3m",
+    "n_treated": 1563,
+    "n_control": 1499,
+    "response_rank": 7,
+    "uplift_rank": 14,
+    "measured_uplift_rank": 19,
+    "measured_visit_uplift_pp": 3.8503,
+    "measured_visit_uplift_se_pp": 1.3634,
+    "verdict": "aligned",
+    "verdict_rule": "wasted-budget: response rank in top tercile AND measured uplift <=0 or in bottom tercile; hidden-gem: response rank bottom tercile AND measured uplift top tercile; else aligned"
+   },
+   "narrative": "The customer segment \"3) $200 - $350 x recency 1-3m\" includes 1,563 treated and 1,499 control customers. It ranks 7th out of 28 segments by a response model, 14th by an uplift model, and 19th by measured uplift from the experiment. The segment shows a 3.85 percentage point increase in visits, with a standard error of 1.36. According to the verdict rule, the response model and measured uplift are aligned for this segment.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "uplift-21",
+   "head": "uplift",
+   "input_facts": {
+    "what": "customer segment from the randomized Hillstrom e-mail experiment (Womens E-Mail vs No E-Mail); ranks are 1=highest among 28 segments; response_rank orders segments by a response model, uplift_rank by an uplift model, measured_uplift_rank by uplift measured directly from the randomized arms; the verdict compares response-model targeting against measured uplift",
+    "segment": "3) $200 - $350 x recency 10-12m",
+    "n_treated": 815,
+    "n_control": 788,
+    "response_rank": 23,
+    "uplift_rank": 18,
+    "measured_uplift_rank": 18,
+    "measured_visit_uplift_pp": 3.9581,
+    "measured_visit_uplift_se_pp": 1.6262,
+    "verdict": "aligned",
+    "verdict_rule": "wasted-budget: response rank in top tercile AND measured uplift <=0 or in bottom tercile; hidden-gem: response rank bottom tercile AND measured uplift top tercile; else aligned"
+   },
+   "narrative": "The customer segment \"3) $200 - $350 x recency 10-12m\" includes 815 treated and 788 control customers from the Hillstrom e-mail experiment. This segment ranks 23rd in response rank and 18th in both uplift rank and measured uplift rank. The measured visit uplift per person is 3.9581 with a standard error of 1.6262, and the verdict is \"aligned,\" indicating that the response model and measured uplift are consistent.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "uplift-22",
+   "head": "uplift",
+   "input_facts": {
+    "what": "customer segment from the randomized Hillstrom e-mail experiment (Womens E-Mail vs No E-Mail); ranks are 1=highest among 28 segments; response_rank orders segments by a response model, uplift_rank by an uplift model, measured_uplift_rank by uplift measured directly from the randomized arms; the verdict compares response-model targeting against measured uplift",
+    "segment": "3) $200 - $350 x recency 4-6m",
+    "n_treated": 910,
+    "n_control": 888,
+    "response_rank": 21,
+    "uplift_rank": 25,
+    "measured_uplift_rank": 23,
+    "measured_visit_uplift_pp": 1.6731,
+    "measured_visit_uplift_se_pp": 1.6084,
+    "verdict": "aligned",
+    "verdict_rule": "wasted-budget: response rank in top tercile AND measured uplift <=0 or in bottom tercile; hidden-gem: response rank bottom tercile AND measured uplift top tercile; else aligned"
+   },
+   "narrative": "The customer segment \"3) $200 - $350 x recency 4-6m\" includes 910 treated and 888 control customers. According to the response model, it ranks 21st out of 28 segments, while the uplift model ranks it 25th, and the measured uplift from the experiment places it 23rd. The measured per-person visit uplift is 1.6731 with a standard error of 1.6084. Based on the alignment rule, the targeting strategy using the response model is considered \"aligned\" with the measured uplift.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "uplift-23",
+   "head": "uplift",
+   "input_facts": {
+    "what": "customer segment from the randomized Hillstrom e-mail experiment (Womens E-Mail vs No E-Mail); ranks are 1=highest among 28 segments; response_rank orders segments by a response model, uplift_rank by an uplift model, measured_uplift_rank by uplift measured directly from the randomized arms; the verdict compares response-model targeting against measured uplift",
+    "segment": "2) $100 - $200 x recency 10-12m",
+    "n_treated": 1148,
+    "n_control": 1107,
+    "response_rank": 27,
+    "uplift_rank": 21,
+    "measured_uplift_rank": 21,
+    "measured_visit_uplift_pp": 2.852,
+    "measured_visit_uplift_se_pp": 1.2249,
+    "verdict": "aligned",
+    "verdict_rule": "wasted-budget: response rank in top tercile AND measured uplift <=0 or in bottom tercile; hidden-gem: response rank bottom tercile AND measured uplift top tercile; else aligned"
+   },
+   "narrative": "The customer segment \"2) $100 - $200 x recency 10-12m\" includes 1,148 treated and 1,107 control customers. According to the response model, it ranks 27th out of 28 segments, while both the uplift model and direct measurement place it 21st. The measured per-person visit uplift is 2.852 with a standard error of 1.225. Based on the alignment rule, the segment is classified as \"aligned.\"",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "uplift-24",
+   "head": "uplift",
+   "input_facts": {
+    "what": "customer segment from the randomized Hillstrom e-mail experiment (Womens E-Mail vs No E-Mail); ranks are 1=highest among 28 segments; response_rank orders segments by a response model, uplift_rank by an uplift model, measured_uplift_rank by uplift measured directly from the randomized arms; the verdict compares response-model targeting against measured uplift",
+    "segment": "6) $750 - $1,000 x recency 10-12m",
+    "n_treated": 27,
+    "n_control": 42,
+    "response_rank": 18,
+    "uplift_rank": 28,
+    "measured_uplift_rank": 28,
+    "measured_visit_uplift_pp": -11.3757,
+    "measured_visit_uplift_se_pp": 9.6316,
+    "verdict": "aligned",
+    "verdict_rule": "wasted-budget: response rank in top tercile AND measured uplift <=0 or in bottom tercile; hidden-gem: response rank bottom tercile AND measured uplift top tercile; else aligned"
+   },
+   "narrative": "The customer segment \"6) $750 - $1,000 x recency 10-12m\" includes 27 treated and 42 control customers from the Hillstrom e-mail experiment. According to a response model, this segment ranks 18th out of 28, while an uplift model ranks it 28th. The measured uplift from the randomized arms also ranks 28th, with a per-person visit uplift of -11.38 and a standard error of 9.63. The verdict for this segment is \"aligned,\" as it does not meet the criteria for \"wasted-budget\" or \"hidden-gem.\"",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "uplift-25",
+   "head": "uplift",
+   "input_facts": {
+    "what": "customer segment from the randomized Hillstrom e-mail experiment (Womens E-Mail vs No E-Mail); ranks are 1=highest among 28 segments; response_rank orders segments by a response model, uplift_rank by an uplift model, measured_uplift_rank by uplift measured directly from the randomized arms; the verdict compares response-model targeting against measured uplift",
+    "segment": "5) $500 - $750 x recency 4-6m",
+    "n_treated": 379,
+    "n_control": 390,
+    "response_rank": 14,
+    "uplift_rank": 2,
+    "measured_uplift_rank": 3,
+    "measured_visit_uplift_pp": 7.1206,
+    "measured_visit_uplift_se_pp": 2.3786,
+    "verdict": "aligned",
+    "verdict_rule": "wasted-budget: response rank in top tercile AND measured uplift <=0 or in bottom tercile; hidden-gem: response rank bottom tercile AND measured uplift top tercile; else aligned"
+   },
+   "narrative": "The customer segment \"5) $500 - $750 x recency 4-6m\" includes 379 treated and 390 control customers. According to the response model, it ranks 14th out of 28 segments, while the uplift model ranks it 2nd. The measured uplift from the randomized experiment ranks it 3rd, with a per-person visit uplift of 7.12 and a standard error of 2.38. The verdict is \"aligned,\" meaning the response model targeting is consistent with the measured uplift.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "uplift-26",
+   "head": "uplift",
+   "input_facts": {
+    "what": "customer segment from the randomized Hillstrom e-mail experiment (Womens E-Mail vs No E-Mail); ranks are 1=highest among 28 segments; response_rank orders segments by a response model, uplift_rank by an uplift model, measured_uplift_rank by uplift measured directly from the randomized arms; the verdict compares response-model targeting against measured uplift",
+    "segment": "1) $0 - $100 x recency 7-9m",
+    "n_treated": 1891,
+    "n_control": 1936,
+    "response_rank": 26,
+    "uplift_rank": 10,
+    "measured_uplift_rank": 9,
+    "measured_visit_uplift_pp": 5.8157,
+    "measured_visit_uplift_se_pp": 0.9457,
+    "verdict": "hidden-gem",
+    "verdict_rule": "wasted-budget: response rank in top tercile AND measured uplift <=0 or in bottom tercile; hidden-gem: response rank bottom tercile AND measured uplift top tercile; else aligned"
+   },
+   "narrative": "The customer segment \"$0 - $100 x recency 7-9m\" includes 1,891 treated and 1,936 control customers. This segment ranks 26th out of 28 in response rank (bottom tercile) but 10th in uplift rank and 9th in measured uplift rank (both top tercile). The measured visit uplift is 5.82 percentage points with a standard error of 0.95, leading to a \"hidden-gem\" verdict.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "uplift-27",
+   "head": "uplift",
+   "input_facts": {
+    "what": "customer segment from the randomized Hillstrom e-mail experiment (Womens E-Mail vs No E-Mail); ranks are 1=highest among 28 segments; response_rank orders segments by a response model, uplift_rank by an uplift model, measured_uplift_rank by uplift measured directly from the randomized arms; the verdict compares response-model targeting against measured uplift",
+    "segment": "5) $500 - $750 x recency 10-12m",
+    "n_treated": 159,
+    "n_control": 175,
+    "response_rank": 15,
+    "uplift_rank": 7,
+    "measured_uplift_rank": 6,
+    "measured_visit_uplift_pp": 6.5229,
+    "measured_visit_uplift_se_pp": 3.541,
+    "verdict": "aligned",
+    "verdict_rule": "wasted-budget: response rank in top tercile AND measured uplift <=0 or in bottom tercile; hidden-gem: response rank bottom tercile AND measured uplift top tercile; else aligned"
+   },
+   "narrative": "The customer segment \"5) $500 - $750 x recency 10-12m\" includes 159 treated and 175 control customers. According to the response model, it ranks 15th out of 28 segments, while the uplift model ranks it 7th, and the measured uplift from the experiment places it 6th. The measured per-person uplift in visits is 6.52, with a standard error of 3.54. Based on the alignment rule, the segment is classified as \"aligned.\"",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "uplift-28",
+   "head": "uplift",
+   "input_facts": {
+    "what": "customer segment from the randomized Hillstrom e-mail experiment (Womens E-Mail vs No E-Mail); ranks are 1=highest among 28 segments; response_rank orders segments by a response model, uplift_rank by an uplift model, measured_uplift_rank by uplift measured directly from the randomized arms; the verdict compares response-model targeting against measured uplift",
+    "segment": "5) $500 - $750 x recency 7-9m",
+    "n_treated": 261,
+    "n_control": 276,
+    "response_rank": 19,
+    "uplift_rank": 8,
+    "measured_uplift_rank": 8,
+    "measured_visit_uplift_pp": 5.8846,
+    "measured_visit_uplift_se_pp": 2.8025,
+    "verdict": "aligned",
+    "verdict_rule": "wasted-budget: response rank in top tercile AND measured uplift <=0 or in bottom tercile; hidden-gem: response rank bottom tercile AND measured uplift top tercile; else aligned"
+   },
+   "narrative": "The customer segment \"5) $500 - $750 x recency 7-9m\" includes 261 treated and 276 control customers. According to the response model, it ranks 19th out of 28 segments, while both the uplift model and the measured uplift from the experiment rank it 8th. The measured per-person uplift in visits is 5.88, with a standard error of 2.80. Since the segment is not classified as a \"wasted-budget\" or \"hidden-gem\" under the alignment rule, the verdict is \"aligned.\"",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  },
+  {
+   "id": "uplift-29",
+   "head": "uplift",
+   "input_facts": {
+    "what": "customer segment from the randomized Hillstrom e-mail experiment (Womens E-Mail vs No E-Mail); ranks are 1=highest among 28 segments; response_rank orders segments by a response model, uplift_rank by an uplift model, measured_uplift_rank by uplift measured directly from the randomized arms; the verdict compares response-model targeting against measured uplift",
+    "segment": "4) $350 - $500 x recency 4-6m",
+    "n_treated": 511,
+    "n_control": 526,
+    "response_rank": 9,
+    "uplift_rank": 23,
+    "measured_uplift_rank": 24,
+    "measured_visit_uplift_pp": 1.2627,
+    "measured_visit_uplift_se_pp": 2.3323,
+    "verdict": "wasted-budget",
+    "verdict_rule": "wasted-budget: response rank in top tercile AND measured uplift <=0 or in bottom tercile; hidden-gem: response rank bottom tercile AND measured uplift top tercile; else aligned"
+   },
+   "narrative": "The customer segment \"4) $350 - $500 x recency 4-6m\" includes 511 treated and 526 control customers from the Hillstrom e-mail experiment. It ranks 9th in response model predictions but 23rd in uplift model predictions and 24th in measured uplift, with a per-person visit uplift of 1.26 and standard error of 2.33. Based on the verdict rule, this segment is classified as \"wasted-budget,\" as it shows a top-tercile response rank but a bottom-tercile measured uplift.",
+   "numeric_unsupported": [],
+   "cross_exam_flags": [],
+   "verdict": "pass",
+   "fail_reason": null
+  }
+ ]
+}

@@ -1,0 +1,926 @@
+{
+ "seed": 0,
+ "versions": {
+  "python": "3.13.1",
+  "stdlib_only": true
+ },
+ "generated_by": "scripts/safety/control_plane_conformance.py --check-able",
+ "generated_at": "2026-08-23T18:38:25+00:00",
+ "data_sources": [
+  {
+   "name": "SAFETY-DESIGN.md, Part 2.6 decision rule and the SAFE-E pre-registration in Part 3, both committed at 1b32639 before any result existed",
+   "url": "SAFETY-DESIGN.md (this repository)",
+   "sha256": "eff83b68f5ff0fcd2922baaf8b536cfde1d1d7779ec9186526520773f68abb26"
+  }
+ ],
+ "labels": [
+  "designed-and-checked",
+  "not-deployed",
+  "reference-implementation",
+  "no-data-read",
+  "exhaustive-enumeration",
+  "specification-conformance"
+ ],
+ "status": "DESIGNED-AND-CHECKED",
+ "status_note": "The agent control plane is designed and not built. No line of it runs in any product. This exhibit checks one property of the written specification against a reference implementation of it. DESIGNED-AND-CHECKED is not deployed, and nothing here may be presented as a measurement of a running system.",
+ "what_this_is": "The rule in SAFETY-DESIGN.md 2.6 claims that a model output may only add friction and never remove it. This file transcribes that rule into a reference implementation, enumerates mandate, action and model-novelty-score triples, and counts the triples where the model made the outcome less restrictive than it would have been with no model at all. It converts one design assertion into a checkable property. It converts nothing else.",
+ "no_data_read": "This exhibit opens no dataset. The sibling safety exhibits run on the public IBM TabFormer benchmark, which is synthetic, or on public Foursquare venue records. This one runs on records constructed here from declared plan constants, so it carries no privacy question and no sampling uncertainty. The counts are exact over the enumerated space.",
+ "the_property_under_test": {
+  "house_rule": "A model output may only add friction, never remove it. For every action, the disposition computed with the model score present must be at least as restrictive as the disposition computed with the model absent.",
+  "source": "SAFETY-DESIGN.md 2.1, part 3",
+  "restrictiveness_order": [
+   "AUTO_EXECUTE",
+   "OBSERVE",
+   "ESCALATE",
+   "DENY"
+  ],
+  "restrictiveness_rank": {
+   "AUTO_EXECUTE": 0,
+   "OBSERVE": 1,
+   "ESCALATE": 2,
+   "DENY": 3
+  },
+  "model_absent_arm": "model_available is False, so the novelty function returns the most permissive band N0 without reading the score. This is what the pre-registration specifies: the model absent and novelty pinned to its most permissive band.",
+  "violation_definition": "a triple whose model-present disposition has a strictly lower restrictiveness rank than the same base record evaluated with the model absent"
+ },
+ "reference_implementation": {
+  "function": "reference_disposition in scripts/safety/control_plane_conformance.py",
+  "transcribed_from": "SAFETY-DESIGN.md 2.6, the pseudocode block",
+  "phases": [
+   "deterministic",
+   "graded"
+  ],
+  "reason_code_asymmetry": "Two branches return the single CATEGORY code the specification defines, one for the deny list and one for the allow list. 2.4 says the agent is told the reason code and never the threshold, so collapsing them is deliberate and the internal labels are kept apart only for the audit record and for the coverage count here.",
+  "instrumentation": "Every fact is read through one accessor that records the current phase and the provenance of the field. The provenance table is audit element seven from 2.7 made into the instrument rather than into documentation.",
+  "provenance_table": {
+   "action_amount": "action",
+   "action_bound_to_mandate": "context",
+   "action_country": "action",
+   "action_mcc": "action",
+   "action_merchant": "action",
+   "action_type": "action",
+   "actions_in_window": "context",
+   "budget_warned": "context",
+   "expires_at": "mandate",
+   "identity_proved": "context",
+   "model_available": "context",
+   "model_novelty_score": "model",
+   "not_before": "mandate",
+   "novelty_floor": "context",
+   "novelty_score_threshold": "configuration",
+   "now": "context",
+   "origin_verified": "context",
+   "prior_actions_at_merchant": "context",
+   "revoked": "mandate",
+   "scope_action_types": "mandate",
+   "scope_auto_approve_below": "configuration",
+   "scope_cumulative_max": "configuration",
+   "scope_geography": "mandate",
+   "scope_mcc_allow": "mandate",
+   "scope_mcc_deny": "mandate",
+   "scope_merchant_allow": "mandate",
+   "scope_per_transaction_max": "configuration",
+   "scope_velocity_max_actions": "configuration",
+   "signature_valid": "mandate",
+   "spent_to_date": "context"
+  },
+  "model_provenance_fields": [
+   "model_novelty_score"
+  ]
+ },
+ "plan_constants": {
+  "per_transaction_max_minor_units": 20000,
+  "auto_approve_below_minor_units": 5000,
+  "cumulative_max_minor_units": 100000,
+  "velocity_max_actions": 5,
+  "velocity_window_seconds": 3600,
+  "novelty_score_threshold": 0.95,
+  "budget_proximity_fraction": 0.8,
+  "note": "plan constants, not measurements. On the page they carry data-assumption=plan-constant per CONTRACT.md section 2b."
+ },
+ "enumeration": {
+  "exhaustive_or_sampled": "exhaustive",
+  "what_exhaustive_means_here": "every combination of the declared axes is evaluated, with no sampling and no random draw. The axes cover every fact the rule reads, and each numeric axis places a value strictly below, exactly at and strictly above the threshold it is compared against, so every comparison in the rule takes both truth values.",
+  "n_mandate_records": 216,
+  "n_action_records": 9600,
+  "n_base_records": 2073600,
+  "n_novelty_inputs": 4,
+  "n_triples_enumerated": 8294400,
+  "n_disposition_evaluations": 12441600,
+  "axes": [
+   {
+    "name": "mandate_state",
+    "values": [
+     "bad_signature",
+     "expired",
+     "valid"
+    ],
+    "n": 3
+   },
+   {
+    "name": "revocation",
+    "values": [
+     "live",
+     "revoked"
+    ],
+    "n": 2
+   },
+   {
+    "name": "mcc_state",
+    "values": [
+     "allowlisted_in_clean",
+     "allowlisted_in_denied",
+     "allowlisted_out_clean",
+     "allowlisted_out_denied",
+     "unrestricted_clean",
+     "unrestricted_denied"
+    ],
+    "n": 6
+   },
+   {
+    "name": "merchant_state",
+    "values": [
+     "allowlisted_in",
+     "allowlisted_out",
+     "unrestricted"
+    ],
+    "n": 3
+   },
+   {
+    "name": "action_type_scope",
+    "values": [
+     "type_in_scope",
+     "type_out_of_scope"
+    ],
+    "n": 2
+   },
+   {
+    "name": "identity",
+    "values": [
+     "identity_fails",
+     "identity_ok"
+    ],
+    "n": 2
+   },
+   {
+    "name": "binding",
+    "values": [
+     "bound",
+     "unbound"
+    ],
+    "n": 2
+   },
+   {
+    "name": "origin",
+    "values": [
+     "origin_ok",
+     "origin_unavailable"
+    ],
+    "n": 2
+   },
+   {
+    "name": "geography",
+    "values": [
+     "in_geography",
+     "out_of_geography"
+    ],
+    "n": 2
+   },
+   {
+    "name": "action_amount",
+    "values": [
+     "v0_at_auto_approve_boundary",
+     "v0_interior",
+     "v1_at_per_transaction_boundary",
+     "v1_interior",
+     "v2_over_cap"
+    ],
+    "n": 5
+   },
+   {
+    "name": "cumulative_position",
+    "values": [
+     "at_cap_boundary",
+     "at_proximity_boundary",
+     "between_proximity_and_cap",
+     "over_cap",
+     "well_below"
+    ],
+    "n": 5
+   },
+   {
+    "name": "velocity",
+    "values": [
+     "velocity_exceeded",
+     "within_velocity"
+    ],
+    "n": 2
+   },
+   {
+    "name": "action_type",
+    "values": [
+     "card_purchase",
+     "cart_edit",
+     "contact_change"
+    ],
+    "n": 3
+   },
+   {
+    "name": "first_use",
+    "values": [
+     "first_action_at_merchant",
+     "seen_before_at_merchant"
+    ],
+    "n": 2
+   },
+   {
+    "name": "budget_warned",
+    "values": [
+     "already_warned",
+     "not_warned"
+    ],
+    "n": 2
+   },
+   {
+    "name": "novelty_input",
+    "values": [
+     "floor_N0_score_high",
+     "floor_N0_score_low",
+     "floor_N1_score_high",
+     "floor_N1_score_low"
+    ],
+    "n": 4
+   }
+  ],
+  "axes_by_name": {
+   "mandate_state": {
+    "name": "mandate_state",
+    "values": [
+     "bad_signature",
+     "expired",
+     "valid"
+    ],
+    "n": 3
+   },
+   "revocation": {
+    "name": "revocation",
+    "values": [
+     "live",
+     "revoked"
+    ],
+    "n": 2
+   },
+   "mcc_state": {
+    "name": "mcc_state",
+    "values": [
+     "allowlisted_in_clean",
+     "allowlisted_in_denied",
+     "allowlisted_out_clean",
+     "allowlisted_out_denied",
+     "unrestricted_clean",
+     "unrestricted_denied"
+    ],
+    "n": 6
+   },
+   "merchant_state": {
+    "name": "merchant_state",
+    "values": [
+     "allowlisted_in",
+     "allowlisted_out",
+     "unrestricted"
+    ],
+    "n": 3
+   },
+   "action_type_scope": {
+    "name": "action_type_scope",
+    "values": [
+     "type_in_scope",
+     "type_out_of_scope"
+    ],
+    "n": 2
+   },
+   "identity": {
+    "name": "identity",
+    "values": [
+     "identity_fails",
+     "identity_ok"
+    ],
+    "n": 2
+   },
+   "binding": {
+    "name": "binding",
+    "values": [
+     "bound",
+     "unbound"
+    ],
+    "n": 2
+   },
+   "origin": {
+    "name": "origin",
+    "values": [
+     "origin_ok",
+     "origin_unavailable"
+    ],
+    "n": 2
+   },
+   "geography": {
+    "name": "geography",
+    "values": [
+     "in_geography",
+     "out_of_geography"
+    ],
+    "n": 2
+   },
+   "action_amount": {
+    "name": "action_amount",
+    "values": [
+     "v0_at_auto_approve_boundary",
+     "v0_interior",
+     "v1_at_per_transaction_boundary",
+     "v1_interior",
+     "v2_over_cap"
+    ],
+    "n": 5
+   },
+   "cumulative_position": {
+    "name": "cumulative_position",
+    "values": [
+     "at_cap_boundary",
+     "at_proximity_boundary",
+     "between_proximity_and_cap",
+     "over_cap",
+     "well_below"
+    ],
+    "n": 5
+   },
+   "velocity": {
+    "name": "velocity",
+    "values": [
+     "velocity_exceeded",
+     "within_velocity"
+    ],
+    "n": 2
+   },
+   "action_type": {
+    "name": "action_type",
+    "values": [
+     "card_purchase",
+     "cart_edit",
+     "contact_change"
+    ],
+    "n": 3
+   },
+   "first_use": {
+    "name": "first_use",
+    "values": [
+     "first_action_at_merchant",
+     "seen_before_at_merchant"
+    ],
+    "n": 2
+   },
+   "budget_warned": {
+    "name": "budget_warned",
+    "values": [
+     "already_warned",
+     "not_warned"
+    ],
+    "n": 2
+   },
+   "novelty_input": {
+    "name": "novelty_input",
+    "values": [
+     "floor_N0_score_high",
+     "floor_N0_score_low",
+     "floor_N1_score_high",
+     "floor_N1_score_low"
+    ],
+    "n": 4
+   }
+  }
+ },
+ "primary": {
+  "what_this_is": "the three counts the pre-registration names, and nothing else",
+  "n_triples_enumerated": 8294400,
+  "n_monotonicity_violations": 0,
+  "n_model_derived_reads_in_deterministic_path": 0,
+  "violations_by_novelty_input": {
+   "floor_N0_score_low": 0,
+   "floor_N1_score_low": 0,
+   "floor_N0_score_high": 0,
+   "floor_N1_score_high": 0
+  },
+  "conforms": true,
+  "verdict": "The property holds over the enumerated space: no triple made the model's contribution reduce friction, and no deny or cap path read a model-derived value."
+ },
+ "provenance_instrumentation": {
+  "method": "the phase and the provenance of every read are recorded by the accessor as the rule executes, so the field lists below are observed over the enumeration rather than read off the source",
+  "fields_read_in_deterministic_phase": [
+   "action_amount",
+   "action_bound_to_mandate",
+   "action_country",
+   "action_mcc",
+   "action_merchant",
+   "action_type",
+   "actions_in_window",
+   "expires_at",
+   "identity_proved",
+   "not_before",
+   "now",
+   "origin_verified",
+   "revoked",
+   "scope_action_types",
+   "scope_auto_approve_below",
+   "scope_cumulative_max",
+   "scope_geography",
+   "scope_mcc_allow",
+   "scope_mcc_deny",
+   "scope_merchant_allow",
+   "scope_per_transaction_max",
+   "scope_velocity_max_actions",
+   "signature_valid",
+   "spent_to_date"
+  ],
+  "n_fields_read_in_deterministic_phase": 24,
+  "fields_read_in_graded_phase": [
+   "action_amount",
+   "action_type",
+   "budget_warned",
+   "model_available",
+   "model_novelty_score",
+   "novelty_floor",
+   "novelty_score_threshold",
+   "prior_actions_at_merchant",
+   "scope_auto_approve_below",
+   "scope_cumulative_max",
+   "scope_per_transaction_max",
+   "spent_to_date"
+  ],
+  "n_fields_read_in_graded_phase": 12,
+  "model_provenance_fields_read_in_deterministic_phase": [],
+  "tainted_triples_by_disposition": {
+   "AUTO_EXECUTE": 0,
+   "OBSERVE": 0,
+   "ESCALATE": 0,
+   "DENY": 0
+  }
+ },
+ "coverage": {
+  "why_this_is_here": "zero violations proves nothing if the enumeration never reached the graded block. These counts show which outcomes and which reason codes the space actually exercised.",
+  "dispositions_model_present": {
+   "AUTO_EXECUTE": 192,
+   "OBSERVE": 288,
+   "ESCALATE": 2592,
+   "DENY": 8291328
+  },
+  "dispositions_model_absent": {
+   "AUTO_EXECUTE": 192,
+   "OBSERVE": 96,
+   "ESCALATE": 480,
+   "DENY": 2072832
+  },
+  "dispositions_reached": [
+   "AUTO_EXECUTE",
+   "DENY",
+   "ESCALATE",
+   "OBSERVE"
+  ],
+  "n_dispositions_reached": 4,
+  "reason_codes_returned_to_the_agent": {
+   "BINDING": 345600,
+   "BUDGET_PROXIMITY": 160,
+   "CATEGORY": 57600,
+   "CUMULATIVE_CAP": 1536,
+   "FIRST_USE": 128,
+   "GEOGRAPHY": 9600,
+   "IDENTITY": 4147200,
+   "IRREVERSIBLE": 1024,
+   "MANDATE": 2764800,
+   "MERCHANT": 9600,
+   "NOVELTY": 1024,
+   "ORIGIN_UNAVAILABLE": 172800,
+   "OUT_OF_SCOPE": 86400,
+   "OVER_CAP": 1920,
+   "REVOKED": 691200,
+   "VALUE_AND_NOVELTY": 256,
+   "VALUE_OR_NOVELTY": 288,
+   "VELOCITY": 3072,
+   "WITHIN_MANDATE": 192
+  },
+  "n_reason_codes_returned_to_the_agent": 19,
+  "reason_codes_internal": {
+   "BINDING": 345600,
+   "BUDGET_PROXIMITY": 160,
+   "CATEGORY_ALLOWLIST": 14400,
+   "CATEGORY_DENYLIST": 43200,
+   "CUMULATIVE_CAP": 1536,
+   "FIRST_USE": 128,
+   "GEOGRAPHY": 9600,
+   "IDENTITY": 4147200,
+   "IRREVERSIBLE": 1024,
+   "MANDATE": 2764800,
+   "MERCHANT": 9600,
+   "NOVELTY": 1024,
+   "ORIGIN_UNAVAILABLE": 172800,
+   "OUT_OF_SCOPE": 86400,
+   "OVER_CAP": 1920,
+   "REVOKED": 691200,
+   "VALUE_AND_NOVELTY": 256,
+   "VALUE_OR_NOVELTY": 288,
+   "VELOCITY": 3072,
+   "WITHIN_MANDATE": 192
+  },
+  "n_reason_codes_internal": 20,
+  "internal_reason_codes_never_reached": [],
+  "n_internal_reason_codes_never_reached": 0,
+  "n_triples_reaching_the_graded_block": 3072,
+  "share_of_triples_reaching_the_graded_block": 0.00037037,
+  "n_triples_where_the_model_changed_the_disposition": 864,
+  "n_triples_where_the_model_added_friction": 864,
+  "read_the_denominator_before_the_headline": "The large count is the enumerated space, not the strength of the evidence. Most triples stop in the deterministic block, where the model cannot reach them and where a monotonicity pass is free. The triples that carry the weight are the ones that reach the graded block, and inside those, the ones where the model actually moved the outcome. Both counts are printed above and the second is the one to quote."
+ },
+ "supplementary": {
+  "what_this_is": "two arms beyond the pre-registered three counts. They strengthen the primary measure and they do not replace it.",
+  "pairwise_band_monotonicity": {
+   "definition": "for every base record, restrictiveness must be non-decreasing across the novelty bands in the order N0, N1, N2, not only against the pinned N0 baseline",
+   "n_bases_checked": 2073600,
+   "n_bases_with_a_violation": 0
+  },
+  "model_score_sweep": {
+   "what_this_is": "restrictiveness as a function of the model novelty score itself, on the cross-section where every deterministic pre-check passes",
+   "score_grid": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    0.9,
+    0.94,
+    0.95,
+    0.96,
+    0.99,
+    1.0
+   ],
+   "threshold": 0.95,
+   "comparison": "strictly greater than the threshold raises the band to N2",
+   "n_bases": 1200,
+   "n_rows": 12000,
+   "n_score_steps_compared": 10800,
+   "n_score_steps_where_restrictiveness_decreased": 0,
+   "n_score_steps_where_the_band_decreased": 0,
+   "exhaustive_over_this_cross_section": true
+  }
+ },
+ "sanity": {
+  "what_this_is": "a conformance checker that cannot report a violation is not evidence. Three deliberately broken reference rules run through the identical enumeration, each built to trip a named detector. The run aborts if any of them comes back behaving other than declared, so the zero above is a measured zero and not an untested one.",
+  "these_are_synthetic_defects": "The mutants are not proposals and no part of the specification. They exist only to calibrate the detectors.",
+  "identity_rung": {
+   "config": "the reference rule evaluated twice on the same record, model absent on both sides",
+   "n_bases": 2073600,
+   "n_repeat_evaluations": 2073600,
+   "n_disagreements": 0,
+   "note": "the comparator's zero point, and a determinism check on the rule at the same time. It is measured rather than assumed, because a rule that is not a pure function of the facts would make every other count here meaningless."
+  },
+  "mutants": [
+   {
+    "name": "novelty_review_substitutes_for_human",
+    "defect": "the model's novelty verdict is treated as a completed review, so a flagged action returns OBSERVE instead of reaching the escalation checks",
+    "n_triples_enumerated": 8294400,
+    "n_triples_where_the_model_changed_the_disposition": 1632,
+    "n_monotonicity_violations": 960,
+    "n_model_derived_reads_in_deterministic_path": 0,
+    "model_provenance_fields_read_in_deterministic_phase": [],
+    "expected_to_trip_monotonicity": true,
+    "expected_to_trip_model_read_in_deterministic_path": false,
+    "tripped_monotonicity": true,
+    "tripped_model_read_in_deterministic_path": false,
+    "caught_as_expected": true,
+    "first_violations": [
+     {
+      "novelty_input": "floor_N0_score_high",
+      "model_present_disposition": "OBSERVE",
+      "model_absent_disposition": "ESCALATE",
+      "action_amount": 5000,
+      "action_type": "card_purchase",
+      "spent_to_date": 95000,
+      "reason_code_model_present": "MODEL_REVIEWED"
+     },
+     {
+      "novelty_input": "floor_N1_score_high",
+      "model_present_disposition": "OBSERVE",
+      "model_absent_disposition": "ESCALATE",
+      "action_amount": 5000,
+      "action_type": "card_purchase",
+      "spent_to_date": 95000,
+      "reason_code_model_present": "MODEL_REVIEWED"
+     },
+     {
+      "novelty_input": "floor_N0_score_high",
+      "model_present_disposition": "OBSERVE",
+      "model_absent_disposition": "ESCALATE",
+      "action_amount": 5000,
+      "action_type": "card_purchase",
+      "spent_to_date": 95000,
+      "reason_code_model_present": "MODEL_REVIEWED"
+     },
+     {
+      "novelty_input": "floor_N1_score_high",
+      "model_present_disposition": "OBSERVE",
+      "model_absent_disposition": "ESCALATE",
+      "action_amount": 5000,
+      "action_type": "card_purchase",
+      "spent_to_date": 95000,
+      "reason_code_model_present": "MODEL_REVIEWED"
+     },
+     {
+      "novelty_input": "floor_N0_score_high",
+      "model_present_disposition": "OBSERVE",
+      "model_absent_disposition": "ESCALATE",
+      "action_amount": 5000,
+      "action_type": "cart_edit",
+      "spent_to_date": 95000,
+      "reason_code_model_present": "MODEL_REVIEWED"
+     }
+    ]
+   },
+   {
+    "name": "over_cap_waived_when_not_novel",
+    "defect": "the over-cap deny consults the model and lets an above-cap action through whenever the model has not flagged it",
+    "n_triples_enumerated": 8294400,
+    "n_triples_where_the_model_changed_the_disposition": 1296,
+    "n_monotonicity_violations": 0,
+    "n_model_derived_reads_in_deterministic_path": 1920,
+    "model_provenance_fields_read_in_deterministic_phase": [
+     "model_novelty_score"
+    ],
+    "expected_to_trip_monotonicity": false,
+    "expected_to_trip_model_read_in_deterministic_path": true,
+    "tripped_monotonicity": false,
+    "tripped_model_read_in_deterministic_path": true,
+    "caught_as_expected": true,
+    "first_violations": []
+   },
+   {
+    "name": "cumulative_cap_grace_at_mid_novelty",
+    "defect": "the cumulative-cap deny is waived at the middle novelty band, which both reads a model value in a cap path and makes N1 more permissive than N0",
+    "n_triples_enumerated": 8294400,
+    "n_triples_where_the_model_changed_the_disposition": 1056,
+    "n_monotonicity_violations": 192,
+    "n_model_derived_reads_in_deterministic_path": 1536,
+    "model_provenance_fields_read_in_deterministic_phase": [
+     "model_novelty_score"
+    ],
+    "expected_to_trip_monotonicity": true,
+    "expected_to_trip_model_read_in_deterministic_path": true,
+    "tripped_monotonicity": true,
+    "tripped_model_read_in_deterministic_path": true,
+    "caught_as_expected": true,
+    "first_violations": [
+     {
+      "novelty_input": "floor_N1_score_low",
+      "model_present_disposition": "OBSERVE",
+      "model_absent_disposition": "DENY",
+      "action_amount": 5000,
+      "action_type": "card_purchase",
+      "spent_to_date": 115000,
+      "reason_code_model_present": "VALUE_OR_NOVELTY"
+     },
+     {
+      "novelty_input": "floor_N1_score_low",
+      "model_present_disposition": "ESCALATE",
+      "model_absent_disposition": "DENY",
+      "action_amount": 5000,
+      "action_type": "card_purchase",
+      "spent_to_date": 115000,
+      "reason_code_model_present": "BUDGET_PROXIMITY"
+     },
+     {
+      "novelty_input": "floor_N1_score_low",
+      "model_present_disposition": "OBSERVE",
+      "model_absent_disposition": "DENY",
+      "action_amount": 5000,
+      "action_type": "card_purchase",
+      "spent_to_date": 115000,
+      "reason_code_model_present": "VALUE_OR_NOVELTY"
+     },
+     {
+      "novelty_input": "floor_N1_score_low",
+      "model_present_disposition": "ESCALATE",
+      "model_absent_disposition": "DENY",
+      "action_amount": 5000,
+      "action_type": "card_purchase",
+      "spent_to_date": 115000,
+      "reason_code_model_present": "BUDGET_PROXIMITY"
+     },
+     {
+      "novelty_input": "floor_N1_score_low",
+      "model_present_disposition": "OBSERVE",
+      "model_absent_disposition": "DENY",
+      "action_amount": 5000,
+      "action_type": "cart_edit",
+      "spent_to_date": 115000,
+      "reason_code_model_present": "VALUE_OR_NOVELTY"
+     }
+    ]
+   }
+  ],
+  "mutants_by_name": {
+   "novelty_review_substitutes_for_human": {
+    "name": "novelty_review_substitutes_for_human",
+    "defect": "the model's novelty verdict is treated as a completed review, so a flagged action returns OBSERVE instead of reaching the escalation checks",
+    "n_triples_enumerated": 8294400,
+    "n_triples_where_the_model_changed_the_disposition": 1632,
+    "n_monotonicity_violations": 960,
+    "n_model_derived_reads_in_deterministic_path": 0,
+    "model_provenance_fields_read_in_deterministic_phase": [],
+    "expected_to_trip_monotonicity": true,
+    "expected_to_trip_model_read_in_deterministic_path": false,
+    "tripped_monotonicity": true,
+    "tripped_model_read_in_deterministic_path": false,
+    "caught_as_expected": true,
+    "first_violations": [
+     {
+      "novelty_input": "floor_N0_score_high",
+      "model_present_disposition": "OBSERVE",
+      "model_absent_disposition": "ESCALATE",
+      "action_amount": 5000,
+      "action_type": "card_purchase",
+      "spent_to_date": 95000,
+      "reason_code_model_present": "MODEL_REVIEWED"
+     },
+     {
+      "novelty_input": "floor_N1_score_high",
+      "model_present_disposition": "OBSERVE",
+      "model_absent_disposition": "ESCALATE",
+      "action_amount": 5000,
+      "action_type": "card_purchase",
+      "spent_to_date": 95000,
+      "reason_code_model_present": "MODEL_REVIEWED"
+     },
+     {
+      "novelty_input": "floor_N0_score_high",
+      "model_present_disposition": "OBSERVE",
+      "model_absent_disposition": "ESCALATE",
+      "action_amount": 5000,
+      "action_type": "card_purchase",
+      "spent_to_date": 95000,
+      "reason_code_model_present": "MODEL_REVIEWED"
+     },
+     {
+      "novelty_input": "floor_N1_score_high",
+      "model_present_disposition": "OBSERVE",
+      "model_absent_disposition": "ESCALATE",
+      "action_amount": 5000,
+      "action_type": "card_purchase",
+      "spent_to_date": 95000,
+      "reason_code_model_present": "MODEL_REVIEWED"
+     },
+     {
+      "novelty_input": "floor_N0_score_high",
+      "model_present_disposition": "OBSERVE",
+      "model_absent_disposition": "ESCALATE",
+      "action_amount": 5000,
+      "action_type": "cart_edit",
+      "spent_to_date": 95000,
+      "reason_code_model_present": "MODEL_REVIEWED"
+     }
+    ]
+   },
+   "over_cap_waived_when_not_novel": {
+    "name": "over_cap_waived_when_not_novel",
+    "defect": "the over-cap deny consults the model and lets an above-cap action through whenever the model has not flagged it",
+    "n_triples_enumerated": 8294400,
+    "n_triples_where_the_model_changed_the_disposition": 1296,
+    "n_monotonicity_violations": 0,
+    "n_model_derived_reads_in_deterministic_path": 1920,
+    "model_provenance_fields_read_in_deterministic_phase": [
+     "model_novelty_score"
+    ],
+    "expected_to_trip_monotonicity": false,
+    "expected_to_trip_model_read_in_deterministic_path": true,
+    "tripped_monotonicity": false,
+    "tripped_model_read_in_deterministic_path": true,
+    "caught_as_expected": true,
+    "first_violations": []
+   },
+   "cumulative_cap_grace_at_mid_novelty": {
+    "name": "cumulative_cap_grace_at_mid_novelty",
+    "defect": "the cumulative-cap deny is waived at the middle novelty band, which both reads a model value in a cap path and makes N1 more permissive than N0",
+    "n_triples_enumerated": 8294400,
+    "n_triples_where_the_model_changed_the_disposition": 1056,
+    "n_monotonicity_violations": 192,
+    "n_model_derived_reads_in_deterministic_path": 1536,
+    "model_provenance_fields_read_in_deterministic_phase": [
+     "model_novelty_score"
+    ],
+    "expected_to_trip_monotonicity": true,
+    "expected_to_trip_model_read_in_deterministic_path": true,
+    "tripped_monotonicity": true,
+    "tripped_model_read_in_deterministic_path": true,
+    "caught_as_expected": true,
+    "first_violations": [
+     {
+      "novelty_input": "floor_N1_score_low",
+      "model_present_disposition": "OBSERVE",
+      "model_absent_disposition": "DENY",
+      "action_amount": 5000,
+      "action_type": "card_purchase",
+      "spent_to_date": 115000,
+      "reason_code_model_present": "VALUE_OR_NOVELTY"
+     },
+     {
+      "novelty_input": "floor_N1_score_low",
+      "model_present_disposition": "ESCALATE",
+      "model_absent_disposition": "DENY",
+      "action_amount": 5000,
+      "action_type": "card_purchase",
+      "spent_to_date": 115000,
+      "reason_code_model_present": "BUDGET_PROXIMITY"
+     },
+     {
+      "novelty_input": "floor_N1_score_low",
+      "model_present_disposition": "OBSERVE",
+      "model_absent_disposition": "DENY",
+      "action_amount": 5000,
+      "action_type": "card_purchase",
+      "spent_to_date": 115000,
+      "reason_code_model_present": "VALUE_OR_NOVELTY"
+     },
+     {
+      "novelty_input": "floor_N1_score_low",
+      "model_present_disposition": "ESCALATE",
+      "model_absent_disposition": "DENY",
+      "action_amount": 5000,
+      "action_type": "card_purchase",
+      "spent_to_date": 115000,
+      "reason_code_model_present": "BUDGET_PROXIMITY"
+     },
+     {
+      "novelty_input": "floor_N1_score_low",
+      "model_present_disposition": "OBSERVE",
+      "model_absent_disposition": "DENY",
+      "action_amount": 5000,
+      "action_type": "cart_edit",
+      "spent_to_date": 115000,
+      "reason_code_model_present": "VALUE_OR_NOVELTY"
+     }
+    ]
+   }
+  },
+  "n_mutants": 3,
+  "n_mutants_caught_as_declared": 3,
+  "the_asymmetry_that_matters": "One mutant trips the monotonicity count and not the taint count, one trips the taint count and not the monotonicity count, and one trips both. That is the evidence that the two pre-registered counts measure different things and that neither is redundant."
+ },
+ "findings_as_obtained": [
+  "8,294,400 triples enumerated exhaustively over 2,073,600 base records and 4 novelty inputs, with 0 monotonicity violations.",
+  "The denominator flatters the result and the honest number is smaller. Only 3,072 of those triples reach the graded block at all, because the deterministic block denies the rest first, and the model changed the disposition in 864 of them, every one of those 864 times toward more friction. That smaller count is the one carrying the property.",
+  "0 triples read a model-provenance field inside the deterministic block. The deterministic block read 24 distinct fields over the whole enumeration and 0 of them carry model provenance.",
+  "All four dispositions and 20 of 20 internal reason labels were reached, so the enumeration exercised the graded block rather than denying everything early.",
+  "3 deliberately broken reference rules were run through the same enumeration and all 3 behaved exactly as declared in advance, which is what makes the zero above a measured zero.",
+  "The finer arm agrees: 0 base records show a violation when restrictiveness is checked pairwise across N0, N1 and N2 rather than only against the pinned baseline, and 0 of 10,800 score steps reduced restrictiveness as the model novelty score rose across its threshold."
+ ],
+ "interpretation_guard": [
+  "Zero violations means the rule AS SPECIFIED cannot let a model output reduce friction over the enumerated space. It does not mean the control plane is safe, and it does not mean the control plane exists.",
+  "The status is DESIGNED-AND-CHECKED. Do not place this beside the measured privacy results in a way that reads as a measurement of a running system.",
+  "This is a property of our own specification, checked by us. An external reader gets the value from the enumeration being exhaustive and from the mutants showing the checker can fail, not from the number zero on its own.",
+  "Do not quote the triple count as though it were the strength of the evidence. Most of the space stops in the deterministic block where the model cannot reach it. Quote coverage.n_triples_where_the_model_changed_the_disposition beside it or quote neither."
+ ],
+ "limitations": [
+  "It is a reference implementation of a rule this team wrote, not the code of any deployed system. A conformance pass says the specification has the property. It says nothing about an implementation nobody has built.",
+  "The enumeration is exhaustive over the declared axes, materialized from one set of plan constants. Every comparison in the rule is exercised below, at and above its threshold, but a different constant set is a different enumeration.",
+  "The enumerated space is dominated by triples the deterministic block denies before the model is consulted, so the headline count is much larger than the count of triples on which the property is non-trivially tested. Both numbers sit in the coverage block and the smaller one is the honest one.",
+  "The property is monotonicity in the model's contribution. It is not a proof that the deterministic layer is correct, that the thresholds are well chosen, or that a real novelty model would produce scores of the shape assumed here.",
+  "Nothing here measures resistance to attack. A gate can be perfectly monotone in the model's output and still be defeated by an unverified mandate, a stale revocation record or a compromised registry. Those sit in 2.4, 2.7 and the failure list in 2.8, and none of them is measured by this file.",
+  "The taint instrumentation observes reads through one accessor. A rule that reached a model value by another route, by closing over it for instance, would not be seen. The reference implementation reads every fact through the accessor and that is checkable by reading the function, but it is a property of this code and not something the language enforces.",
+  "The four dispositions are treated as a total order. That is what 2.1 states, and it is a modelling choice: an escalation that times out is recorded as not executed, so it is treated here as more restrictive than an observe, which executes."
+ ],
+ "deviations_from_preregistration": [
+  {
+   "item": "runtime",
+   "preregistered": "laptop, seconds, stdlib only, deterministic",
+   "as_run": "stdlib only and deterministic as written, wall time 32.0 seconds",
+   "why": "the enumeration was taken exhaustive over the full declared axis set rather than sampled, because an exhaustive count over a small space is a stronger statement than a sampled one and the space is small enough to enumerate"
+  },
+  {
+   "item": "house helpers",
+   "preregistered": "stdlib only",
+   "as_run": "atomic_write_json and the version block are local copies rather than imports from scripts/fm/common.py",
+   "why": "that module imports numpy at module scope, and importing it would break the stdlib-only promise. Behaviour is identical to the house helper."
+  },
+  {
+   "item": "arms beyond the pre-registration",
+   "preregistered": "three counts: triples enumerated, monotonicity violations, model-derived reads inside the deterministic path",
+   "as_run": "the three counts are reported unchanged as primary, with a coverage block, a pairwise band monotonicity arm and a model score sweep added beside them",
+   "why": "the pre-registered comparison pins the model-absent arm to one band, so on its own it cannot see a rule that is uniformly more permissive. The added arms are strictly stronger and they are labelled supplementary so the pre-registered measure stays legible on its own."
+  }
+ ],
+ "pointer_law": "sanity.mutants is a LIST, so copy addresses a mutant by name only through sanity.mutants_by_name.<name>, never by position. enumeration.axes is a LIST for the same reason and carries enumeration.axes_by_name beside it. Positional stamps are allowed only inside a renderer that emits the key and the value from the same loop iteration.",
+ "runtime": {
+  "wall_seconds": 31.97,
+  "machine": "laptop CPU, single process, stdlib only",
+  "note": "excluded from --check by prefix, because it is a timing and not a measurement"
+ },
+ "check": {
+  "command": "python3 scripts/safety/control_plane_conformance.py --check",
+  "tolerance": 1e-06,
+  "note": "re-enumerates the whole space from the declared axes and compares every numeric leaf against the committed results/safety_control_plane.json. Deterministic on CPU with no random draw and no data read, so it needs no node pinning. /versions and /runtime are excluded from the comparison. The check also prints an advisory when the sha256 of SAFETY-DESIGN.md differs from the one recorded in data_sources, which does not change the exit code."
+ }
+}

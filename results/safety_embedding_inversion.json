@@ -1,0 +1,2046 @@
+{
+ "seed": 42,
+ "versions": {
+  "python": "3.13.1",
+  "numpy": "2.5.2",
+  "polars": "1.43.2",
+  "pyarrow": "25.0.1",
+  "lightgbm": "4.7.0",
+  "sklearn": "1.9.0",
+  "torch": "2.13.0"
+ },
+ "generated_by": "scripts/safety/embedding_inversion.py --check-able",
+ "generated_at": "2026-08-23T18:00:59Z",
+ "data_sources": [
+  {
+   "name": "IBM TabFormer card_transaction.v1.csv (synthetic)",
+   "url": "https://github.com/IBM/TabFormer (data/credit_card/transactions.tgz)",
+   "sha256": "e9f589a0958f40d60f81b1a2e8428db86e00c05755caf44fb055827976c0efa2"
+  },
+  {
+   "name": "data/merchant_embeddings.parquet, internal artifact produced by scripts/fm/embed.py from the frozen backbone checkpoint",
+   "url": "local, never released",
+   "sha256": "ff36320c911fcee7d7ce287d158b07cd747e1acb308f76232e0935202cb2aaa0"
+  }
+ ],
+ "labels": [
+  "synthetic",
+  "mechanism-not-exposure",
+  "internal-artifact-not-shipped",
+  "attack-vs-imputation-control"
+ ],
+ "what_this_is": "An attribute-inference attack on the merchant embedding file, run against a population-imputation control that was built and hashed before the attack existed. The unit is one merchant whose embedding is the pooled encoding of exactly one pre-cut transaction, so the vector is a lossy encoding of a single record. The question is how much of that record comes back from the 512 numbers alone, and whether it comes back from the vector or only from the population distribution that an adversary could have written down without us.",
+ "scope_honesty_read_this_before_the_numbers": {
+  "we_ship_embeddings_to_nobody": "The partner surface releases bucket-level scores. The merchant embedding file is an internal artifact that stays inside the perimeter by design and is not part of any partner deliverable.",
+  "so_what_a_positive_result_means": "This measures the artifact we deliberately keep inside. A positive result is evidence FOR the design choice that keeps it inside, not the disclosure of a live hole in a shipped system, and it must never be written up as one.",
+  "what_it_is_not": "It is not a vulnerability report, it is not a claim about any deployed system, and it does not describe anything a partner can reach today.",
+  "why_it_is_worth_measuring_anyway": "The page makes a data-rights claim in words. This turns the words into a number, whichever way the number lands."
+ },
+ "mechanism_not_exposure": "The corpus is the public IBM TabFormer benchmark and it is SYNTHETIC. There is no cardmember here and no American Express data here. This measures the mechanism, meaning how much a pooled encoding of one transaction gives back under this protocol, and it is not a measurement of American Express exposure.",
+ "pre_registration": {
+  "file": "SAFETY-DESIGN.md, section SAFE-D",
+  "committed_at": "1b32639, before any result existed",
+  "primary_target": "merchant_category_mcc",
+  "primary_target_reason": "merchant category is the field the whitespace head's similarity signal runs on, so it is the field whose recovery would matter commercially. Declared before the run and not swapped afterwards.",
+  "secondary_target": "merchant_city, the field that sits next to the vector in the same file",
+  "third_target": "amount_decile, the one target that is a property of the transaction rather than of the merchant",
+  "order_of_work": "the imputation control is built, scored and hashed first, then the probe is trained. The producer enforces it: run_attack raises unless build_controls has recorded the hash."
+ },
+ "order_of_work_proof": {
+  "control_block_sha256_before_attack": "bb5aed1ac2dbb30dc7566f5f09967fd07f121b0c2788eb82bc489348e626439b",
+  "control_block_sha256_at_report": "bb5aed1ac2dbb30dc7566f5f09967fd07f121b0c2788eb82bc489348e626439b",
+  "equal": true,
+  "note": "the same structural move as the zero-label law in results/protection.json. If these two hashes differ the control was touched after the attack ran and the file is void."
+ },
+ "population": {
+  "n_merchants_in_embedding_file": 238615,
+  "n_merchants_single_transaction": 64432,
+  "share_single_transaction": 0.270025,
+  "n_distinct_cities_in_file": 13189,
+  "n_multi_transaction_merchants": 174183,
+  "n_multi_transaction_merchants_with_one_distinct_mcc": 174143,
+  "share_multi_transaction_merchants_with_one_distinct_mcc": 0.99977,
+  "corpus_cut": {
+   "n_csv_rows": 24386900,
+   "n_rows_dropped_unparseable": 0,
+   "n_rows": 24386900,
+   "cut_ts": 1503653820,
+   "cut_date": "2017-08-25T09:37:00Z",
+   "n_rows_pre_cut": 19997257,
+   "n_rows_post_cut": 4389643,
+   "min_ts": 662800200,
+   "max_ts": 1582934280,
+   "post_frac": 0.18,
+   "note": "recomputed from data/transactions.tgz in this run by the same rule scripts/fm/prep.py uses, so the join below rests on a reproduced cut and not on a remembered constant"
+  },
+  "join_is_exact": {
+   "n_unmatched_merchants": 0,
+   "n_count_disagreements": 0,
+   "note": "every merchant in the embedding file was matched back to the raw corpus on merchant name plus city, and every recovered pre-cut count equals the count stored in the file. Both must be zero or the producer aborts."
+  },
+  "verified_in_this_run": "the row count, the single-transaction count, the cut timestamp and the pre-cut and post-cut row counts were all recomputed here from source rather than carried over from the feasibility audit."
+ },
+ "embedding_provenance": {
+  "producer": "scripts/fm/embed.py:44-92",
+  "pooling": "mean of the encoder output over that merchant's PRE-cut transactions",
+  "so_for_a_single_transaction_merchant": "the vector is the encoder state of exactly one transaction, with no averaging to hide behind",
+  "encoder": "a bidirectional transformer encoder over a window of up to 16 consecutive transactions of the SAME account, so the vector is contextual and also carries some of that account's neighbouring activity. That adjacent surface is not measured here.",
+  "input_fields": [
+   "year",
+   "month",
+   "day",
+   "hour",
+   "amount_q",
+   "use_chip",
+   "mcc",
+   "city",
+   "state",
+   "errors"
+  ],
+  "the_mechanism_that_makes_a_positive_result_expected": "merchant category and city are TOKENIZED INPUTS to the encoder, and the amount enters as a 100-bucket quantile token. A recovered category is therefore the model handing back one of its own input fields, which is what a lossy encoding of a single record does. The finding is not that the model was careless, it is that pooling over one transaction pools over nothing.",
+  "city_vocabulary_cap": "scripts/fm/prep.py caps the city vocabulary at the top 1000 pre-cut cities and maps the rest to a single unknown token, so most city values never entered the encoder at all. Read the city result against that, not against the attack's effort."
+ },
+ "subsample": {
+  "rule": "a seeded uniform sample of the single-transaction merchants, capped at the pre-registered 60,000 for memory",
+  "n_eligible": 64432,
+  "n_sampled": 60000,
+  "seed": 42
+ },
+ "split": {
+  "kind": "merchant-disjoint by construction, since one merchant is one row",
+  "n_train": 45000,
+  "n_test": 15000,
+  "n_shared_merchants_train_test": 0,
+  "caveat": "embeddings are not fully independent across merchants: two merchants can appear in the same encoder window if the same account transacted with both, so a test merchant's vector may have been contextualised by a train merchant's transaction. That dependence is not measured here. It cannot manufacture the primary result, because the primary target is an input token of the test merchant's own transaction."
+ },
+ "targets": {
+  "merchant_category_mcc": {
+   "definition": "the raw MCC of that merchant's single pre-cut transaction",
+   "n_classes": 91,
+   "majority_class_share": 0.09846666666666666,
+   "top_classes": [
+    {
+     "mcc": "7538",
+     "n": 5908
+    },
+    {
+     "mcc": "5912",
+     "n": 5094
+    },
+    {
+     "mcc": "5411",
+     "n": 4053
+    },
+    {
+     "mcc": "5300",
+     "n": 3899
+    },
+    {
+     "mcc": "4900",
+     "n": 3855
+    },
+    {
+     "mcc": "5812",
+     "n": 3262
+    },
+    {
+     "mcc": "5921",
+     "n": 3032
+    },
+    {
+     "mcc": "5310",
+     "n": 3026
+    },
+    {
+     "mcc": "5813",
+     "n": 2794
+    },
+    {
+     "mcc": "4121",
+     "n": 1948
+    }
+   ]
+  },
+  "merchant_city": {
+   "definition": "the merchant city string of that transaction",
+   "n_classes": 11111,
+   "majority_class_share": 0.0057,
+   "n_test_rows_in_classes_absent_from_train": 2323,
+   "share_of_sampled_merchants_whose_city_is_inside_the_model_vocabulary": 0.360717
+  },
+  "amount_decile": {
+   "definition": "the decile of the transaction amount, edges taken from the TRAIN merchants only",
+   "n_classes": 10,
+   "majority_class_share": 0.10306666666666667,
+   "edges": [
+    5.98,
+    11.83,
+    18.11,
+    28.02,
+    40.305,
+    54.31,
+    72.42300000000003,
+    98.97200000000004,
+    154.5
+   ]
+  }
+ },
+ "metric_definitions": {
+  "why_not_accuracy": "Mehnaz, Li and Bertino 2020 find accuracy uninformative when the target distribution is unbalanced and recommend G-mean and the Matthews correlation coefficient. Accuracy appears in this file only inside the same dict as the majority-class share, never on its own, and it is never the headline.",
+  "gmean_ovr_macro": "mean over the classes present in the scored rows of sqrt(recall times specificity) for that class against the rest. This is the multiclass reading that stays informative when some classes are never recovered.",
+  "gmean_recall_geometric": "the strict multiclass G-mean, the geometric mean of the per-class recalls. It is exactly 0 if any present class is never recovered, which is the honest behaviour on a long tail and is why both readings ship.",
+  "matthews": "the multiclass Matthews correlation coefficient",
+  "matthews_implementation_gap_vs_sklearn": 0.0
+ },
+ "reference": {
+  "matthews_no_information": 0.0,
+  "gmean_recall_geometric_for_a_constant_predictor": 0.0,
+  "note": "Any predictor independent of the target scores a Matthews coefficient of 0 in expectation, and a constant predictor scores a strict multiclass G-mean of exactly 0 whenever there is more than one class. Read every number below against those, and against the control arms, which are the empirical version of the same idea."
+ },
+ "bootstrap": {
+  "method": "bootstrap over test merchants, which is the entity here",
+  "B": 1000,
+  "ci": "percentile 95%",
+  "paired": "every arm is scored on the same resampled merchants inside one replicate, so the differences in comparisons are paired",
+  "seed": 4242,
+  "caveat_on_macro_gmean_intervals": "on the city target, which has thousands of classes, a bootstrap replicate does not contain every class, and gmean_ovr_macro averages over the classes present in that replicate. The interval for that one metric is therefore the spread of the replicate statistic and is not centred on the point estimate. Matthews and accuracy do not have this property and their intervals read normally."
+ },
+ "controls_built_first": {
+  "merchant_category_mcc": {
+   "control_marginal_mode": {
+    "gmean_ovr_macro": 0.0,
+    "gmean_recall_geometric": 0.0,
+    "matthews": 0.0,
+    "top1_accuracy": 0.09986666666666667,
+    "majority_class_share_in_test": 0.09986666666666667,
+    "n_test_classes_present": 81,
+    "n_test_classes_never_recovered": 80,
+    "gmean_ovr_macro_ci": [
+     0.0,
+     0.0
+    ],
+    "gmean_recall_geometric_ci": [
+     0.0,
+     0.0
+    ],
+    "matthews_ci": [
+     0.0,
+     0.0
+    ],
+    "top1_accuracy_ci": [
+     0.0952,
+     0.10480166666666667
+    ]
+   },
+   "control_marginal_sample": {
+    "gmean_ovr_macro": 0.05997726111120984,
+    "gmean_recall_geometric": 0.0,
+    "matthews": -0.0013278550258233848,
+    "top1_accuracy": 0.04566666666666667,
+    "majority_class_share_in_test": 0.09986666666666667,
+    "n_test_classes_present": 81,
+    "n_test_classes_never_recovered": 51,
+    "gmean_ovr_macro_ci": [
+     0.05427815084233692,
+     0.06502934792506095
+    ],
+    "gmean_recall_geometric_ci": [
+     0.0,
+     0.0
+    ],
+    "matthews_ci": [
+     -0.004811798362082839,
+     0.0021349177394195873
+    ],
+    "top1_accuracy_ci": [
+     0.042333333333333334,
+     0.049135
+    ]
+   },
+   "control_conditional_mode": {
+    "gmean_ovr_macro": 0.04257339560914015,
+    "gmean_recall_geometric": 0.0,
+    "matthews": -0.009330385533847543,
+    "top1_accuracy": 0.05386666666666667,
+    "majority_class_share_in_test": 0.09986666666666667,
+    "n_test_classes_present": 81,
+    "n_test_classes_never_recovered": 61,
+    "gmean_ovr_macro_ci": [
+     0.0391799540461257,
+     0.04664488221879163
+    ],
+    "gmean_recall_geometric_ci": [
+     0.0,
+     0.0
+    ],
+    "matthews_ci": [
+     -0.012646693914601279,
+     -0.00558691464109594
+    ],
+    "top1_accuracy_ci": [
+     0.050333333333333334,
+     0.05760166666666666
+    ]
+   },
+   "control_conditional_sample": {
+    "gmean_ovr_macro": 0.05290226969752706,
+    "gmean_recall_geometric": 0.0,
+    "matthews": -0.009324129712796595,
+    "top1_accuracy": 0.036866666666666666,
+    "majority_class_share_in_test": 0.09986666666666667,
+    "n_test_classes_present": 81,
+    "n_test_classes_never_recovered": 54,
+    "gmean_ovr_macro_ci": [
+     0.047857553742437095,
+     0.057821751314908354
+    ],
+    "gmean_recall_geometric_ci": [
+     0.0,
+     0.0
+    ],
+    "matthews_ci": [
+     -0.012433412202144356,
+     -0.006301919652805372
+    ],
+    "top1_accuracy_ci": [
+     0.03373333333333333,
+     0.0398
+    ]
+   },
+   "conditioned_on": "merchant_city, which the control is handed for free",
+   "n_test_keys_unseen_in_train": 2323
+  },
+  "merchant_city": {
+   "control_marginal_mode": {
+    "gmean_ovr_macro": 0.0,
+    "gmean_recall_geometric": 0.0,
+    "matthews": 0.0,
+    "top1_accuracy": 0.004866666666666667,
+    "majority_class_share_in_test": 0.004866666666666667,
+    "n_test_classes_present": 5381,
+    "n_test_classes_never_recovered": 5380,
+    "gmean_ovr_macro_ci": [
+     0.0,
+     0.0
+    ],
+    "gmean_recall_geometric_ci": [
+     0.0,
+     0.0
+    ],
+    "matthews_ci": [
+     0.0,
+     0.0
+    ],
+    "top1_accuracy_ci": [
+     0.0038666666666666667,
+     0.006066666666666666
+    ]
+   },
+   "control_marginal_sample": {
+    "gmean_ovr_macro": 0.0002414729203766802,
+    "gmean_recall_geometric": 0.0,
+    "matthews": -6.196959133111963e-05,
+    "top1_accuracy": 0.0004,
+    "majority_class_share_in_test": 0.004866666666666667,
+    "n_test_classes_present": 5381,
+    "n_test_classes_never_recovered": 5375,
+    "gmean_ovr_macro_ci": [
+     5.8554969823514196e-05,
+     0.00039047045418670086
+    ],
+    "gmean_recall_geometric_ci": [
+     0.0,
+     0.0
+    ],
+    "matthews_ci": [
+     -0.00037489005088099366,
+     0.0002731650263205414
+    ],
+    "top1_accuracy_ci": [
+     6.666666666666667e-05,
+     0.0007333333333333333
+    ]
+   },
+   "control_conditional_mode": {
+    "gmean_ovr_macro": 0.0005777874888509972,
+    "gmean_recall_geometric": 0.0,
+    "matthews": 0.0007758844664434461,
+    "top1_accuracy": 0.0041333333333333335,
+    "majority_class_share_in_test": 0.004866666666666667,
+    "n_test_classes_present": 5381,
+    "n_test_classes_never_recovered": 5369,
+    "gmean_ovr_macro_ci": [
+     0.0005301823862358088,
+     0.0008157334098551896
+    ],
+    "gmean_recall_geometric_ci": [
+     0.0,
+     0.0
+    ],
+    "matthews_ci": [
+     -0.0002485730517418263,
+     0.0019395640370868407
+    ],
+    "top1_accuracy_ci": [
+     0.0032,
+     0.005266666666666667
+    ]
+   },
+   "control_conditional_sample": {
+    "gmean_ovr_macro": 0.00047229990178859104,
+    "gmean_recall_geometric": 0.0,
+    "matthews": 0.00027085841853191926,
+    "top1_accuracy": 0.0007333333333333333,
+    "majority_class_share_in_test": 0.004866666666666667,
+    "n_test_classes_present": 5381,
+    "n_test_classes_never_recovered": 5370,
+    "gmean_ovr_macro_ci": [
+     0.00021416236684743866,
+     0.0007051221693961732
+    ],
+    "gmean_recall_geometric_ci": [
+     0.0,
+     0.0
+    ],
+    "matthews_ci": [
+     -0.0001197532817842493,
+     0.0007470783139306465
+    ],
+    "top1_accuracy_ci": [
+     0.0003333333333333333,
+     0.0012
+    ]
+   },
+   "conditioned_on": "the transaction's merchant category, which the control is handed for free",
+   "n_test_keys_unseen_in_train": 1
+  },
+  "amount_decile": {
+   "control_marginal_mode": {
+    "gmean_ovr_macro": 0.0,
+    "gmean_recall_geometric": 0.0,
+    "matthews": 0.0,
+    "top1_accuracy": 0.09233333333333334,
+    "majority_class_share_in_test": 0.1128,
+    "n_test_classes_present": 10,
+    "n_test_classes_never_recovered": 9,
+    "gmean_ovr_macro_ci": [
+     0.0,
+     0.0
+    ],
+    "gmean_recall_geometric_ci": [
+     0.0,
+     0.0
+    ],
+    "matthews_ci": [
+     0.0,
+     0.0
+    ],
+    "top1_accuracy_ci": [
+     0.08786666666666666,
+     0.09666666666666666
+    ]
+   },
+   "control_marginal_sample": {
+    "gmean_ovr_macro": 0.29831537919816536,
+    "gmean_recall_geometric": 0.09879670881614117,
+    "matthews": -0.0008469813376113766,
+    "top1_accuracy": 0.0992,
+    "majority_class_share_in_test": 0.1128,
+    "n_test_classes_present": 10,
+    "n_test_classes_never_recovered": 0,
+    "gmean_ovr_macro_ci": [
+     0.2906947102750324,
+     0.30568945653709323
+    ],
+    "gmean_recall_geometric_ci": [
+     0.09363604045750845,
+     0.10354456006444414
+    ],
+    "matthews_ci": [
+     -0.00618584620050969,
+     0.004680205244265359
+    ],
+    "top1_accuracy_ci": [
+     0.09439833333333333,
+     0.10413499999999999
+    ]
+   },
+   "control_conditional_mode": {
+    "gmean_ovr_macro": 0.2516859975603209,
+    "gmean_recall_geometric": 0.0692191121145541,
+    "matthews": 0.04491771513976457,
+    "top1_accuracy": 0.1234,
+    "majority_class_share_in_test": 0.1128,
+    "n_test_classes_present": 10,
+    "n_test_classes_never_recovered": 0,
+    "gmean_ovr_macro_ci": [
+     0.24362327738515963,
+     0.2589189605787882
+    ],
+    "gmean_recall_geometric_ci": [
+     0.06428703445854195,
+     0.0733506582027369
+    ],
+    "matthews_ci": [
+     0.03903157924187506,
+     0.05118185493059836
+    ],
+    "top1_accuracy_ci": [
+     0.11813333333333334,
+     0.12853333333333333
+    ]
+   },
+   "control_conditional_sample": {
+    "gmean_ovr_macro": 0.3311523238079183,
+    "gmean_recall_geometric": 0.12133741516007959,
+    "matthews": 0.02382801655267981,
+    "top1_accuracy": 0.12153333333333333,
+    "majority_class_share_in_test": 0.1128,
+    "n_test_classes_present": 10,
+    "n_test_classes_never_recovered": 0,
+    "gmean_ovr_macro_ci": [
+     0.3236554094438453,
+     0.3386919588242942
+    ],
+    "gmean_recall_geometric_ci": [
+     0.11594811368917396,
+     0.12667063887371918
+    ],
+    "matthews_ci": [
+     0.017938564734973298,
+     0.02993134889007174
+    ],
+    "top1_accuracy_ci": [
+     0.1162,
+     0.12700333333333333
+    ]
+   },
+   "conditioned_on": "merchant category and city together, both handed to the control for free",
+   "n_test_keys_unseen_in_train": 10515
+  }
+ },
+ "control_note": "Jayaraman and Evans 2022: an attribute-inference number is meaningless without a population-imputation baseline measured on the same records with the same distributional knowledge and no model access. The conditional arms are handed the other fields of the same record for free, which is the generous reading of that setup and makes the control harder to beat.",
+ "attack": {
+  "merchant_category_mcc": {
+   "attack_linear_probe": {
+    "gmean_ovr_macro": 0.9463133180952475,
+    "gmean_recall_geometric": 0.0,
+    "matthews": 0.9994406256247104,
+    "top1_accuracy": 0.9994666666666666,
+    "majority_class_share_in_test": 0.09986666666666667,
+    "n_test_classes_present": 81,
+    "n_test_classes_never_recovered": 4,
+    "gmean_ovr_macro_ci": [
+     0.9367354632525761,
+     0.9863784232452724
+    ],
+    "gmean_recall_geometric_ci": [
+     0.0,
+     0.0
+    ],
+    "matthews_ci": [
+     0.9990210882322996,
+     0.9997902141086655
+    ],
+    "top1_accuracy_ci": [
+     0.9990666666666667,
+     0.9998
+    ],
+    "lbfgs_iterations": 13
+   },
+   "attack_nearest_centroid": {
+    "gmean_ovr_macro": 0.9579068355202265,
+    "gmean_recall_geometric": 0.0,
+    "matthews": 0.986660826594494,
+    "top1_accuracy": 0.9872666666666666,
+    "majority_class_share_in_test": 0.09986666666666667,
+    "n_test_classes_present": 81,
+    "n_test_classes_never_recovered": 3,
+    "gmean_ovr_macro_ci": [
+     0.95537864817525,
+     0.9946206324356096
+    ],
+    "gmean_recall_geometric_ci": [
+     0.0,
+     0.9892852579122272
+    ],
+    "matthews_ci": [
+     0.984838369471809,
+     0.9884085792387766
+    ],
+    "top1_accuracy_ci": [
+     0.9855333333333334,
+     0.9889333333333333
+    ],
+    "n_classes_reachable_from_train": 90
+   }
+  },
+  "merchant_city": {
+   "attack_nearest_centroid": {
+    "gmean_ovr_macro": 0.10535803576783694,
+    "gmean_recall_geometric": 0.0,
+    "matthews": 0.27664064145909284,
+    "top1_accuracy": 0.2769333333333333,
+    "majority_class_share_in_test": 0.004866666666666667,
+    "n_test_classes_present": 5381,
+    "n_test_classes_never_recovered": 4709,
+    "gmean_ovr_macro_ci": [
+     0.1155969631034301,
+     0.12206251440698568
+    ],
+    "gmean_recall_geometric_ci": [
+     0.0,
+     0.0
+    ],
+    "matthews_ci": [
+     0.26971345444434675,
+     0.28338240042389545
+    ],
+    "top1_accuracy_ci": [
+     0.26999666666666666,
+     0.28367333333333333
+    ],
+    "n_classes_reachable_from_train": 9836
+   }
+  },
+  "amount_decile": {
+   "attack_linear_probe": {
+    "gmean_ovr_macro": 0.9696315121910404,
+    "gmean_recall_geometric": 0.9458494617368984,
+    "matthews": 0.9395245515298521,
+    "top1_accuracy": 0.9456,
+    "majority_class_share_in_test": 0.1128,
+    "n_test_classes_present": 10,
+    "n_test_classes_never_recovered": 0,
+    "gmean_ovr_macro_ci": [
+     0.9676606717002338,
+     0.9716191108543369
+    ],
+    "gmean_recall_geometric_ci": [
+     0.9423277910986296,
+     0.9493519908516999
+    ],
+    "matthews_ci": [
+     0.9357298855381592,
+     0.9433836485477585
+    ],
+    "top1_accuracy_ci": [
+     0.9421983333333334,
+     0.9490683333333333
+    ],
+    "lbfgs_iterations": 66
+   },
+   "attack_nearest_centroid": {
+    "gmean_ovr_macro": 0.8245347785685981,
+    "gmean_recall_geometric": 0.7002858323870448,
+    "matthews": 0.6723513647910805,
+    "top1_accuracy": 0.7048666666666666,
+    "majority_class_share_in_test": 0.1128,
+    "n_test_classes_present": 10,
+    "n_test_classes_never_recovered": 0,
+    "gmean_ovr_macro_ci": [
+     0.8198067223998372,
+     0.8288101439064908
+    ],
+    "gmean_recall_geometric_ci": [
+     0.692823082148845,
+     0.7070431085540657
+    ],
+    "matthews_ci": [
+     0.6639351440973391,
+     0.6800551242385391
+    ],
+    "top1_accuracy_ci": [
+     0.697265,
+     0.7118016666666667
+    ],
+    "n_classes_reachable_from_train": 10
+   }
+  }
+ },
+ "attack_note": "Two estimators. A multinomial logistic probe, which measures what is linearly decodable from the vector, and a nearest class centroid, which is the only one of the two that scales to the city target's class count on this machine. Features are the 512 embedding dimensions and nothing else.",
+ "comparisons": [
+  {
+   "target": "merchant_category_mcc",
+   "a": "attack_linear_probe",
+   "b": "control_marginal_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.9994406256247104,
+    "b_value": 0.0,
+    "difference": 0.9994406256247104,
+    "ci": [
+     0.9990210882322996,
+     0.9997902141086655
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9463133180952475,
+    "b_value": 0.0,
+    "difference": 0.9463133180952475,
+    "ci": [
+     0.9367354632525761,
+     0.9863784232452724
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "merchant_category_mcc",
+   "a": "attack_linear_probe",
+   "b": "control_marginal_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.9994406256247104,
+    "b_value": -0.0013278550258233848,
+    "difference": 1.0007684806505337,
+    "ci": [
+     0.9972697126775789,
+     1.004347720030048
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9463133180952475,
+    "b_value": 0.05997726111120984,
+    "difference": 0.8863360569840377,
+    "ci": [
+     0.8791789874876897,
+     0.926446857195295
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "merchant_category_mcc",
+   "a": "attack_linear_probe",
+   "b": "control_conditional_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.9994406256247104,
+    "b_value": -0.009330385533847543,
+    "difference": 1.008771011158558,
+    "ci": [
+     1.0050348933313333,
+     1.0120287056927233
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9463133180952475,
+    "b_value": 0.04257339560914015,
+    "difference": 0.9037399224861073,
+    "ci": [
+     0.8951495915948208,
+     0.9430484654791232
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "merchant_category_mcc",
+   "a": "attack_linear_probe",
+   "b": "control_conditional_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.9994406256247104,
+    "b_value": -0.009324129712796595,
+    "difference": 1.008764755337507,
+    "ci": [
+     1.005658813142414,
+     1.0119555406313319
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9463133180952475,
+    "b_value": 0.05290226969752706,
+    "difference": 0.8934110483977205,
+    "ci": [
+     0.8859318164096843,
+     0.9332219147716915
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "merchant_category_mcc",
+   "a": "attack_nearest_centroid",
+   "b": "control_marginal_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.986660826594494,
+    "b_value": 0.0,
+    "difference": 0.986660826594494,
+    "ci": [
+     0.984838369471809,
+     0.9884085792387766
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9579068355202265,
+    "b_value": 0.0,
+    "difference": 0.9579068355202265,
+    "ci": [
+     0.95537864817525,
+     0.9946206324356096
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "merchant_category_mcc",
+   "a": "attack_nearest_centroid",
+   "b": "control_marginal_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.986660826594494,
+    "b_value": -0.0013278550258233848,
+    "difference": 0.9879886816203173,
+    "ci": [
+     0.9839628306589729,
+     0.991827074010699
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9579068355202265,
+    "b_value": 0.05997726111120984,
+    "difference": 0.8979295744090167,
+    "ci": [
+     0.8941162414759805,
+     0.9341018926863364
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "merchant_category_mcc",
+   "a": "attack_nearest_centroid",
+   "b": "control_conditional_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.986660826594494,
+    "b_value": -0.009330385533847543,
+    "difference": 0.9959912121283415,
+    "ci": [
+     0.991843471433076,
+     0.9998894680438652
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9579068355202265,
+    "b_value": 0.04257339560914015,
+    "difference": 0.9153334399110863,
+    "ci": [
+     0.9110177277728924,
+     0.9500021939467789
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "merchant_category_mcc",
+   "a": "attack_nearest_centroid",
+   "b": "control_conditional_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.986660826594494,
+    "b_value": -0.009324129712796595,
+    "difference": 0.9959849563072906,
+    "ci": [
+     0.9925705860949328,
+     0.9995731935781116
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9579068355202265,
+    "b_value": 0.05290226969752706,
+    "difference": 0.9050045658226994,
+    "ci": [
+     0.9002408445734287,
+     0.9400807757678286
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "merchant_city",
+   "a": "attack_nearest_centroid",
+   "b": "control_marginal_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.27664064145909284,
+    "b_value": 0.0,
+    "difference": 0.27664064145909284,
+    "ci": [
+     0.26971345444434675,
+     0.28338240042389545
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.10535803576783694,
+    "b_value": 0.0,
+    "difference": 0.10535803576783694,
+    "ci": [
+     0.1155969631034301,
+     0.12206251440698568
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "merchant_city",
+   "a": "attack_nearest_centroid",
+   "b": "control_marginal_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.27664064145909284,
+    "b_value": -6.196959133111963e-05,
+    "difference": 0.276702611050424,
+    "ci": [
+     0.2695145135595139,
+     0.2834823814716567
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.10535803576783694,
+    "b_value": 0.0002414729203766802,
+    "difference": 0.10511656284746025,
+    "ci": [
+     0.11528993284323433,
+     0.12186806634753176
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "merchant_city",
+   "a": "attack_nearest_centroid",
+   "b": "control_conditional_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.27664064145909284,
+    "b_value": 0.0007758844664434461,
+    "difference": 0.2758647569926494,
+    "ci": [
+     0.26884872470606846,
+     0.2825880541923637
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.10535803576783694,
+    "b_value": 0.0005777874888509972,
+    "difference": 0.10478024827898594,
+    "ci": [
+     0.11492700569276376,
+     0.12143407960735879
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "merchant_city",
+   "a": "attack_nearest_centroid",
+   "b": "control_conditional_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.27664064145909284,
+    "b_value": 0.00027085841853191926,
+    "difference": 0.2763697830405609,
+    "ci": [
+     0.26937277272828414,
+     0.2831735321350683
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.10535803576783694,
+    "b_value": 0.00047229990178859104,
+    "difference": 0.10488573586604834,
+    "ci": [
+     0.11514992004819291,
+     0.12153241429495558
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "amount_decile",
+   "a": "attack_linear_probe",
+   "b": "control_marginal_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.9395245515298521,
+    "b_value": 0.0,
+    "difference": 0.9395245515298521,
+    "ci": [
+     0.9357298855381592,
+     0.9433836485477585
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9696315121910404,
+    "b_value": 0.0,
+    "difference": 0.9696315121910404,
+    "ci": [
+     0.9676606717002338,
+     0.9716191108543369
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "amount_decile",
+   "a": "attack_linear_probe",
+   "b": "control_marginal_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.9395245515298521,
+    "b_value": -0.0008469813376113766,
+    "difference": 0.9403715328674636,
+    "ci": [
+     0.9336159660897758,
+     0.9468911959913315
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9696315121910404,
+    "b_value": 0.29831537919816536,
+    "difference": 0.671316132992875,
+    "ci": [
+     0.6635520518013285,
+     0.678812807929305
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "amount_decile",
+   "a": "attack_linear_probe",
+   "b": "control_conditional_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.9395245515298521,
+    "b_value": 0.04491771513976457,
+    "difference": 0.8946068363900875,
+    "ci": [
+     0.887352606554949,
+     0.9016788649477568
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9696315121910404,
+    "b_value": 0.2516859975603209,
+    "difference": 0.7179455146307194,
+    "ci": [
+     0.7102748222548889,
+     0.7263357242438078
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "amount_decile",
+   "a": "attack_linear_probe",
+   "b": "control_conditional_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.9395245515298521,
+    "b_value": 0.02382801655267981,
+    "difference": 0.9156965349771723,
+    "ci": [
+     0.9085473465015441,
+     0.9227627399852707
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9696315121910404,
+    "b_value": 0.3311523238079183,
+    "difference": 0.638479188383122,
+    "ci": [
+     0.6315010783749536,
+     0.6461573892028478
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "amount_decile",
+   "a": "attack_nearest_centroid",
+   "b": "control_marginal_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.6723513647910805,
+    "b_value": 0.0,
+    "difference": 0.6723513647910805,
+    "ci": [
+     0.6639351440973391,
+     0.6800551242385391
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.8245347785685981,
+    "b_value": 0.0,
+    "difference": 0.8245347785685981,
+    "ci": [
+     0.8198067223998372,
+     0.8288101439064908
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "amount_decile",
+   "a": "attack_nearest_centroid",
+   "b": "control_marginal_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.6723513647910805,
+    "b_value": -0.0008469813376113766,
+    "difference": 0.6731983461286919,
+    "ci": [
+     0.6633859605401357,
+     0.6824782449937372
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.8245347785685981,
+    "b_value": 0.29831537919816536,
+    "difference": 0.5262193993704327,
+    "ci": [
+     0.517812455463776,
+     0.5342159860365183
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "amount_decile",
+   "a": "attack_nearest_centroid",
+   "b": "control_conditional_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.6723513647910805,
+    "b_value": 0.04491771513976457,
+    "difference": 0.6274336496513159,
+    "ci": [
+     0.6175181203561878,
+     0.6372727229555957
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.8245347785685981,
+    "b_value": 0.2516859975603209,
+    "difference": 0.5728487810082772,
+    "ci": [
+     0.5647055471862469,
+     0.5821969716419936
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "target": "amount_decile",
+   "a": "attack_nearest_centroid",
+   "b": "control_conditional_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.6723513647910805,
+    "b_value": 0.02382801655267981,
+    "difference": 0.6485233482384006,
+    "ci": [
+     0.638871621144838,
+     0.6583590260372162
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.8245347785685981,
+    "b_value": 0.3311523238079183,
+    "difference": 0.4933824547606798,
+    "ci": [
+     0.48515238700054564,
+     0.5021621218508235
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  }
+ ],
+ "comparisons_by_key": {
+  "merchant_category_mcc_attack_linear_probe_vs_control_marginal_mode": {
+   "target": "merchant_category_mcc",
+   "a": "attack_linear_probe",
+   "b": "control_marginal_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.9994406256247104,
+    "b_value": 0.0,
+    "difference": 0.9994406256247104,
+    "ci": [
+     0.9990210882322996,
+     0.9997902141086655
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9463133180952475,
+    "b_value": 0.0,
+    "difference": 0.9463133180952475,
+    "ci": [
+     0.9367354632525761,
+     0.9863784232452724
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "merchant_category_mcc_attack_linear_probe_vs_control_marginal_sample": {
+   "target": "merchant_category_mcc",
+   "a": "attack_linear_probe",
+   "b": "control_marginal_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.9994406256247104,
+    "b_value": -0.0013278550258233848,
+    "difference": 1.0007684806505337,
+    "ci": [
+     0.9972697126775789,
+     1.004347720030048
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9463133180952475,
+    "b_value": 0.05997726111120984,
+    "difference": 0.8863360569840377,
+    "ci": [
+     0.8791789874876897,
+     0.926446857195295
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "merchant_category_mcc_attack_linear_probe_vs_control_conditional_mode": {
+   "target": "merchant_category_mcc",
+   "a": "attack_linear_probe",
+   "b": "control_conditional_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.9994406256247104,
+    "b_value": -0.009330385533847543,
+    "difference": 1.008771011158558,
+    "ci": [
+     1.0050348933313333,
+     1.0120287056927233
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9463133180952475,
+    "b_value": 0.04257339560914015,
+    "difference": 0.9037399224861073,
+    "ci": [
+     0.8951495915948208,
+     0.9430484654791232
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "merchant_category_mcc_attack_linear_probe_vs_control_conditional_sample": {
+   "target": "merchant_category_mcc",
+   "a": "attack_linear_probe",
+   "b": "control_conditional_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.9994406256247104,
+    "b_value": -0.009324129712796595,
+    "difference": 1.008764755337507,
+    "ci": [
+     1.005658813142414,
+     1.0119555406313319
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9463133180952475,
+    "b_value": 0.05290226969752706,
+    "difference": 0.8934110483977205,
+    "ci": [
+     0.8859318164096843,
+     0.9332219147716915
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "merchant_category_mcc_attack_nearest_centroid_vs_control_marginal_mode": {
+   "target": "merchant_category_mcc",
+   "a": "attack_nearest_centroid",
+   "b": "control_marginal_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.986660826594494,
+    "b_value": 0.0,
+    "difference": 0.986660826594494,
+    "ci": [
+     0.984838369471809,
+     0.9884085792387766
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9579068355202265,
+    "b_value": 0.0,
+    "difference": 0.9579068355202265,
+    "ci": [
+     0.95537864817525,
+     0.9946206324356096
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "merchant_category_mcc_attack_nearest_centroid_vs_control_marginal_sample": {
+   "target": "merchant_category_mcc",
+   "a": "attack_nearest_centroid",
+   "b": "control_marginal_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.986660826594494,
+    "b_value": -0.0013278550258233848,
+    "difference": 0.9879886816203173,
+    "ci": [
+     0.9839628306589729,
+     0.991827074010699
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9579068355202265,
+    "b_value": 0.05997726111120984,
+    "difference": 0.8979295744090167,
+    "ci": [
+     0.8941162414759805,
+     0.9341018926863364
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "merchant_category_mcc_attack_nearest_centroid_vs_control_conditional_mode": {
+   "target": "merchant_category_mcc",
+   "a": "attack_nearest_centroid",
+   "b": "control_conditional_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.986660826594494,
+    "b_value": -0.009330385533847543,
+    "difference": 0.9959912121283415,
+    "ci": [
+     0.991843471433076,
+     0.9998894680438652
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9579068355202265,
+    "b_value": 0.04257339560914015,
+    "difference": 0.9153334399110863,
+    "ci": [
+     0.9110177277728924,
+     0.9500021939467789
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "merchant_category_mcc_attack_nearest_centroid_vs_control_conditional_sample": {
+   "target": "merchant_category_mcc",
+   "a": "attack_nearest_centroid",
+   "b": "control_conditional_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.986660826594494,
+    "b_value": -0.009324129712796595,
+    "difference": 0.9959849563072906,
+    "ci": [
+     0.9925705860949328,
+     0.9995731935781116
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9579068355202265,
+    "b_value": 0.05290226969752706,
+    "difference": 0.9050045658226994,
+    "ci": [
+     0.9002408445734287,
+     0.9400807757678286
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "merchant_city_attack_nearest_centroid_vs_control_marginal_mode": {
+   "target": "merchant_city",
+   "a": "attack_nearest_centroid",
+   "b": "control_marginal_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.27664064145909284,
+    "b_value": 0.0,
+    "difference": 0.27664064145909284,
+    "ci": [
+     0.26971345444434675,
+     0.28338240042389545
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.10535803576783694,
+    "b_value": 0.0,
+    "difference": 0.10535803576783694,
+    "ci": [
+     0.1155969631034301,
+     0.12206251440698568
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "merchant_city_attack_nearest_centroid_vs_control_marginal_sample": {
+   "target": "merchant_city",
+   "a": "attack_nearest_centroid",
+   "b": "control_marginal_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.27664064145909284,
+    "b_value": -6.196959133111963e-05,
+    "difference": 0.276702611050424,
+    "ci": [
+     0.2695145135595139,
+     0.2834823814716567
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.10535803576783694,
+    "b_value": 0.0002414729203766802,
+    "difference": 0.10511656284746025,
+    "ci": [
+     0.11528993284323433,
+     0.12186806634753176
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "merchant_city_attack_nearest_centroid_vs_control_conditional_mode": {
+   "target": "merchant_city",
+   "a": "attack_nearest_centroid",
+   "b": "control_conditional_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.27664064145909284,
+    "b_value": 0.0007758844664434461,
+    "difference": 0.2758647569926494,
+    "ci": [
+     0.26884872470606846,
+     0.2825880541923637
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.10535803576783694,
+    "b_value": 0.0005777874888509972,
+    "difference": 0.10478024827898594,
+    "ci": [
+     0.11492700569276376,
+     0.12143407960735879
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "merchant_city_attack_nearest_centroid_vs_control_conditional_sample": {
+   "target": "merchant_city",
+   "a": "attack_nearest_centroid",
+   "b": "control_conditional_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.27664064145909284,
+    "b_value": 0.00027085841853191926,
+    "difference": 0.2763697830405609,
+    "ci": [
+     0.26937277272828414,
+     0.2831735321350683
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.10535803576783694,
+    "b_value": 0.00047229990178859104,
+    "difference": 0.10488573586604834,
+    "ci": [
+     0.11514992004819291,
+     0.12153241429495558
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "amount_decile_attack_linear_probe_vs_control_marginal_mode": {
+   "target": "amount_decile",
+   "a": "attack_linear_probe",
+   "b": "control_marginal_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.9395245515298521,
+    "b_value": 0.0,
+    "difference": 0.9395245515298521,
+    "ci": [
+     0.9357298855381592,
+     0.9433836485477585
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9696315121910404,
+    "b_value": 0.0,
+    "difference": 0.9696315121910404,
+    "ci": [
+     0.9676606717002338,
+     0.9716191108543369
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "amount_decile_attack_linear_probe_vs_control_marginal_sample": {
+   "target": "amount_decile",
+   "a": "attack_linear_probe",
+   "b": "control_marginal_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.9395245515298521,
+    "b_value": -0.0008469813376113766,
+    "difference": 0.9403715328674636,
+    "ci": [
+     0.9336159660897758,
+     0.9468911959913315
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9696315121910404,
+    "b_value": 0.29831537919816536,
+    "difference": 0.671316132992875,
+    "ci": [
+     0.6635520518013285,
+     0.678812807929305
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "amount_decile_attack_linear_probe_vs_control_conditional_mode": {
+   "target": "amount_decile",
+   "a": "attack_linear_probe",
+   "b": "control_conditional_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.9395245515298521,
+    "b_value": 0.04491771513976457,
+    "difference": 0.8946068363900875,
+    "ci": [
+     0.887352606554949,
+     0.9016788649477568
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9696315121910404,
+    "b_value": 0.2516859975603209,
+    "difference": 0.7179455146307194,
+    "ci": [
+     0.7102748222548889,
+     0.7263357242438078
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "amount_decile_attack_linear_probe_vs_control_conditional_sample": {
+   "target": "amount_decile",
+   "a": "attack_linear_probe",
+   "b": "control_conditional_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.9395245515298521,
+    "b_value": 0.02382801655267981,
+    "difference": 0.9156965349771723,
+    "ci": [
+     0.9085473465015441,
+     0.9227627399852707
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.9696315121910404,
+    "b_value": 0.3311523238079183,
+    "difference": 0.638479188383122,
+    "ci": [
+     0.6315010783749536,
+     0.6461573892028478
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "amount_decile_attack_nearest_centroid_vs_control_marginal_mode": {
+   "target": "amount_decile",
+   "a": "attack_nearest_centroid",
+   "b": "control_marginal_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.6723513647910805,
+    "b_value": 0.0,
+    "difference": 0.6723513647910805,
+    "ci": [
+     0.6639351440973391,
+     0.6800551242385391
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.8245347785685981,
+    "b_value": 0.0,
+    "difference": 0.8245347785685981,
+    "ci": [
+     0.8198067223998372,
+     0.8288101439064908
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "amount_decile_attack_nearest_centroid_vs_control_marginal_sample": {
+   "target": "amount_decile",
+   "a": "attack_nearest_centroid",
+   "b": "control_marginal_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.6723513647910805,
+    "b_value": -0.0008469813376113766,
+    "difference": 0.6731983461286919,
+    "ci": [
+     0.6633859605401357,
+     0.6824782449937372
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.8245347785685981,
+    "b_value": 0.29831537919816536,
+    "difference": 0.5262193993704327,
+    "ci": [
+     0.517812455463776,
+     0.5342159860365183
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "amount_decile_attack_nearest_centroid_vs_control_conditional_mode": {
+   "target": "amount_decile",
+   "a": "attack_nearest_centroid",
+   "b": "control_conditional_mode",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.6723513647910805,
+    "b_value": 0.04491771513976457,
+    "difference": 0.6274336496513159,
+    "ci": [
+     0.6175181203561878,
+     0.6372727229555957
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.8245347785685981,
+    "b_value": 0.2516859975603209,
+    "difference": 0.5728487810082772,
+    "ci": [
+     0.5647055471862469,
+     0.5821969716419936
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "amount_decile_attack_nearest_centroid_vs_control_conditional_sample": {
+   "target": "amount_decile",
+   "a": "attack_nearest_centroid",
+   "b": "control_conditional_sample",
+   "note": "attack with embedding access minus imputation control without it",
+   "matthews": {
+    "a_value": 0.6723513647910805,
+    "b_value": 0.02382801655267981,
+    "difference": 0.6485233482384006,
+    "ci": [
+     0.638871621144838,
+     0.6583590260372162
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "gmean_ovr_macro": {
+    "a_value": 0.8245347785685981,
+    "b_value": 0.3311523238079183,
+    "difference": 0.4933824547606798,
+    "ci": [
+     0.48515238700054564,
+     0.5021621218508235
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  }
+ },
+ "sanity": {
+  "what_this_is": "the pipeline must be able to report both no signal and full signal, or neither a null nor a positive here is evidence of anything. Bands were declared before the run.",
+  "declared_bands": {
+   "no_signal_rungs": "|matthews| <= 0.02",
+   "full_signal_rung": "matthews >= 0.99"
+  },
+  "rungs": {
+   "shuffled_labels_primary_linear_probe": {
+    "config": "training labels permuted, test labels untouched, same probe",
+    "expected": "chance",
+    "gmean_ovr_macro": 0.048348850057402956,
+    "gmean_recall_geometric": 0.0,
+    "matthews": 0.0018399609994361162,
+    "top1_accuracy": 0.07006666666666667,
+    "majority_class_share_in_test": 0.09986666666666667,
+    "n_test_classes_present": 81,
+    "n_test_classes_never_recovered": 58,
+    "gmean_ovr_macro_ci": [
+     0.04177210069211867,
+     0.05358331468977698
+    ],
+    "gmean_recall_geometric_ci": [
+     0.0,
+     0.0
+    ],
+    "matthews_ci": [
+     -0.002165591734607573,
+     0.005655453299000129
+    ],
+    "top1_accuracy_ci": [
+     0.06566333333333334,
+     0.07386666666666666
+    ],
+    "lbfgs_iterations": 200,
+    "passed": true
+   },
+   "random_features_primary_linear_probe": {
+    "config": "embeddings replaced by seeded gaussian noise of the same shape, real labels",
+    "expected": "chance",
+    "gmean_ovr_macro": 0.0531611686945073,
+    "gmean_recall_geometric": 0.0,
+    "matthews": -0.0007516855523673348,
+    "top1_accuracy": 0.06593333333333333,
+    "majority_class_share_in_test": 0.09986666666666667,
+    "n_test_classes_present": 81,
+    "n_test_classes_never_recovered": 53,
+    "gmean_ovr_macro_ci": [
+     0.043042009215054425,
+     0.05754371290115806
+    ],
+    "gmean_recall_geometric_ci": [
+     0.0,
+     0.0
+    ],
+    "matthews_ci": [
+     -0.004754652329620121,
+     0.00348608785462624
+    ],
+    "top1_accuracy_ci": [
+     0.062,
+     0.07006833333333333
+    ],
+    "lbfgs_iterations": 105,
+    "iteration_note": "this rung reaches the iteration cap because there is nothing to fit. It is the expected behaviour of a no-signal feature set and it does not change the verdict, which is read from the held-out score",
+    "passed": true
+   },
+   "leak_primary_linear_probe": {
+    "config": "the target's own one-hot appended to the embedding, same probe",
+    "expected": "near one",
+    "gmean_ovr_macro": 0.946312905189379,
+    "gmean_recall_geometric": 0.0,
+    "matthews": 0.9994406301563878,
+    "top1_accuracy": 0.9994666666666666,
+    "majority_class_share_in_test": 0.09986666666666667,
+    "n_test_classes_present": 81,
+    "n_test_classes_never_recovered": 4,
+    "gmean_ovr_macro_ci": [
+     0.936735034577386,
+     0.9863779945490978
+    ],
+    "gmean_recall_geometric_ci": [
+     0.0,
+     0.0
+    ],
+    "matthews_ci": [
+     0.9990210996521263,
+     0.999790214061049
+    ],
+    "top1_accuracy_ci": [
+     0.9990666666666667,
+     0.9998
+    ],
+    "lbfgs_iterations": 13,
+    "passed": true
+   },
+   "shuffled_labels_secondary_nearest_centroid": {
+    "config": "training city labels permuted, test labels untouched, same centroid rule",
+    "expected": "chance",
+    "gmean_ovr_macro": 0.00015694331845269064,
+    "gmean_recall_geometric": 0.0,
+    "matthews": 9.561585871252832e-07,
+    "top1_accuracy": 0.00013333333333333334,
+    "majority_class_share_in_test": 0.004866666666666667,
+    "n_test_classes_present": 5381,
+    "n_test_classes_never_recovered": 5379,
+    "gmean_ovr_macro_ci": [
+     0.0,
+     0.00030907877790101645
+    ],
+    "gmean_recall_geometric_ci": [
+     0.0,
+     0.0
+    ],
+    "matthews_ci": [
+     -0.000134588513837827,
+     0.00020339274795699668
+    ],
+    "top1_accuracy_ci": [
+     0.0,
+     0.0003333333333333333
+    ],
+    "passed": true
+   },
+   "leak_secondary_nearest_centroid": {
+    "config": "the target's own class index, scaled by 1000 so it dominates the distance, appended to the embedding",
+    "expected": "near one, but bounded above by the test cities that have no training merchant at all and therefore no centroid to reach",
+    "gmean_ovr_macro": 0.7630484091901323,
+    "gmean_recall_geometric": 0.0,
+    "matthews": 0.8450683157463336,
+    "top1_accuracy": 0.8451333333333333,
+    "majority_class_share_in_test": 0.004866666666666667,
+    "n_test_classes_present": 5381,
+    "n_test_classes_never_recovered": 1275,
+    "gmean_ovr_macro_ci": [
+     0.7675337066634632,
+     0.7791986885571643
+    ],
+    "gmean_recall_geometric_ci": [
+     0.0,
+     0.0
+    ],
+    "matthews_ci": [
+     0.8392051085458708,
+     0.8503378100820628
+    ],
+    "top1_accuracy_ci": [
+     0.8392666666666667,
+     0.8504033333333334
+    ],
+    "n_test_rows_in_classes_absent_from_train": 2323,
+    "top1_accuracy_ceiling_given_unreachable_classes": 0.8451333333333333,
+    "gap_to_ceiling": 0.0,
+    "reaches_its_structural_ceiling": true,
+    "passed": false,
+    "why_it_misses_the_declared_floor": "the floor of 0.99 was declared before the run and it was declared wrongly for this target. A city with no training merchant has no centroid, so those test rows cannot be recovered by any estimator of this family however strong its features are. The rung recovers every row it structurally can and none of the rows it cannot, which is what reaches_its_structural_ceiling records. The full-signal demonstration for this file is carried by leak_primary_linear_probe, whose target has no unreachable classes."
+   }
+  },
+  "all_rungs_passed_as_declared": false,
+  "all_no_signal_rungs_passed": true,
+  "full_signal_demonstrated": true,
+  "verdict": "The instrument reports chance when the signal is destroyed and reports its maximum when the signal is planted, so a null from this pipeline would have meant something and a positive from it means something. One declared band, the 0.99 floor on the secondary leak rung, was mis-specified before the run for a target that has classes no estimator can reach, and it is reported as failed rather than moved."
+ },
+ "headline_reading": {
+  "primary_target": "merchant_category_mcc",
+  "primary_arm": "attack_linear_probe",
+  "matthews": 0.9994406256247104,
+  "matthews_ci": [
+   0.9990210882322996,
+   0.9997902141086655
+  ],
+  "gmean_ovr_macro": 0.9463133180952475,
+  "gmean_ovr_macro_ci": [
+   0.9367354632525761,
+   0.9863784232452724
+  ],
+  "best_control_arm": "control_conditional_mode",
+  "best_control_matthews": -0.009330385533847543,
+  "vs_control_direction": "a_wins",
+  "one_sentence": "On the public synthetic TabFormer corpus, the merchant category of a single-transaction merchant is recoverable from that merchant's 512-dimensional embedding alone at a Matthews coefficient of 0.9994 against -0.0093 for a population-imputation control with no embedding access, which is why that file stays inside the perimeter and only scores go to partners."
+ },
+ "interpretation_guard": {
+  "required_sentence": "This measures an internal artifact that no partner receives. A positive result is evidence for the rule that keeps it internal, not a disclosure about a shipped system.",
+  "forbidden_phrasings": [
+   "merchant data is exposed",
+   "the embeddings we ship leak",
+   "partners can recover transactions",
+   "a vulnerability in our pipeline",
+   "we release embeddings"
+  ],
+  "threat_model_stated_plainly": "The adversary in this file holds the embedding file and a labelled sample of merchants with known field values. That is a strong adversary and a deliberate choice: the weaker score-only adversary is the one our partner surface actually creates, and it is measured elsewhere. Reporting the strong version is the conservative direction for a design decision about what to keep inside.",
+  "why_a_positive_result_here_is_not_the_literature_being_wrong": "Jayaraman and Evans 2022 report that black-box attribute inference rarely learns more than imputation, and that white-box access does reliably identify records. Zhao et al. 2021 and Olatunji et al. 2023 corroborate the black-box half. Handing over an internal representation is the white-box half, so a strong result here agrees with those papers rather than contradicting them, and a null would have been the surprise."
+ },
+ "findings_as_obtained": {
+  "1_the_primary_target_comes_back_almost_completely": "For merchants whose embedding pools exactly one transaction, a linear probe on the 512 numbers alone recovers the transaction's merchant category with a Matthews coefficient of 0.9994 (95% interval 0.9990 to 0.9998) across 91 categories. The imputation control with the same distributional knowledge, handed the merchant's city for free and given no embedding access, scores -0.0093. The paired difference is 1.0088 with an interval of 1.0050 to 1.0120, so the embedding is doing essentially all of the work and imputation is doing none of it.",
+  "2_this_is_the_expected_mechanism_not_a_defect": "Merchant category is a tokenized INPUT to the encoder, so a single-transaction embedding is a lossy encoding of a record that had the category in it. Pooling over one transaction pools over nothing. The literature's usual finding, that black-box attribute inference rarely beats imputation, is about querying a trained model. This is not that setting: it hands the adversary the internal representation itself, which is the white-box end of Jayaraman and Evans, and it is exactly the setting their paper says does reveal records.",
+  "3_the_amount_decile_is_the_transaction_level_target_and_it_also_comes_back": "Merchant category is close to a merchant-level constant in this corpus, 99.977 percent of multi-transaction merchants carry exactly one category, so finding 1 is best read as the vector giving back the merchant's category. The amount decile is genuinely a property of the single transaction, and the same probe recovers it at a Matthews coefficient of 0.9395 (interval 0.9357 to 0.9434) against 0.0449 for the control, a paired difference of 0.8946.",
+  "4_the_city_result_is_modest_and_the_reason_is_the_vocabulary_not_the_attack": "City recovery reaches a Matthews coefficient of 0.2766 (interval 0.2697 to 0.2834) against 0.0008 for the control, across 11111 cities. The paired difference is 0.2759, so the vector still carries far more than imputation, but the level is far below the other two targets. The mechanism is in the preparation code: the city vocabulary is capped at the top 1000 pre-cut cities and only 36.1 percent of these merchants have a city the encoder ever saw as anything other than an unknown token. A field the model never encoded is a field the vector cannot give back.",
+  "5_read_the_two_g_means_as_a_pair_not_as_a_contradiction": "The strict multiclass G-mean is 0.0000 for every arm on the category target, including the attack that recovers 99.95 percent of test merchants correctly. That is not a contradiction, it is the definition: the strict reading is a geometric mean over per-class recalls, so one long-tail category that is never recovered sends the whole product to 0. The attack leaves 4 of 81 present categories unrecovered. The macro one-vs-rest reading, 0.9463, is the one that stays informative on a long tail, and both ship so neither can be quoted alone.",
+  "6_what_this_says_about_the_design_choice": "The perimeter rule that scores and not embeddings cross to partners is the rule that carries the result. A single-transaction merchant embedding behaves close to a copy of its record, so it belongs on the inside, and this file is the measurement that says so rather than an assertion that it is so. Nothing here describes a partner-reachable surface.",
+  "what_this_does_not_say": "It does not say that a partner can do this, because no partner receives an embedding. It does not say anything about American Express data, because the corpus is the public IBM TabFormer benchmark and it is synthetic. It does not generalise past this encoder, this pooling rule and this corpus."
+ },
+ "diagnostics": {
+  "n_merchants_read_from_embedding_file": 238615,
+  "n_embedding_dimensions": 512,
+  "linear_probe": {
+   "solver": "lbfgs",
+   "max_iter": 200,
+   "C": 1.0,
+   "features": "standardised embedding, train statistics only"
+  },
+  "nearest_centroid": {
+   "metric": "euclidean on the standardised embedding",
+   "unseen_classes": "a class with no training merchant has no centroid and can never be predicted"
+  },
+  "runtime_seconds": 61.2
+ },
+ "limitations": [
+  "The corpus is the public IBM TabFormer benchmark and it is synthetic, so no number here describes a real merchant or a real cardmember.",
+  "The attack is a supervised probe, so it assumes an adversary who holds both the embeddings and a labelled sample of merchants with known field values. An adversary with the vector and nothing else is a weaker adversary that this file does not measure.",
+  "Merchant category is close to a merchant-level constant in this corpus rather than a per-transaction quantity, so the primary result should be read as the vector giving back the merchant's category. The amount decile is the target that is genuinely transaction level.",
+  "Recovering the city is not a disclosure to anyone holding this file, because the city string sits in a column beside the vector. The city and category results are informative about what the VECTOR encodes, which is the question, and not about what a file holder learns.",
+  "Single-transaction and multi-transaction merchants are never compared here. The comparison the pre-registration warns about would need matching, and for these targets it is not even well posed: category is near constant within a merchant, and a multi-transaction merchant has no single amount.",
+  "Encoder windows span one account's consecutive transactions, so train and test embeddings are not fully independent. The size of that dependence is unmeasured.",
+  "The city vocabulary cap means most city values were never encoder inputs, so the city arm measures a target the encoder mostly never saw.",
+  "One backbone checkpoint, one corpus, one pooling rule. Nothing here generalises to a different encoder or a different pooling window."
+ ],
+ "deviations_from_preregistration": [
+  {
+   "deviation": "the logistic probe was not run on the city target",
+   "prereg": "SAFE-D names one probe classifier over category, city and amount decile",
+   "reason": "the city target has thousands of classes in this subsample and a multinomial logistic fit at that class count does not fit the laptop memory budget. A nearest class centroid runs on all three targets, so the city target is still attacked and is still reported, with the estimator named beside it"
+  },
+  {
+   "deviation": "sanity rungs were added that the pre-registration did not name",
+   "prereg": "SAFE-D lists arms, metrics and the control but no sanity ladder",
+   "reason": "the implementation brief and the privacy ladder's own pattern require a pipeline that can report both no signal and full signal. Bands were declared before the run and are recorded in the file"
+  },
+  {
+   "deviation": "one sanity band, the 0.99 floor on the secondary leak rung, was declared wrongly and the rung is reported as failing it",
+   "prereg": "the brief requires a leak rung that must come back high; the producer declared a single floor of 0.99 for both leak rungs before the run",
+   "reason": "the city target has classes with no training merchant, which no centroid estimator can ever reach, so its leak rung has a structural ceiling below 0.99. The rung sits exactly at that ceiling. The band is reported as declared and as failed rather than moved after the fact, and the full-signal demonstration is carried by the primary leak rung, which has no unreachable classes and returns 0.9994"
+  },
+  {
+   "deviation": "the amount decile is scored as a third target rather than as an equal of the first two",
+   "prereg": "SAFE-D lists category, city and amount decile together",
+   "reason": "the primary and secondary were pre-declared in the same paragraph and are reported in that order. The amount decile is reported in full, it is simply not promoted over either of them"
+  }
+ ],
+ "check": {
+  "command": "python scripts/safety/embedding_inversion.py --check",
+  "tolerance": 1e-06,
+  "note": "recomputes the corpus cut, the merchant targets, the subsample, the control, the attack and every sanity rung from data/transactions.tgz and data/merchant_embeddings.parquet, then compares every numeric leaf against the committed results/safety_embedding_inversion.json. CPU only and seeded, so it needs no node pinning.",
+  "verified": {
+   "where": "the producing laptop, Apple M2, CPU only, thread caps as set at the top of the producer",
+   "verdict": "CHECK OK, exit 0",
+   "n_numeric_leaves_compared": "813",
+   "tolerance": "1e-06",
+   "note": "Values are strings on purpose. This block is metadata about the check, not a measurement, so it adds no numeric leaf for a future --check to compare. The producer reads the corpus and the embedding file from source on every run, so the check reproduces the whole pipeline and not a cached intermediate."
+  }
+ }
+}

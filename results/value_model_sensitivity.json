@@ -1,0 +1,189 @@
+{
+ "what_this_is": "One-way sensitivity on the bottom-up value model in copy/value-model.md. Every input is held at its base value while one input is moved to its conservative and then its stretch value, and the inputs are ranked by the resulting swing in the annual total. EVERY INPUT HERE IS A DECLARED ASSUMPTION, NOT A MEASUREMENT, so this ranks which assumption the answer is most sensitive to and says nothing about which value is right.",
+ "generated_by": "scripts/value_model_sensitivity.py",
+ "source_of_inputs": "copy/value-model.md, the three declared values for each input",
+ "base_total_usd": 10480000.0,
+ "base_lane_a_usd": 6400000.0,
+ "base_lane_b_usd": 2880000.0,
+ "base_lane_c_usd": 1200000.0,
+ "most_sensitive_input": "markets_or_partners_live",
+ "most_sensitive_label": "Markets or partners live (shared by all three lanes)",
+ "most_sensitive_swing_usd": 15720000.0,
+ "least_sensitive_input": "lane_c_yield_gain",
+ "least_sensitive_swing_usd": 800000.0,
+ "no_break_even_and_why": "No break-even is reported in the usual direction, and none can be: a forward break-even needs a cost to clear, this entry states no Phase 1 budget, and inventing one to complete the chart would be a new assumption dressed as an answer. What IS reported, in phase1_breakeven below, is the inversion: not a budget assumed but the bar a budget would have to clear, priced on the one lane whose targeting mechanism was measured. That adds no assumption, because it states what an unknown must beat rather than guessing the unknown. Same move as retention_threshold, run on the cost side.",
+ "second_input": "Lane A: signing-conversion uplift credited to the list",
+ "second_swing_usd": 9600000.0,
+ "shared_input_note": "Markets or partners live feeds all three lanes, so moving it moves the whole model, and that it ranks first is a property of the model as written rather than a discovery. An earlier version of this note read that the total is governed by how many partners sign and not by how well anything performs. That was wrong and it gave away more than the arithmetic supports. The second-ranked input, at US$9.60M against the first's US$15.72M, is the signing-conversion uplift credited to the ranked list, which IS the model's own contribution, and the two carry the same declared range of five times low to high. So the answer depends on how many partners sign AND on how well the list works, in that order, and the second of those is precisely what a pilot would measure.",
+ "range_caveat": "One-way swings are proportional to the range each input was given, so this ranking says as much about how wide we drew each range as about the structure underneath. The top two were drawn at the same five-times width, which is why their order is informative; comparing either to an input drawn at a narrower width is not.",
+ "base_total_per_partner_usd": 1310000.0,
+ "offers_lane_per_partner_usd": 360000.0,
+ "phase1_breakeven": {
+  "what_this_is": "No Phase 1 budget is assumed here and none is stated anywhere in this entry. This is the inversion: what a Phase 1 spend would have to clear, priced on the offers lane alone, which is the only lane whose targeting mechanism was measured on randomized data. A reader who knows what six months of CoE time costs can put their own number against this bar; we cannot and do not.",
+  "priced_on_lane": "offers, at all three declared scenarios",
+  "offers_lane_annual_usd": 2880000.0,
+  "by_scenario": {
+   "conservative": {
+    "offers_lane_annual_usd": 180000.0,
+    "months_for_a_one_million_phase1": 66.66666666666666
+   },
+   "base": {
+    "offers_lane_annual_usd": 2880000.0,
+    "months_for_a_one_million_phase1": 4.166666666666666
+   },
+   "stretch": {
+    "offers_lane_annual_usd": 22500000.0,
+    "months_for_a_one_million_phase1": 0.5333333333333333
+   }
+  },
+  "at_discount_revenue_rate": 0.02,
+  "ladder": [
+   {
+    "phase1_spend_usd": 1000000,
+    "months_for_the_offers_lane_alone_to_clear_it": 4.166666666666666,
+    "incremental_billed_business_required_usd": 50000000.0
+   },
+   {
+    "phase1_spend_usd": 2000000,
+    "months_for_the_offers_lane_alone_to_clear_it": 8.333333333333332,
+    "incremental_billed_business_required_usd": 100000000.0
+   },
+   {
+    "phase1_spend_usd": 4000000,
+    "months_for_the_offers_lane_alone_to_clear_it": 16.666666666666664,
+    "incremental_billed_business_required_usd": 200000000.0
+   }
+  ],
+  "the_caveat_that_travels": "The offers lane's size input is a declared assumption, not a measurement, so this bar is only as good as that input. What is measured is the targeting mechanism underneath it and the counting rule that certifies it, not the size."
+ },
+ "retention_threshold": {
+  "what_this_is": "The retention payoff is asserted in this document and never sized, because sizing it needs a partner's existing billed business through the network, which is Amex's figure and not a public one. This is the threshold instead: the billed business that would have to be HELD, rather than migrating to wallet rails, for the retention payoff alone to match everything the three lanes model at base case. It turns an assertion into a number the reader can test against what they know.",
+  "billed_business_to_match_base_total_usd": 524000000.0,
+  "per_partner_usd": 65500000.0,
+  "at_discount_revenue_rate": 0.02,
+  "across_partners": 8,
+  "we_do_not_know_if_that_is_large": "Whether that is a large or a small share of a GNS partner's annual billed business is something an Amex reader knows and we do not. That is the whole point of printing the threshold rather than an estimate."
+ },
+ "rows": [
+  {
+   "input": "markets_or_partners_live",
+   "label": "Markets or partners live (shared by all three lanes)",
+   "conservative_value": 3,
+   "base_value": 8,
+   "stretch_value": 15,
+   "total_at_conservative_usd": 3930000.0,
+   "total_at_stretch_usd": 19650000.0,
+   "swing_usd": 15720000.0,
+   "swing_as_multiple_of_base_total": 1.5,
+   "rank": 1
+  },
+  {
+   "input": "lane_a_signing_conversion_uplift",
+   "label": "Lane A: signing-conversion uplift credited to the list",
+   "conservative_value": 0.003,
+   "base_value": 0.008,
+   "stretch_value": 0.015,
+   "total_at_conservative_usd": 6480000.0,
+   "total_at_stretch_usd": 16080000.0,
+   "swing_usd": 9600000.0,
+   "swing_as_multiple_of_base_total": 0.916030534351145,
+   "rank": 2
+  },
+  {
+   "input": "lane_a_billed_per_merchant",
+   "label": "Lane A: incremental billed business per newly signed merchant",
+   "conservative_value": 50000,
+   "base_value": 100000,
+   "stretch_value": 200000,
+   "total_at_conservative_usd": 7280000.0,
+   "total_at_stretch_usd": 16880000.0,
+   "swing_usd": 9600000.0,
+   "swing_as_multiple_of_base_total": 0.916030534351145,
+   "rank": 3
+  },
+  {
+   "input": "lane_a_addressable_universe",
+   "label": "Lane A: addressable non-accepting merchants per market",
+   "conservative_value": 30000,
+   "base_value": 50000,
+   "stretch_value": 70000,
+   "total_at_conservative_usd": 7920000.0,
+   "total_at_stretch_usd": 13040000.0,
+   "swing_usd": 5120000.0,
+   "swing_as_multiple_of_base_total": 0.48854961832061067,
+   "rank": 4
+  },
+  {
+   "input": "lane_b_billed_per_campaign",
+   "label": "Lane B: incremental billed business per campaign",
+   "conservative_value": 1000000,
+   "base_value": 3000000,
+   "stretch_value": 6000000,
+   "total_at_conservative_usd": 8560000.0,
+   "total_at_stretch_usd": 13360000.0,
+   "swing_usd": 4800000.0,
+   "swing_as_multiple_of_base_total": 0.4580152671755725,
+   "rank": 5
+  },
+  {
+   "input": "discount_revenue_rate",
+   "label": "Discount revenue rate (Lanes A and B)",
+   "conservative_value": 0.015,
+   "base_value": 0.02,
+   "stretch_value": 0.025,
+   "total_at_conservative_usd": 8160000.0,
+   "total_at_stretch_usd": 12800000.0,
+   "swing_usd": 4640000.0,
+   "swing_as_multiple_of_base_total": 0.44274809160305345,
+   "rank": 6
+  },
+  {
+   "input": "lane_b_campaigns_per_partner",
+   "label": "Lane B: campaigns per partner per year",
+   "conservative_value": 4,
+   "base_value": 6,
+   "stretch_value": 10,
+   "total_at_conservative_usd": 9520000.0,
+   "total_at_stretch_usd": 12400000.0,
+   "swing_usd": 2880000.0,
+   "swing_as_multiple_of_base_total": 0.2748091603053435,
+   "rank": 7
+  },
+  {
+   "input": "lane_c_budget_per_partner",
+   "label": "Lane C: corridor-facing budget per partner",
+   "conservative_value": 3000000,
+   "base_value": 5000000,
+   "stretch_value": 8000000,
+   "total_at_conservative_usd": 10000000.0,
+   "total_at_stretch_usd": 11200000.0,
+   "swing_usd": 1200000.0,
+   "swing_as_multiple_of_base_total": 0.11450381679389313,
+   "rank": 8
+  },
+  {
+   "input": "lane_c_share_reallocated",
+   "label": "Lane C: share of that budget reallocated on the forecast",
+   "conservative_value": 0.15,
+   "base_value": 0.2,
+   "stretch_value": 0.3,
+   "total_at_conservative_usd": 10180000.0,
+   "total_at_stretch_usd": 11080000.0,
+   "swing_usd": 900000.0,
+   "swing_as_multiple_of_base_total": 0.08587786259541985,
+   "rank": 9
+  },
+  {
+   "input": "lane_c_yield_gain",
+   "label": "Lane C: yield gain on the reallocated share",
+   "conservative_value": 0.1,
+   "base_value": 0.15,
+   "stretch_value": 0.2,
+   "total_at_conservative_usd": 10080000.0,
+   "total_at_stretch_usd": 10880000.0,
+   "swing_usd": 800000.0,
+   "swing_as_multiple_of_base_total": 0.07633587786259542,
+   "rank": 10
+  }
+ ]
+}

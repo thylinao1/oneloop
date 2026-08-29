@@ -1,0 +1,138 @@
+{
+ "seed": 7,
+ "versions": {
+  "python": "3.13.1",
+  "numpy": "2.5.2",
+  "polars": "1.43.2",
+  "pyarrow": "25.0.1",
+  "lightgbm": "4.7.0",
+  "sklearn": "1.9.0"
+ },
+ "generated_by": "scripts/pair_retention.py --check-able",
+ "data_sources": [
+  {
+   "name": "IBM TabFormer card_transaction.v1.csv (synthetic)",
+   "url": "https://github.com/IBM/TabFormer (data/credit_card/transactions.tgz)",
+   "sha256": "e9f589a0958f40d60f81b1a2e8428db86e00c05755caf44fb055827976c0efa2"
+  },
+  {
+   "name": "merchant-axis pooled merchant embeddings (merchant_embeddings_v2.parquet)",
+   "url": "cluster artifact of the merchant-axis pretraining run",
+   "sha256": "670372ae31440b9220361a40f0cc51a51c6729f9807ceb88ce37346aa14711a4"
+  }
+ ],
+ "labels": [
+  "synthetic"
+ ],
+ "what_this_is": "The merchant-native downstream task. The merchant axis was previously evaluated only on next merchant category and fraud, both of which are near-degenerate when the entity is the merchant. Pair retention is not: the unit is an (account, merchant) pair seen before the cut, and the label is whether that pair transacts again after it. Pre-registered in the project record before the first run.",
+ "task": {
+  "unit": "(account, merchant) pair with at least one transaction strictly before the cut",
+  "label": "1 if the same pair transacts again at or after the cut",
+  "cut_ts": 1503653820,
+  "cut_date": "2017-08-25T09:37:00Z",
+  "n_pairs_total": 838863,
+  "pos_rate_total": 0.1690860128531119,
+  "n_rows_read": 24386900,
+  "n_unmatched_merchant_rows": 50225,
+  "n_unmatched_merchant_rows_pre_cut": 0
+ },
+ "split": {
+  "kind": "entity-disjoint by merchant (seeded sha256 hash partition)",
+  "test_frac": 0.3,
+  "n_merchants_train": 167245,
+  "n_merchants_test": 71370,
+  "n_shared_merchants_train_test": 0,
+  "n_train_pairs_available": 581624,
+  "n_test_pairs_available": 257239,
+  "n_train": 581624,
+  "n_test": 257239,
+  "n_test_merchants_scored": 71370,
+  "test_pos_rate": 0.17757804998464463,
+  "caveat": "merchant-disjoint only: cardholders cross merchant boundaries, the same disclosed caveat the merchant-axis pretraining run carries"
+ },
+ "held_fixed": {
+  "model": "LightGBM binary, identical settings across all three arms",
+  "params": {
+   "objective": "binary",
+   "metric": "average_precision",
+   "learning_rate": 0.05,
+   "num_leaves": 63,
+   "n_estimators": 600,
+   "seed": 7,
+   "verbose": -1
+  },
+  "early_stopping": "50 rounds on a merchant-disjoint 15% validation slice of the train side",
+  "baseline_features": [
+   "pair_n_pre",
+   "pair_days_since_last",
+   "pair_days_since_first",
+   "pair_span_days",
+   "pair_mean_gap_days",
+   "pair_amt_sum",
+   "pair_amt_mean",
+   "acct_n_pre",
+   "acct_n_merch_pre",
+   "merch_n_pre",
+   "merch_n_acct_pre",
+   "merch_days_since_last",
+   "pair_share_of_acct"
+  ],
+  "embedding_dim": 512,
+  "embedding_pooling": "pre-cut transactions only"
+ },
+ "bootstrap": {
+  "method": "merchant-clustered paired bootstrap",
+  "B": 1000,
+  "ci": "percentile 95%"
+ },
+ "arms": {
+  "baseline": {
+   "auc": 0.9403561030955836,
+   "prauc": 0.8635790773602771,
+   "n_features": 13,
+   "lgbm_iterations": 599
+  },
+  "with_v2": {
+   "auc": 0.9409450391567682,
+   "prauc": 0.8664076574018376,
+   "n_features": 526,
+   "lgbm_iterations": 593
+  },
+  "with_v1": {
+   "auc": 0.9395089158345604,
+   "prauc": 0.8622373196547187,
+   "n_features": 526,
+   "lgbm_iterations": 600
+  }
+ },
+ "deltas": {
+  "with_v2": {
+   "delta_auc": 0.0005889360611845973,
+   "delta_auc_ci": [
+    -0.0004747385453346048,
+    0.0015666344856114925
+   ],
+   "delta_prauc": 0.0028285800415605022,
+   "delta_prauc_ci": [
+    -0.0004215014745512335,
+    0.006311025144042519
+   ],
+   "unmatched_pairs": 0
+  },
+  "with_v1": {
+   "delta_auc": -0.0008471872610231745,
+   "delta_auc_ci": [
+    -0.0033903220721540396,
+    0.0013580118823888511
+   ],
+   "delta_prauc": -0.001341757705558333,
+   "delta_prauc_ci": [
+    -0.006704440700693473,
+    0.003589187223874524
+   ],
+   "unmatched_pairs": 0
+  }
+ },
+ "primary": "with_v2",
+ "check": "scripts/pair_retention.py --check (recomputes stage run from the cached pair table)"
+}

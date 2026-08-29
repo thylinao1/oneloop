@@ -1,0 +1,102 @@
+{
+ "generated_by": "scripts/fm/transfer_eval_cj.py --stage combine",
+ "versions": {
+  "python": "3.12.3",
+  "numpy": "2.5.2",
+  "polars": "1.43.2",
+  "pyarrow": "25.0.1",
+  "lightgbm": "4.7.0",
+  "sklearn": "1.9.0",
+  "torch": "2.13.0+cu130"
+ },
+ "seeds": [
+  7,
+  8
+ ],
+ "eval_seed": 42,
+ "data_sources": [
+  {
+   "name": "dunnhumby The Complete Journey (real retail transactions)",
+   "url": "https://www.dunnhumby.com/source-files/",
+   "sha256": "5e0a3d72fe8562fe0ab995f70fb58b74359e8ec4bbccd1521e2b137da0558f9a",
+   "terms": "dunnhumby terms: data may be used solely for research, personal or non-commercial purposes"
+  }
+ ],
+ "labels": [
+  "real"
+ ],
+ "what_this_is": "the shipped L3 transfer protocol replicated on a real retail corpus: same guards, same bootstrap code, two pretraining seeds against one pre-registered household-disjoint split",
+ "scale_caveat": "2.6M transactions and ~2,500 households against TabFormer's 24M rows: a protocol replication on a small real corpus, not a scale replication",
+ "per_seed": {
+  "7": {
+   "backbone_seed": 7,
+   "eval_seed": 42,
+   "baseline_top1": 0.5200629425649095,
+   "with_emb_top1": 0.5041025064628526,
+   "baseline_top5": 0.7046195346746095,
+   "with_emb_top5": 0.7069798808587164,
+   "delta_top1": -0.015960436102056885,
+   "delta_top1_ci": [
+    -0.020728618281150718,
+    -0.011325686193294236
+   ],
+   "delta_top5": 0.002360346184106965,
+   "delta_top5_ci": [
+    -0.00260406374315581,
+    0.007481036662452649
+   ],
+   "majority_floor_top1": 0.5100595706417894,
+   "majority_floor_top5": 0.7113633809149151
+  },
+  "8": {
+   "backbone_seed": 8,
+   "eval_seed": 42,
+   "baseline_top1": 0.5200629425649095,
+   "with_emb_top1": 0.5053388782735754,
+   "baseline_top5": 0.7046195346746095,
+   "with_emb_top5": 0.7093402270428234,
+   "delta_top1": -0.014724064291334105,
+   "delta_top1_ci": [
+    -0.019683739230089276,
+    -0.010079221950178921
+   ],
+   "delta_top5": 0.00472069236821393,
+   "delta_top5_ci": [
+    -0.0005771134914434595,
+    0.010794945240458589
+   ],
+   "majority_floor_top1": 0.5100595706417894,
+   "majority_floor_top5": 0.7113633809149151
+  }
+ },
+ "split": {
+  "n_users": 2500,
+  "n_test_users": 500,
+  "n_train_users": 2000,
+  "n_train_rows": 37837,
+  "n_test_rows": 8897,
+  "seed": 7,
+  "scored_unit": "basket-opening transaction (first row of each post-cut basket, predecessor strictly earlier in ts)",
+  "n_post_rows": 469113,
+  "n_post_basket_opening_rows": 46951,
+  "n_basket_starts_dropped_same_ts_tie": 217,
+  "row_sampling": "uniform over basket-opening rows (no label stratification)",
+  "split": "entity-disjoint by household, pre-registered at select stage",
+  "small_entity_pool_note": "~2,500 households total; the split sizes above are the whole story, there is no larger pool"
+ },
+ "leakage_checks": {
+  "label_excluded": true,
+  "time_truncated": true,
+  "as_of_embeddings": true,
+  "scored_unit_basket_opening": true,
+  "ids_excluded": true
+ },
+ "bootstrap": {
+  "method": "entity-clustered paired bootstrap (household clusters); same code object as the shipped transfer_eval.py",
+  "B": 1000,
+  "ci": "percentile 95%"
+ },
+ "decision_rule": "pre-registered in CJ-REPLICATION-PREREG.md: positive only if both seed intervals sit above zero; anything else ships as a null or mixed result; no third seed, no protocol changes after seeing numbers",
+ "required_sentence": "Under the L3 protocol on the real Complete Journey corpus the backbone's transfer gain on next-commodity top-1 is negative in both pretraining seeds (-0.0160 and -0.0147), with both 95% household-clustered intervals below zero. Per the pre-registration this ships as obtained.",
+ "call": "negative_both_seeds"
+}

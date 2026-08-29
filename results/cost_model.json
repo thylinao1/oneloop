@@ -1,0 +1,897 @@
+{
+ "generated_by": "scripts/cost_model.py --check-able",
+ "what_this_is": "the cost and return lane the submission did not have: every compute quantity measured from Slurm accounting and job artifacts, every price a declared assumption with provider, URL and retrieval date, and a payback statement against the committed declared-assumption value model",
+ "basis_legend": {
+  "measured": "read from Slurm accounting (sacct), a job log, or the cluster filesystem; reproducible from the committed dump",
+  "declared_assumption": "chosen and cited, never measured; prices, mappings and every value-model input"
+ },
+ "data_sources": [
+  {
+   "name": "Slurm accounting dump, amex-* jobs, 2026-08-10 through 2026-08-24",
+   "path": "results/cache/sacct_amex_2026-08-24b.txt",
+   "sha256": "ce01680ba8a5ea548719e651fe71a5d192dfae8e0f886e415383eb3bdf69c211",
+   "command": "ssh soc \"sacct -S 2026-08-10 -E now -u $USER --format=JobID,JobName%32,Elapsed,AllocTRES%70,State,End,NodeList%20 -X -P\" filtered to the header row plus rows whose JobName starts with amex-; rows kept verbatim",
+   "retrieved": "2026-08-24",
+   "basis": "measured"
+  },
+  {
+   "name": "merchant-axis job log (row counts) and artifact mtimes (phase bracket)",
+   "path": "~/amex-oneloop/logs/amex-merchant-749089.out on the NUS SoC cluster",
+   "retrieved": "2026-08-24",
+   "basis": "measured"
+  },
+  {
+   "name": "bottom-up value model (three lanes, three scenarios)",
+   "path": "copy/value-model.md",
+   "basis": "declared_assumption"
+  }
+ ],
+ "jobs": {
+  "n_jobs": 46,
+  "n_completed": 28,
+  "n_failed_or_cancelled": 18,
+  "included": "every Slurm job named amex-* on the NUS SoC cluster in the window, including failed, cancelled and out-of-memory runs; real R&D compute includes the runs that did not work",
+  "excluded": "all jobs of other projects on the same account",
+  "basis": "measured",
+  "per_job": [
+   {
+    "job_id": "748860",
+    "name": "amex-fsq-slice",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 8,
+    "elapsed_seconds": 80,
+    "node": ""
+   },
+   {
+    "job_id": "748881",
+    "name": "amex-envbuild",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 4,
+    "elapsed_seconds": 337,
+    "node": ""
+   },
+   {
+    "job_id": "748911",
+    "name": "amex-drvchk",
+    "state": "FAILED",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": "a100-40",
+    "gpu_count": 1,
+    "cpu_count": 2,
+    "elapsed_seconds": 0,
+    "node": ""
+   },
+   {
+    "job_id": "748913",
+    "name": "amex-drvchk",
+    "state": "CANCELLED",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 0,
+    "elapsed_seconds": 0,
+    "node": ""
+   },
+   {
+    "job_id": "748931",
+    "name": "amex-backbone",
+    "state": "CANCELLED",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 0,
+    "elapsed_seconds": 0,
+    "node": ""
+   },
+   {
+    "job_id": "748986",
+    "name": "amex-backbone",
+    "state": "CANCELLED",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 0,
+    "elapsed_seconds": 0,
+    "node": ""
+   },
+   {
+    "job_id": "748987",
+    "name": "amex-backbone40",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": "a100-40",
+    "gpu_count": 1,
+    "cpu_count": 16,
+    "elapsed_seconds": 6129,
+    "node": ""
+   },
+   {
+    "job_id": "749062",
+    "name": "amex-narratives",
+    "state": "OUT_OF_MEMORY",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": "h200-141",
+    "gpu_count": 1,
+    "cpu_count": 2,
+    "elapsed_seconds": 91,
+    "node": ""
+   },
+   {
+    "job_id": "749084",
+    "name": "amex-narratives",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": "h200-141",
+    "gpu_count": 1,
+    "cpu_count": 16,
+    "elapsed_seconds": 414,
+    "node": ""
+   },
+   {
+    "job_id": "749086",
+    "name": "amex-scale3m",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": "h100-47",
+    "gpu_count": 1,
+    "cpu_count": 16,
+    "elapsed_seconds": 601,
+    "node": ""
+   },
+   {
+    "job_id": "749087",
+    "name": "amex-scale10m",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": "a100-40",
+    "gpu_count": 1,
+    "cpu_count": 16,
+    "elapsed_seconds": 2988,
+    "node": ""
+   },
+   {
+    "job_id": "749088",
+    "name": "amex-scale24m-s2",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": "h100-96",
+    "gpu_count": 1,
+    "cpu_count": 16,
+    "elapsed_seconds": 3350,
+    "node": ""
+   },
+   {
+    "job_id": "749089",
+    "name": "amex-merchant",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": "h100-96",
+    "gpu_count": 1,
+    "cpu_count": 16,
+    "elapsed_seconds": 3130,
+    "node": ""
+   },
+   {
+    "job_id": "749090",
+    "name": "amex-atlas",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 8,
+    "elapsed_seconds": 235,
+    "node": ""
+   },
+   {
+    "job_id": "751174",
+    "name": "amex-ladder",
+    "state": "CANCELLED",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 0,
+    "elapsed_seconds": 0,
+    "node": ""
+   },
+   {
+    "job_id": "751213",
+    "name": "amex-ladder-emb",
+    "state": "CANCELLED",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 0,
+    "elapsed_seconds": 0,
+    "node": ""
+   },
+   {
+    "job_id": "751224",
+    "name": "amex-ladder",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 24,
+    "elapsed_seconds": 11062,
+    "node": ""
+   },
+   {
+    "job_id": "751228",
+    "name": "amex-ladder-smoke",
+    "state": "CANCELLED",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 0,
+    "elapsed_seconds": 0,
+    "node": ""
+   },
+   {
+    "job_id": "751229",
+    "name": "amex-ladder-smoke",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 16,
+    "elapsed_seconds": 118,
+    "node": ""
+   },
+   {
+    "job_id": "751305",
+    "name": "amex-ladder-smoke2",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 16,
+    "elapsed_seconds": 98,
+    "node": ""
+   },
+   {
+    "job_id": "751703",
+    "name": "amex-ladder-rb-smoke",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 16,
+    "elapsed_seconds": 129,
+    "node": ""
+   },
+   {
+    "job_id": "751710",
+    "name": "amex-ladder-readback",
+    "state": "FAILED",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 24,
+    "elapsed_seconds": 4224,
+    "node": ""
+   },
+   {
+    "job_id": "751713",
+    "name": "amex-protection",
+    "state": "CANCELLED",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": "nv",
+    "gpu_count": 1,
+    "cpu_count": 8,
+    "elapsed_seconds": 923,
+    "node": ""
+   },
+   {
+    "job_id": "751763",
+    "name": "amex-protection",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": "nv",
+    "gpu_count": 1,
+    "cpu_count": 8,
+    "elapsed_seconds": 3181,
+    "node": ""
+   },
+   {
+    "job_id": "751856",
+    "name": "amex-ladder-readback-origin",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 24,
+    "elapsed_seconds": 3788,
+    "node": ""
+   },
+   {
+    "job_id": "751924",
+    "name": "amex-protection",
+    "state": "FAILED",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": "nv",
+    "gpu_count": 1,
+    "cpu_count": 8,
+    "elapsed_seconds": 11,
+    "node": ""
+   },
+   {
+    "job_id": "751927",
+    "name": "amex-protection",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": "nv",
+    "gpu_count": 1,
+    "cpu_count": 8,
+    "elapsed_seconds": 2632,
+    "node": ""
+   },
+   {
+    "job_id": "751929",
+    "name": "amex-protection-check",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": "nv",
+    "gpu_count": 1,
+    "cpu_count": 8,
+    "elapsed_seconds": 2581,
+    "node": ""
+   },
+   {
+    "job_id": "752149",
+    "name": "amex-verify-rarity",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 6,
+    "elapsed_seconds": 16,
+    "node": ""
+   },
+   {
+    "job_id": "752153",
+    "name": "amex-verify-diag",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 6,
+    "elapsed_seconds": 3,
+    "node": ""
+   },
+   {
+    "job_id": "752526",
+    "name": "amex-safety-injection",
+    "state": "CANCELLED",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 0,
+    "elapsed_seconds": 0,
+    "node": ""
+   },
+   {
+    "job_id": "752529",
+    "name": "amex-safety-mia-pop",
+    "state": "FAILED",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 6,
+    "elapsed_seconds": 4,
+    "node": ""
+   },
+   {
+    "job_id": "752530",
+    "name": "amex-safety-mia-pop2",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 6,
+    "elapsed_seconds": 1,
+    "node": ""
+   },
+   {
+    "job_id": "752533",
+    "name": "amex-safety-injection",
+    "state": "FAILED",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": "a100-40",
+    "gpu_count": 2,
+    "cpu_count": 16,
+    "elapsed_seconds": 72,
+    "node": ""
+   },
+   {
+    "job_id": "752534",
+    "name": "amex-safety-mia",
+    "state": "FAILED",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": "nv",
+    "gpu_count": 1,
+    "cpu_count": 12,
+    "elapsed_seconds": 9,
+    "node": ""
+   },
+   {
+    "job_id": "752535",
+    "name": "amex-safety-mia",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": "a100-40",
+    "gpu_count": 1,
+    "cpu_count": 12,
+    "elapsed_seconds": 393,
+    "node": ""
+   },
+   {
+    "job_id": "752536",
+    "name": "amex-safety-injection",
+    "state": "FAILED",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": "a100-40",
+    "gpu_count": 1,
+    "cpu_count": 16,
+    "elapsed_seconds": 55,
+    "node": ""
+   },
+   {
+    "job_id": "752537",
+    "name": "amex-safety-injection",
+    "state": "FAILED",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": "a100-40",
+    "gpu_count": 2,
+    "cpu_count": 16,
+    "elapsed_seconds": 0,
+    "node": ""
+   },
+   {
+    "job_id": "752539",
+    "name": "amex-safety-injection",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": "a100-80",
+    "gpu_count": 1,
+    "cpu_count": 16,
+    "elapsed_seconds": 606,
+    "node": ""
+   },
+   {
+    "job_id": "752541",
+    "name": "amex-safety-mia",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": "a100-40",
+    "gpu_count": 1,
+    "cpu_count": 12,
+    "elapsed_seconds": 386,
+    "node": ""
+   },
+   {
+    "job_id": "752544",
+    "name": "amex-safety-mia",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": "a100-40",
+    "gpu_count": 1,
+    "cpu_count": 12,
+    "elapsed_seconds": 390,
+    "node": ""
+   },
+   {
+    "job_id": "752551",
+    "name": "amex-safety-mia-check",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": "a100-40",
+    "gpu_count": 1,
+    "cpu_count": 12,
+    "elapsed_seconds": 368,
+    "node": ""
+   },
+   {
+    "job_id": "752750",
+    "name": "amex-cj-download",
+    "state": "FAILED",
+    "bucket": "failed_or_cancelled",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 8,
+    "elapsed_seconds": 26,
+    "node": ""
+   },
+   {
+    "job_id": "752761",
+    "name": "amex-cj-download",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 8,
+    "elapsed_seconds": 44,
+    "node": ""
+   },
+   {
+    "job_id": "752763",
+    "name": "amex-cj-backbone",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": "a100-40",
+    "gpu_count": 1,
+    "cpu_count": 8,
+    "elapsed_seconds": 1346,
+    "node": ""
+   },
+   {
+    "job_id": "752801",
+    "name": "amex-cj-transfer",
+    "state": "COMPLETED",
+    "bucket": "completed",
+    "gpu_type": null,
+    "gpu_count": 0,
+    "cpu_count": 24,
+    "elapsed_seconds": 229,
+    "node": ""
+   }
+  ]
+ },
+ "measured_compute": {
+  "gpu_hours_by_type": {
+   "a100-40": {
+    "completed": 3.333333333333333,
+    "failed_or_cancelled": 0.05527777777777778,
+    "total": 3.388611111111111,
+    "basis": "measured",
+    "unit": "GPU-hours"
+   },
+   "a100-80": {
+    "completed": 0.16833333333333333,
+    "failed_or_cancelled": 0.0,
+    "total": 0.16833333333333333,
+    "basis": "measured",
+    "unit": "GPU-hours"
+   },
+   "h100-47": {
+    "completed": 0.16694444444444445,
+    "failed_or_cancelled": 0.0,
+    "total": 0.16694444444444445,
+    "basis": "measured",
+    "unit": "GPU-hours"
+   },
+   "h100-96": {
+    "completed": 1.8,
+    "failed_or_cancelled": 0.0,
+    "total": 1.8,
+    "basis": "measured",
+    "unit": "GPU-hours"
+   },
+   "h200-141": {
+    "completed": 0.115,
+    "failed_or_cancelled": 0.025277777777777777,
+    "total": 0.14027777777777778,
+    "basis": "measured",
+    "unit": "GPU-hours"
+   },
+   "nv": {
+    "completed": 2.331666666666667,
+    "failed_or_cancelled": 0.2619444444444444,
+    "total": 2.5936111111111115,
+    "basis": "measured",
+    "unit": "GPU-hours"
+   }
+  },
+  "total_gpu_hours": {
+   "value": 8.257777777777779,
+   "basis": "measured",
+   "unit": "GPU-hours"
+  },
+  "cpu_only_core_hours": {
+   "completed": 103.26555555555555,
+   "failed_or_cancelled": 28.224444444444444,
+   "total": 131.49,
+   "basis": "measured",
+   "unit": "core-hours"
+  },
+  "note": "CPU cores and memory allocated alongside a GPU are not priced separately: the cited per-GPU-hour prices are for instances that bundle vCPUs and RAM with the card"
+ },
+ "price_assumptions": {
+  "gpu": {
+   "a100-40": {
+    "usd_per_gpu_hour": 1.99,
+    "maps_to": "A100 40GB PCIe/SXM on-demand",
+    "provider": "Lambda",
+    "url": "https://lambda.ai/pricing",
+    "retrieved": "2026-08-24",
+    "basis": "declared_assumption"
+   },
+   "a100-80": {
+    "usd_per_gpu_hour": 2.79,
+    "maps_to": "A100 SXM 80GB on-demand (8x instance rate per GPU, the only 80GB tier Lambda lists)",
+    "provider": "Lambda",
+    "url": "https://lambda.ai/pricing",
+    "retrieved": "2026-08-24",
+    "basis": "declared_assumption"
+   },
+   "h100-47": {
+    "usd_per_gpu_hour": 4.29,
+    "maps_to": "full H100 SXM 1x on-demand. The cluster resource is a 47GB MIG slice, roughly half an H100, priced here as a whole card. Conservative: overstates cost.",
+    "provider": "Lambda",
+    "url": "https://lambda.ai/pricing",
+    "retrieved": "2026-08-24",
+    "basis": "declared_assumption"
+   },
+   "h100-96": {
+    "usd_per_gpu_hour": 4.29,
+    "maps_to": "full H100 SXM 1x on-demand. The cluster card is an H100 NVL 96GB (the job log prints 'NVIDIA H100 NVL', 95830 MiB); priced at the highest listed H100 tier. Conservative: at or above market.",
+    "provider": "Lambda",
+    "url": "https://lambda.ai/pricing",
+    "retrieved": "2026-08-24",
+    "basis": "declared_assumption"
+   },
+   "h200-141": {
+    "usd_per_gpu_hour": 6.305,
+    "maps_to": "HGX H200 141GB, 8-GPU instance at $50.44 per instance-hour, divided by 8. Lambda does not list H200 on-demand, so the price comes from CoreWeave, which sits above the specialist-cloud range. Conservative: overstates cost.",
+    "provider": "CoreWeave",
+    "url": "https://www.coreweave.com/pricing",
+    "retrieved": "2026-08-24",
+    "basis": "declared_assumption"
+   },
+   "nv": {
+    "usd_per_gpu_hour": 1.99,
+    "maps_to": "A100 40GB price. The gres 'nv' nodes carry far older cards, measured via 'scontrol show node' on 2026-08-24: xgpe1/xgpe2 = Titan RTX, xgpd0 = Titan V, xgpf4 = T4. None has a current listing on a major on-demand page; each rents well below an A100 wherever it is still offered. Conservative: overstates.",
+    "provider": "Lambda (price), NUS SoC scontrol (hardware identity)",
+    "url": "https://lambda.ai/pricing",
+    "retrieved": "2026-08-24",
+    "basis": "declared_assumption"
+   }
+  },
+  "cpu_core": {
+   "usd_per_core_hour": 0.044625,
+   "maps_to": "AWS EC2 c7i.4xlarge on-demand, Linux, us-east-1: $0.714 per hour for 16 vCPU, so $0.0446 per vCPU-hour. Read from the Vantage mirror of AWS published pricing.",
+   "provider": "AWS via instances.vantage.sh",
+   "url": "https://instances.vantage.sh/aws/ec2/c7i.4xlarge",
+   "retrieved": "2026-08-24",
+   "basis": "declared_assumption"
+  },
+  "all_prices_are": "declared assumptions: public on-demand rates read on 2026-08-24, excluding tax, never presented as measured"
+ },
+ "one_off_rnd_cost": {
+  "by_gpu_type_usd": {
+   "a100-40": {
+    "gpu_hours": {
+     "completed": 3.333333333333333,
+     "failed_or_cancelled": 0.05527777777777778,
+     "total": 3.388611111111111
+    },
+    "usd_per_gpu_hour": 1.99,
+    "usd_completed": 6.633333333333333,
+    "usd_failed_or_cancelled": 0.11000277777777778,
+    "usd_total": 6.743336111111111
+   },
+   "a100-80": {
+    "gpu_hours": {
+     "completed": 0.16833333333333333,
+     "failed_or_cancelled": 0.0,
+     "total": 0.16833333333333333
+    },
+    "usd_per_gpu_hour": 2.79,
+    "usd_completed": 0.46965,
+    "usd_failed_or_cancelled": 0.0,
+    "usd_total": 0.46965
+   },
+   "h100-47": {
+    "gpu_hours": {
+     "completed": 0.16694444444444445,
+     "failed_or_cancelled": 0.0,
+     "total": 0.16694444444444445
+    },
+    "usd_per_gpu_hour": 4.29,
+    "usd_completed": 0.7161916666666667,
+    "usd_failed_or_cancelled": 0.0,
+    "usd_total": 0.7161916666666667
+   },
+   "h100-96": {
+    "gpu_hours": {
+     "completed": 1.8,
+     "failed_or_cancelled": 0.0,
+     "total": 1.8
+    },
+    "usd_per_gpu_hour": 4.29,
+    "usd_completed": 7.722,
+    "usd_failed_or_cancelled": 0.0,
+    "usd_total": 7.722
+   },
+   "h200-141": {
+    "gpu_hours": {
+     "completed": 0.115,
+     "failed_or_cancelled": 0.025277777777777777,
+     "total": 0.14027777777777778
+    },
+    "usd_per_gpu_hour": 6.305,
+    "usd_completed": 0.725075,
+    "usd_failed_or_cancelled": 0.1593763888888889,
+    "usd_total": 0.8844513888888889
+   },
+   "nv": {
+    "gpu_hours": {
+     "completed": 2.331666666666667,
+     "failed_or_cancelled": 0.2619444444444444,
+     "total": 2.5936111111111115
+    },
+    "usd_per_gpu_hour": 1.99,
+    "usd_completed": 4.640016666666667,
+    "usd_failed_or_cancelled": 0.5212694444444445,
+    "usd_total": 5.161286111111112
+   }
+  },
+  "cpu_only_usd": {
+   "core_hours": {
+    "completed": 103.26555555555555,
+    "failed_or_cancelled": 28.224444444444444,
+    "total": 131.49
+   },
+   "usd_per_core_hour": 0.044625,
+   "usd_completed": 4.6082254166666665,
+   "usd_failed_or_cancelled": 1.2595158333333332,
+   "usd_total": 5.86774125
+  },
+  "gpu_usd_total": 21.69691527777778,
+  "usd_total_market_equivalent": 27.564656527777778,
+  "usd_failed_or_cancelled_runs": 2.0501644444444445,
+  "usd_cash_actually_paid": 0.0,
+  "which_is_which": "usd_cash_actually_paid is the real cash outlay: the training ran on a university cluster free to the team. usd_total_market_equivalent is what the same measured hours would have cost at the cited public on-demand rates, failed runs included; it is the number to use when the cluster subsidy is stripped out.",
+  "basis": "measured quantities x declared_assumption prices"
+ },
+ "serving_projection": {
+  "measured_inputs": {
+   "job": "amex-merchant (Slurm 749089), one H100 NVL 96GB (gres h100-96)",
+   "log": "~/amex-oneloop/logs/amex-merchant-749089.out on the NUS SoC cluster",
+   "n_merchant_embeddings": 238615,
+   "n_window_chunks_pooled": 1415720,
+   "n_asof_rows_embedded": 1100000,
+   "phase_start": "2026-08-22T23:47:23.311510+08:00",
+   "phase_start_source": "mtime of ~/amex-oneloop/scale/merchant-axis/ckpt/pretrain_summary.json, the last artifact written before the embedding phase (ls --full-time, 2026-08-24)",
+   "phase_end": "2026-08-22T23:55:28.065030+08:00",
+   "phase_end_source": "mtime of ~/amex-oneloop/merchant_embeddings_v2.parquet, written when the embedding phase persisted its output (ls --full-time, 2026-08-24)",
+   "basis": "measured"
+  },
+  "embedding_phase_seconds": 484.75352,
+  "merchants_per_second_floor": 492.2398500582317,
+  "target_merchants": {
+   "value": 1000000,
+   "basis": "chosen_target",
+   "note": "illustrative scale, not measured and not a price"
+  },
+  "projected_gpu_hours_ceiling": 0.5643138761417159,
+  "projected_usd_ceiling": 2.4209065286479614,
+  "price_used": "h100-96 mapping above (declared assumption)",
+  "why_floor_and_ceiling": "the log prints row counts but no per-phase timestamps, so the phase wall time is bracketed by two artifact mtimes. That window also holds checkpoint selection, an as-of embedding pass over 1,100,000 rows and a 454MB parquet copy, all charged here to the 238,615 merchant embeddings alone. The rate is therefore a floor, the projected cost a ceiling.",
+  "basis": "measured quantities and timing x declared_assumption price"
+ },
+ "value_lanes": {
+  "source": "copy/value-model.md",
+  "inputs_restated": {
+   "conservative": {
+    "markets": 3,
+    "lane_a": {
+     "universe": 30000,
+     "uplift": 0.003,
+     "billed": 50000,
+     "mdr": 0.015
+    },
+    "lane_b": {
+     "campaigns": 4,
+     "billed": 1000000,
+     "mdr": 0.015
+    },
+    "lane_c": {
+     "budget": 3000000,
+     "share": 0.15,
+     "gain": 0.1
+    }
+   },
+   "base": {
+    "markets": 8,
+    "lane_a": {
+     "universe": 50000,
+     "uplift": 0.008,
+     "billed": 100000,
+     "mdr": 0.02
+    },
+    "lane_b": {
+     "campaigns": 6,
+     "billed": 3000000,
+     "mdr": 0.02
+    },
+    "lane_c": {
+     "budget": 5000000,
+     "share": 0.2,
+     "gain": 0.15
+    }
+   },
+   "stretch": {
+    "markets": 15,
+    "lane_a": {
+     "universe": 70000,
+     "uplift": 0.015,
+     "billed": 200000,
+     "mdr": 0.025
+    },
+    "lane_b": {
+     "campaigns": 10,
+     "billed": 6000000,
+     "mdr": 0.025
+    },
+    "lane_c": {
+     "budget": 8000000,
+     "share": 0.3,
+     "gain": 0.2
+    }
+   }
+  },
+  "scenarios": {
+   "conservative": {
+    "lane_a_whitespace_usd_per_year": 202500.0,
+    "lane_b_offers_usd_per_year": 180000.0,
+    "lane_c_corridor_usd_per_year": 135000.0,
+    "total_usd_per_year": 517500.0,
+    "basis": "declared_assumption"
+   },
+   "base": {
+    "lane_a_whitespace_usd_per_year": 6400000.0,
+    "lane_b_offers_usd_per_year": 2880000.0,
+    "lane_c_corridor_usd_per_year": 1200000.0,
+    "total_usd_per_year": 10480000.0,
+    "basis": "declared_assumption"
+   },
+   "stretch": {
+    "lane_a_whitespace_usd_per_year": 78750000.0,
+    "lane_b_offers_usd_per_year": 22500000.0,
+    "lane_c_corridor_usd_per_year": 7200000.0,
+    "total_usd_per_year": 108450000.0,
+    "basis": "declared_assumption"
+   }
+  },
+  "what_these_are": "the committed declared-assumption planning model, restated with its own arithmetic: every input is an assumption or a cited public number, none is a measurement of One Loop in operation. The offers lane is holdout-certifiable once campaigns run; the corridor lane's yield-gain input is flagged in the value model as its least anchored number.",
+  "basis": "declared_assumption"
+ },
+ "roi": {
+  "shape": "annual declared-assumption value vs a one-off measured-quantity cost, so this is a payback statement and not a return percentage: the numerator is a planning model, the denominator is measured hours at cited prices",
+  "payback": {
+   "conservative": {
+    "one_off_cost_as_fraction_of_one_year": 5.326503676865271e-05,
+    "hours_of_year_at_that_run_rate": 0.46660172209339773
+   },
+   "base": {
+    "one_off_cost_as_fraction_of_one_year": 2.6302153175360476e-06,
+    "hours_of_year_at_that_run_rate": 0.023040686181615776
+   },
+   "stretch": {
+    "one_off_cost_as_fraction_of_one_year": 2.5416926258900673e-07,
+    "hours_of_year_at_that_run_rate": 0.002226522740279699
+   }
+  },
+  "statement": "At the conservative scenario's declared-assumption $517,500 per year, the one-off market-price equivalent of all R&D compute (failed runs included) equals what that scenario models in about 28 minutes of a year; at the base scenario, in about 1.4 minutes. The ratio is this lopsided because the denominator is small, not because the numerator is proven: the value side remains a declared-assumption model, and no return here is measured."
+ },
+ "caveats": [
+  "Every price is a declared assumption read on one day from one provider page; on-demand prices move and exclude tax.",
+  "h100-47 is a 47GB MIG slice priced as a full H100; h100-96 is an H100 NVL priced at the top listed H100 SXM tier; the 'nv' jobs ran on Titan RTX, Titan V and T4 cards priced at the A100 40GB rate. Each mapping overstates cost.",
+  "Elapsed hours come from Slurm job elapsed time, which includes any in-job idle time; nothing is subtracted.",
+  "The window starts 2026-08-10; amex-* jobs first appear 2026-08-22, and no amex-* job exists before the window (job ids begin at 748860).",
+  "The serving projection's wall time is bracketed by artifact mtimes, not in-log timestamps; the caveat inside serving_projection states what the bracket includes and why the cost is a ceiling.",
+  "Laptop-side development, staff time and data egress are not costed; this model prices cluster compute only.",
+  "The value lanes are not validated outcomes. Payback against them inherits every assumption they carry, including the corridor lane's least-anchored yield-gain input."
+ ],
+ "required_sentence": "Building One Loop took a measured 8.3 GPU-hours and 131 CPU-core-hours on a university cluster: cash cost zero, about US$28 at cited public on-demand rates with every failed run included, and refreshing embeddings for one million merchants projects to about US$2.42 per run at the same rates; the annual value it stands against is a declared-assumption planning model, so the payback ratio is an assumption, not a measurement.",
+ "check": {
+  "command": "python3 scripts/cost_model.py --check",
+  "tolerance": 1e-06
+ }
+}

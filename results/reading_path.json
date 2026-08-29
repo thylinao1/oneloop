@@ -1,0 +1,13 @@
+{
+ "what_this_is": "The reading path the cover note and page one promise, measured against the rendered PDF by scripts/check_reading_path.py on every build.",
+ "pdf_pages_total": 96,
+ "proposal_pages": 29,
+ "proposal_block_1_first": 1,
+ "proposal_block_1_last": 22,
+ "proposal_block_2_first": 84,
+ "proposal_block_2_last": 90,
+ "evidence_pages": 61,
+ "evidence_first": 23,
+ "evidence_last": 83,
+ "sources_pages": 6
+}

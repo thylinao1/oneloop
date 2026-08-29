@@ -1,0 +1,143 @@
+{
+ "seed": 42,
+ "versions": {
+  "python": "3.13.1",
+  "polars": "1.43.2",
+  "numpy": "2.5.2",
+  "scipy": "1.18.1"
+ },
+ "generated_by": "scripts/whitespace_stratified.py --check-able",
+ "status": "POST HOC SECONDARY READ, NOT PRE-REGISTERED. The pre-registered primary check on this outcome had already been run and reported when this file was written, so the outcome was already observed and no pre-registration claim is available. What was fixed before the statistic was computed is written into this file as constants: the strata, the arms, the interval procedure and the decision rule. This result is excluded from the pre-registered census in scripts/protocol_value.py, which reads its own row list and does not include it.",
+ "is_pre_registered": false,
+ "excluded_from_the_pre_registered_census": true,
+ "data_sources": [
+  {
+   "name": "Foursquare OS Places \u2014 SG slice (fsq-os-places dt=2026-08-11)",
+   "url": "https://huggingface.co/datasets/foursquare/fsq-os-places",
+   "sha256": "54effd7b8ead5076090cf65ffa3b2770f006913d854e032536fed8d69c56920e"
+  }
+ ],
+ "labels": [
+  "real-public-data",
+  "post hoc secondary read",
+  "outcome is venue formation, not merchant signing"
+ ],
+ "what_this_is": "the within-density re-read of the pre-registered forward check: the composite contains density at weight 0.25, so the primary comparison asks whether the blend beats one of its own channels; this asks whether the other three channels order venue formation inside bands of comparable density",
+ "the_primary_result_this_does_not_overturn": {
+  "call": "density_beats_composite",
+  "spearman_diff_composite_minus_density": {
+   "point": -0.139203,
+   "interval_2p5_97p5": [
+    -0.178481,
+    -0.101996
+   ]
+  },
+  "note": "printed first wherever this re-read appears"
+ },
+ "decision_rule_fixed_before_the_statistic": "The re-read is called a rehabilitation only if the non-density arm's size-weighted mean within-stratum Spearman carries a cell-clustered 95 percent interval entirely above zero. An interval covering zero ships as a failed re-read, in the same type size.",
+ "design": {
+  "n_buckets": 1510,
+  "n_strata": 10,
+  "strata_definition": "density deciles over the pre-cutoff venue count per bucket, the arm that won the primary comparison, assigned by the same stable descending sort the primary check uses for its top-k cuts and held fixed under the bootstrap",
+  "non_density_arm": "0.30*mdr_prior_mean + 0.30*tz_mean + 0.15*indep_share, the shipped composite with its 0.25 density channel removed and no renormalization, which cannot change a rank ordering",
+  "interval": "cell-clustered bootstrap, cluster = grid cell (cell_x, cell_y), 1000 resamples with replacement, default_rng(42), percentile 2.5 to 97.5, the same procedure and seed as the primary check",
+  "reproduction_gate": {
+   "n_buckets_rebuilt": 1536,
+   "n_buckets_shipped": 1536,
+   "n_released_rows_compared": 400,
+   "n_bucket_label_mismatches": 0,
+   "max_abs_score_diff": 4.990386962555604e-07,
+   "tolerance": 1e-06,
+   "ok": true
+  }
+ },
+ "coverage": {
+  "n_outcome_venues_total": 9630,
+  "n_in_formed_buckets": 9288,
+  "n_outside_formed_buckets": 342,
+  "share_in_formed_buckets": 0.9645,
+  "n_outcome_bucket_keys_not_formed_pre_cutoff": 199,
+  "note": "venues outside formed buckets fall where fewer than 10 pre-cutoff venues existed; they are a descriptive statistic, not part of any metric"
+ },
+ "arms_within_density_strata": {
+  "composite": {
+   "weighted_mean_spearman": 0.255521,
+   "interval_2p5_97p5": [
+    0.201476,
+    0.304875
+   ],
+   "per_stratum_spearman": [
+    0.420457,
+    0.239162,
+    0.381953,
+    0.337554,
+    0.2142,
+    0.195141,
+    0.225312,
+    0.249599,
+    0.137108,
+    0.154721
+   ],
+   "n_strata_dropped_undefined": 0
+  },
+  "non_density_channels": {
+   "weighted_mean_spearman": 0.238349,
+   "interval_2p5_97p5": [
+    0.180717,
+    0.291569
+   ],
+   "per_stratum_spearman": [
+    0.377298,
+    0.236511,
+    0.460805,
+    0.33363,
+    0.285833,
+    0.178457,
+    0.185599,
+    0.122758,
+    0.100487,
+    0.102109
+   ],
+   "n_strata_dropped_undefined": 0
+  },
+  "density_itself": {
+   "weighted_mean_spearman": 0.108621,
+   "interval_2p5_97p5": [
+    0.058897,
+    0.159232
+   ],
+   "per_stratum_spearman": [
+    0.678958,
+    0.300755,
+    0.226197,
+    0.013733,
+    0.013822,
+    0.00338,
+    -0.082828,
+    -0.028339,
+    -0.006977,
+    -0.032496
+   ],
+   "n_strata_dropped_undefined": 0
+  },
+  "non_density_minus_density": {
+   "what": "the paired within-strata difference, the comparison a reader asks for once the two numbers sit side by side; same resamples, so it is paired rather than a difference of two independent intervals",
+   "weighted_mean_spearman_difference": 0.129728,
+   "interval_2p5_97p5": [
+    0.057528,
+    0.200623
+   ],
+   "clears_zero": true
+  }
+ },
+ "n_resamples_dropped_undefined": 0,
+ "call": "non_density_channels_order_formation",
+ "rehabilitates_the_non_density_channels": true,
+ "required_sentence": "The pre-registered forward check went against the composite and that stands: difference -0.1392, interval [-0.1785, -0.1020], entirely below zero. A post hoc re-read of the same data asks a different question. Inside bands of comparable density, the composite's three non-density channels order where card-accepting venues appeared at a size-weighted Spearman of 0.2383, cell-clustered interval [0.1807, 0.2916], above zero, while density's own ordering inside those same bands is 0.1086, a paired difference of 0.1297 with interval [0.0575, 0.2006]. So density wins the marginal comparison and carries almost no ordering information once it is held roughly fixed, which is what a signing team works inside. This is a secondary read of an outcome already observed, not a pre-registered result, and it does not reverse the check above.",
+ "caveats": [
+  "the primary pre-registered comparison still went against the composite and is printed first wherever this re-read appears; this does not overturn it and is not offered as an overturning",
+  "stratifying on density does not remove density's information, it holds it roughly fixed inside a stratum; a within-stratum correlation is a statement about ordering inside a band of comparable density and nothing more",
+  "the outcome is venue formation in Foursquare records, not merchant signing, the same caveat the primary check carries",
+  "every caveat of the primary check travels with this one, including survivorship in the slice filter and date_created being record creation rather than opening"
+ ]
+}

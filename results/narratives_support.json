@@ -1,0 +1,14 @@
+{
+ "what_this_is": "Every numeral in every committed narrative, counted by the closest way layer one supports it. This prices the loose part of the match; it is not a semantic error rate and must not be read as one.",
+ "narratives": 30,
+ "numerals_total": 338,
+ "numerals_unsupported": 0,
+ "supported_by_the_fact_as_stored": 303,
+ "supported_by_the_fact_rounded": 34,
+ "supported_only_by_a_percentage_reading": 1,
+ "narratives_containing_a_percentage_only_numeral": 1,
+ "which_narratives": [
+  "whitespace-17"
+ ],
+ "limits": "This counts how a numeral is supported, never whether it was bound to the right fact. Both loose tiers can hide a coincidence: rounding is a half-unit window, so a stored 1.5 carries a printed 2, and the percentage reading moves the decimal point. Layer one matches numerals and does not read sentences, so the noun-binding question stays unmeasured, and the one miss the console reaches was found by reading rather than by any check here."
+}

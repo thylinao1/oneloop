@@ -1,0 +1,688 @@
+{
+ "seed": 7,
+ "versions": {
+  "python": "3.12.3",
+  "numpy": "2.5.2",
+  "polars": "1.43.2",
+  "pyarrow": "25.0.1",
+  "lightgbm": "4.7.0",
+  "sklearn": "1.9.0",
+  "torch": "2.13.0+cu130"
+ },
+ "generated_by": "scripts/fm/protection_pll.py --check-able",
+ "data_sources": [
+  {
+   "name": "IBM TabFormer card_transaction.v1.csv (synthetic)",
+   "url": "https://github.com/IBM/TabFormer (data/credit_card/transactions.tgz)",
+   "sha256": "e9f589a0958f40d60f81b1a2e8428db86e00c05755caf44fb055827976c0efa2"
+  }
+ ],
+ "labels": [
+  "synthetic"
+ ],
+ "what_this_is": "Masked-field pseudo-log-likelihood read straight off the frozen backbone as a label-free behavioural surprise score, then measured against the real fraud labels on the same frozen evaluation split the shipped transfer table uses. A unigram rarity control built from marginal token counts with no model at all is scored the same way, because the honest question about any surprise score is how much of it is just globally rare values.",
+ "method": {
+  "objective": "masked-field, mask probability 0.15 at pretraining",
+  "readout": "one field of the scored transaction masked at a time, the negative log-likelihood of the observed token summed over fields",
+  "fields": [
+   "year",
+   "month",
+   "day",
+   "hour",
+   "amount_q",
+   "use_chip",
+   "mcc",
+   "city",
+   "state",
+   "errors"
+  ],
+  "window": 16,
+  "citation": "Salazar et al., ACL 2020, Masked Language Model Scoring",
+  "full_mask_variant": "NOT SHIPPED. Masking every field of a row at once is out of distribution for a 15% mask-probability pretrain. Any such variant would have to be labelled separately.",
+  "retraining": "none. The checkpoint is frozen and used for inference only.",
+  "checkpoint": "the full-corpus cardholder backbone (frozen, evaluation only)"
+ },
+ "zero_labels": {
+  "fraud_labels_in_score_construction": false,
+  "labels_loaded_after_scores": true,
+  "score_sha256_before_labels": "57141a5f5d2bfdfcfb162c1bf592d9780871bc496380ccaf3db8e935484d8fe5",
+  "score_sha256_at_report": "57141a5f5d2bfdfcfb162c1bf592d9780871bc496380ccaf3db8e935484d8fe5",
+  "note": "Enforced structurally. The scoring input dict never holds the fraud array, build_scores() cannot reach it, and prep/fraud.npy is opened only after every score exists and its sha256 is recorded. The hash is checked again at reporting time, so the score bytes provably predate any label in memory. Labels are used afterwards and only to measure how well the ranking separates."
+ },
+ "guards_constant": {
+  "label_excluded_from_pretraining": true,
+  "ids_excluded_from_vocab": true,
+  "corpus_time_truncated": true,
+  "scored_rows_are_post_cut_and_never_pretrained_on": true,
+  "note": "The pretraining corpus is hard truncated before the cut date and the scored rows are all post-cut, so no scored transaction was in the pretraining data. The corpus does include pre-cut rows of the test accounts, which is the same condition the shipped transfer table runs under, and we state it rather than implying otherwise."
+ },
+ "split": {
+  "source": "the same frozen evaluation split as the shipped transfer table",
+  "n_scored_rows": 300000,
+  "n_positives": 945,
+  "positive_rate": 0.00315,
+  "n_test_accounts": 391,
+  "entity_disjoint": true,
+  "note": {
+   "n_users": 2000,
+   "n_test_users": 400,
+   "n_train_rows": 800000,
+   "n_test_rows": 300000,
+   "seed": 7,
+   "row_sampling": "uniform + all fraud positives kept",
+   "split": "entity-disjoint by user, pre-registered at select stage"
+  }
+ },
+ "reference": {
+  "random_ranking_pr_auc": 0.00315,
+  "random_ranking_roc_auc": 0.5,
+  "note": "A ranking with no information scores PR-AUC equal to the positive rate and ROC-AUC 0.5. Read every number below against those two."
+ },
+ "bootstrap": {
+  "method": "entity-clustered bootstrap over test accounts",
+  "B": 1000,
+  "ci": "percentile 95%",
+  "n_usable_replicates": 1000,
+  "paired": "every score is measured on the same resampled rows inside one replicate, so the differences below are paired"
+ },
+ "scores": {
+  "pll_all_fields": {
+   "roc_auc": 0.9022009630158633,
+   "roc_auc_ci": [
+    0.8741821523156142,
+    0.9265038643553444
+   ],
+   "pr_auc": 0.13377786329555508,
+   "pr_auc_ci": [
+    0.09825656750551967,
+    0.17509500613681603
+   ],
+   "recall_at_top_0.001": 0.1164021164021164,
+   "recall_at_top_0.001_ci": [
+    0.09116182743910829,
+    0.14302193361852653
+   ],
+   "recall_at_top_0.01": 0.37883597883597886,
+   "recall_at_top_0.01_ci": [
+    0.33540971867519953,
+    0.42332271049172726
+   ]
+  },
+  "rarity_all_fields": {
+   "roc_auc": 0.936729463241309,
+   "roc_auc_ci": [
+    0.9008323559523889,
+    0.9652811148732346
+   ],
+   "pr_auc": 0.12815682913932694,
+   "pr_auc_ci": [
+    0.09502248730717473,
+    0.17169355052126495
+   ],
+   "recall_at_top_0.001": 0.10476190476190476,
+   "recall_at_top_0.001_ci": [
+    0.07189462874065582,
+    0.1307399766459946
+   ],
+   "recall_at_top_0.01": 0.32275132275132273,
+   "recall_at_top_0.01_ci": [
+    0.284960746710686,
+    0.3686980785464871
+   ]
+  },
+  "pll_plus_rarity": {
+   "roc_auc": 0.9496746780577514,
+   "roc_auc_ci": [
+    0.9170062761468997,
+    0.974195736694848
+   ],
+   "pr_auc": 0.3295795348412191,
+   "pr_auc_ci": [
+    0.27048683479591235,
+    0.38806699283141227
+   ],
+   "recall_at_top_0.001": 0.1925925925925926,
+   "recall_at_top_0.001_ci": [
+    0.16433159470684824,
+    0.22783980152401204
+   ],
+   "recall_at_top_0.01": 0.5989417989417989,
+   "recall_at_top_0.01_ci": [
+    0.5481377906353798,
+    0.6453713054024838
+   ]
+  },
+  "pll_errors_excluded": {
+   "roc_auc": 0.9026030054636833,
+   "roc_auc_ci": [
+    0.8747269414027057,
+    0.9267748253305303
+   ],
+   "pr_auc": 0.13227174953574491,
+   "pr_auc_ci": [
+    0.09767103998243004,
+    0.1728869369721146
+   ],
+   "recall_at_top_0.001": 0.11428571428571428,
+   "recall_at_top_0.001_ci": [
+    0.08919675326867808,
+    0.14140114227737277
+   ],
+   "recall_at_top_0.01": 0.37883597883597886,
+   "recall_at_top_0.01_ci": [
+    0.3343664983262708,
+    0.42111487180189183
+   ]
+  },
+  "rarity_errors_excluded": {
+   "roc_auc": 0.9381997808086655,
+   "roc_auc_ci": [
+    0.9013290337532197,
+    0.9673612308578443
+   ],
+   "pr_auc": 0.16756849356820178,
+   "pr_auc_ci": [
+    0.12633050561640782,
+    0.2232606083013999
+   ],
+   "recall_at_top_0.001": 0.1343915343915344,
+   "recall_at_top_0.001_ci": [
+    0.10968238646810075,
+    0.1705768373628227
+   ],
+   "recall_at_top_0.01": 0.33015873015873015,
+   "recall_at_top_0.01_ci": [
+    0.2886385326995946,
+    0.40689088325717826
+   ]
+  },
+  "pll_plus_rarity_errors_excluded": {
+   "roc_auc": 0.9509502198238383,
+   "roc_auc_ci": [
+    0.9179730325113311,
+    0.9757262022665033
+   ],
+   "pr_auc": 0.3496029200949133,
+   "pr_auc_ci": [
+    0.28621191500266807,
+    0.4078163402381777
+   ],
+   "recall_at_top_0.001": 0.2,
+   "recall_at_top_0.001_ci": [
+    0.16902035001413193,
+    0.23297693478066306
+   ],
+   "recall_at_top_0.01": 0.6275132275132275,
+   "recall_at_top_0.01_ci": [
+    0.5763351281196836,
+    0.6700767990828917
+   ]
+  },
+  "pll_behavioural_only": {
+   "roc_auc": 0.9380679263135667,
+   "roc_auc_ci": [
+    0.9252328932873656,
+    0.9487932035649584
+   ],
+   "pr_auc": 0.18806012948326029,
+   "pr_auc_ci": [
+    0.14096688283241499,
+    0.23521227276087667
+   ],
+   "recall_at_top_0.001": 0.13756613756613756,
+   "recall_at_top_0.001_ci": [
+    0.10994103693084852,
+    0.16718480475982905
+   ],
+   "recall_at_top_0.01": 0.4211640211640212,
+   "recall_at_top_0.01_ci": [
+    0.3782116340533107,
+    0.4633254465443854
+   ]
+  },
+  "rarity_behavioural_only": {
+   "roc_auc": 0.972104020079476,
+   "roc_auc_ci": [
+    0.962583804470613,
+    0.9805839939005255
+   ],
+   "pr_auc": 0.17056556971897224,
+   "pr_auc_ci": [
+    0.13003664449647695,
+    0.22677453286555843
+   ],
+   "recall_at_top_0.001": 0.1343915343915344,
+   "recall_at_top_0.001_ci": [
+    0.10695010249217823,
+    0.16910605074629503
+   ],
+   "recall_at_top_0.01": 0.3396825396825397,
+   "recall_at_top_0.01_ci": [
+    0.2991153903302763,
+    0.3879068515704154
+   ]
+  },
+  "pll_plus_rarity_behavioural_only": {
+   "roc_auc": 0.9842204142342913,
+   "roc_auc_ci": [
+    0.9795824935015205,
+    0.9882197134766192
+   ],
+   "pr_auc": 0.41328846916340806,
+   "pr_auc_ci": [
+    0.3532102704260659,
+    0.46911949169589945
+   ],
+   "recall_at_top_0.001": 0.21798941798941798,
+   "recall_at_top_0.001_ci": [
+    0.1862636642025014,
+    0.2493513744320196
+   ],
+   "recall_at_top_0.01": 0.6783068783068783,
+   "recall_at_top_0.01_ci": [
+    0.6369911262079003,
+    0.7182215133651861
+   ]
+  }
+ },
+ "comparisons": [
+  {
+   "a": "pll_all_fields",
+   "b": "rarity_all_fields",
+   "note": "contextual surprise minus global rarity",
+   "roc_auc": {
+    "a_value": 0.9022009630158633,
+    "b_value": 0.936729463241309,
+    "difference": -0.034528500225445735,
+    "ci": [
+     -0.052331256887034584,
+     -0.015892600743034273
+    ],
+    "excludes_zero": true,
+    "direction": "b_wins"
+   },
+   "pr_auc": {
+    "a_value": 0.13377786329555508,
+    "b_value": 0.12815682913932694,
+    "difference": 0.0056210341562281385,
+    "ci": [
+     -0.03909354913325854,
+     0.05056708235268516
+    ],
+    "excludes_zero": false,
+    "direction": "not_separated"
+   }
+  },
+  {
+   "a": "pll_plus_rarity",
+   "b": "rarity_all_fields",
+   "note": "the combined rule minus global rarity",
+   "roc_auc": {
+    "a_value": 0.9496746780577514,
+    "b_value": 0.936729463241309,
+    "difference": 0.012945214816442396,
+    "ci": [
+     0.004078120985757172,
+     0.022612116644210346
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "pr_auc": {
+    "a_value": 0.3295795348412191,
+    "b_value": 0.12815682913932694,
+    "difference": 0.20142270570189216,
+    "ci": [
+     0.14803055285495012,
+     0.24501680073527154
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "a": "pll_plus_rarity",
+   "b": "pll_all_fields",
+   "note": "the combined rule minus contextual surprise",
+   "roc_auc": {
+    "a_value": 0.9496746780577514,
+    "b_value": 0.9022009630158633,
+    "difference": 0.04747371504188813,
+    "ci": [
+     0.03659315209070763,
+     0.05802642727594031
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "pr_auc": {
+    "a_value": 0.3295795348412191,
+    "b_value": 0.13377786329555508,
+    "difference": 0.19580167154566402,
+    "ci": [
+     0.1653733985589349,
+     0.22265227651450117
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "a": "pll_errors_excluded",
+   "b": "rarity_errors_excluded",
+   "note": "contextual surprise minus global rarity, errors field dropped from both",
+   "roc_auc": {
+    "a_value": 0.9026030054636833,
+    "b_value": 0.9381997808086655,
+    "difference": -0.03559677534498218,
+    "ci": [
+     -0.053712600625999585,
+     -0.0163355883782741
+    ],
+    "excludes_zero": true,
+    "direction": "b_wins"
+   },
+   "pr_auc": {
+    "a_value": 0.13227174953574491,
+    "b_value": 0.16756849356820178,
+    "difference": -0.03529674403245686,
+    "ci": [
+     -0.08981336709540916,
+     0.018062622083537434
+    ],
+    "excludes_zero": false,
+    "direction": "not_separated"
+   }
+  },
+  {
+   "a": "pll_behavioural_only",
+   "b": "rarity_behavioural_only",
+   "note": "contextual surprise minus global rarity, behavioural fields only",
+   "roc_auc": {
+    "a_value": 0.9380679263135667,
+    "b_value": 0.972104020079476,
+    "difference": -0.034036093765909325,
+    "ci": [
+     -0.04904520906256122,
+     -0.020641833224225747
+    ],
+    "excludes_zero": true,
+    "direction": "b_wins"
+   },
+   "pr_auc": {
+    "a_value": 0.18806012948326029,
+    "b_value": 0.17056556971897224,
+    "difference": 0.017494559764288042,
+    "ci": [
+     -0.038086551845463716,
+     0.0736764777687183
+    ],
+    "excludes_zero": false,
+    "direction": "not_separated"
+   }
+  },
+  {
+   "a": "pll_plus_rarity_behavioural_only",
+   "b": "rarity_behavioural_only",
+   "note": "the combined rule minus global rarity, behavioural fields only",
+   "roc_auc": {
+    "a_value": 0.9842204142342913,
+    "b_value": 0.972104020079476,
+    "difference": 0.012116394154815247,
+    "ci": [
+     0.004504530967659176,
+     0.02006944874404296
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "pr_auc": {
+    "a_value": 0.41328846916340806,
+    "b_value": 0.17056556971897224,
+    "difference": 0.2427228994444358,
+    "ci": [
+     0.18168666803098593,
+     0.29548534331291326
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  }
+ ],
+ "comparisons_by_key": {
+  "pll_all_fields_vs_rarity_all_fields": {
+   "a": "pll_all_fields",
+   "b": "rarity_all_fields",
+   "note": "contextual surprise minus global rarity",
+   "roc_auc": {
+    "a_value": 0.9022009630158633,
+    "b_value": 0.936729463241309,
+    "difference": -0.034528500225445735,
+    "ci": [
+     -0.052331256887034584,
+     -0.015892600743034273
+    ],
+    "excludes_zero": true,
+    "direction": "b_wins"
+   },
+   "pr_auc": {
+    "a_value": 0.13377786329555508,
+    "b_value": 0.12815682913932694,
+    "difference": 0.0056210341562281385,
+    "ci": [
+     -0.03909354913325854,
+     0.05056708235268516
+    ],
+    "excludes_zero": false,
+    "direction": "not_separated"
+   }
+  },
+  "pll_plus_rarity_vs_rarity_all_fields": {
+   "a": "pll_plus_rarity",
+   "b": "rarity_all_fields",
+   "note": "the combined rule minus global rarity",
+   "roc_auc": {
+    "a_value": 0.9496746780577514,
+    "b_value": 0.936729463241309,
+    "difference": 0.012945214816442396,
+    "ci": [
+     0.004078120985757172,
+     0.022612116644210346
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "pr_auc": {
+    "a_value": 0.3295795348412191,
+    "b_value": 0.12815682913932694,
+    "difference": 0.20142270570189216,
+    "ci": [
+     0.14803055285495012,
+     0.24501680073527154
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "provenance_of_the_rule": "The combined rule was chosen AFTER the two single scores had been compared on this same split, so this comparison is a reported finding and not a pre-registered one. It is an unweighted sum of the two standardized scores with nothing fitted and no label used, which is why it is reported at all; the corridor combination in results/corridor_combination.json was pre-registered before its run and this one was not."
+  },
+  "pll_plus_rarity_vs_pll_all_fields": {
+   "a": "pll_plus_rarity",
+   "b": "pll_all_fields",
+   "note": "the combined rule minus contextual surprise",
+   "roc_auc": {
+    "a_value": 0.9496746780577514,
+    "b_value": 0.9022009630158633,
+    "difference": 0.04747371504188813,
+    "ci": [
+     0.03659315209070763,
+     0.05802642727594031
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "pr_auc": {
+    "a_value": 0.3295795348412191,
+    "b_value": 0.13377786329555508,
+    "difference": 0.19580167154566402,
+    "ci": [
+     0.1653733985589349,
+     0.22265227651450117
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "pll_errors_excluded_vs_rarity_errors_excluded": {
+   "a": "pll_errors_excluded",
+   "b": "rarity_errors_excluded",
+   "note": "contextual surprise minus global rarity, errors field dropped from both",
+   "roc_auc": {
+    "a_value": 0.9026030054636833,
+    "b_value": 0.9381997808086655,
+    "difference": -0.03559677534498218,
+    "ci": [
+     -0.053712600625999585,
+     -0.0163355883782741
+    ],
+    "excludes_zero": true,
+    "direction": "b_wins"
+   },
+   "pr_auc": {
+    "a_value": 0.13227174953574491,
+    "b_value": 0.16756849356820178,
+    "difference": -0.03529674403245686,
+    "ci": [
+     -0.08981336709540916,
+     0.018062622083537434
+    ],
+    "excludes_zero": false,
+    "direction": "not_separated"
+   }
+  },
+  "pll_behavioural_only_vs_rarity_behavioural_only": {
+   "a": "pll_behavioural_only",
+   "b": "rarity_behavioural_only",
+   "note": "contextual surprise minus global rarity, behavioural fields only",
+   "roc_auc": {
+    "a_value": 0.9380679263135667,
+    "b_value": 0.972104020079476,
+    "difference": -0.034036093765909325,
+    "ci": [
+     -0.04904520906256122,
+     -0.020641833224225747
+    ],
+    "excludes_zero": true,
+    "direction": "b_wins"
+   },
+   "pr_auc": {
+    "a_value": 0.18806012948326029,
+    "b_value": 0.17056556971897224,
+    "difference": 0.017494559764288042,
+    "ci": [
+     -0.038086551845463716,
+     0.0736764777687183
+    ],
+    "excludes_zero": false,
+    "direction": "not_separated"
+   }
+  },
+  "pll_plus_rarity_behavioural_only_vs_rarity_behavioural_only": {
+   "a": "pll_plus_rarity_behavioural_only",
+   "b": "rarity_behavioural_only",
+   "note": "the combined rule minus global rarity, behavioural fields only",
+   "roc_auc": {
+    "a_value": 0.9842204142342913,
+    "b_value": 0.972104020079476,
+    "difference": 0.012116394154815247,
+    "ci": [
+     0.004504530967659176,
+     0.02006944874404296
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "pr_auc": {
+    "a_value": 0.41328846916340806,
+    "b_value": 0.17056556971897224,
+    "difference": 0.2427228994444358,
+    "ci": [
+     0.18168666803098593,
+     0.29548534331291326
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  }
+ },
+ "diagnostics": {
+  "pll_field_mean_nll": {
+   "year": 13.808491875149418,
+   "month": 0.002646839746044099,
+   "day": 0.23672621479684602,
+   "hour": 0.8617473735043091,
+   "amount_q": 2.932182106233822,
+   "use_chip": 0.5269849693019001,
+   "mcc": 1.0356887690925867,
+   "city": 0.24132267354333298,
+   "state": 0.045099344675683,
+   "errors": 0.0816299162796379
+  },
+  "rarity_field_mean_nll": {
+   "year": 14.72386479010346,
+   "month": 2.490903010710438,
+   "day": 3.4309270642566063,
+   "hour": 2.974812325318601,
+   "amount_q": 4.580677653195931,
+   "use_chip": 1.6126540113330716,
+   "mcc": 3.255323922731198,
+   "city": 6.276967869145218,
+   "state": 3.3857669140393254,
+   "errors": 0.1068951692515439
+  },
+  "mean_prior_transactions_in_window": 14.987143333333334,
+  "share_of_scored_rows_with_no_prior_history": 0.00013,
+  "share_of_scored_rows_with_an_out_of_vocabulary_value": 0.8871266666666666,
+  "out_of_vocabulary_share_by_field": {
+   "year": 0.8631066666666667,
+   "month": 0.0,
+   "day": 0.0,
+   "hour": 0.0,
+   "amount_q": 0.0,
+   "use_chip": 0.0,
+   "mcc": 0.0,
+   "city": 0.17449333333333333,
+   "state": 2.3333333333333332e-05,
+   "errors": 0.0
+  },
+  "out_of_vocabulary_note": "The vocabulary was built on pre-cut rows only, so a post-cut value never seen before maps to the unknown token. Both the model score and the rarity control assign such a value a high surprise, which is one of the things the control is there to separate.",
+  "window": 16,
+  "mask_prob_pretrain": 0.15,
+  "d_model": 512,
+  "layers": 6,
+  "errors_field_note": "TabFormer carries an 'Errors?' column. It is one of the ten pretrained fields, so it enters the surprise score. Every score is therefore reported a second time with that field dropped.",
+  "modal_errors_token_id": 3,
+  "share_of_scored_rows_with_an_error_flag": 0.016976666666666668,
+  "fraud_rate_when_error_flag_set": 0.006283133712939329,
+  "fraud_rate_when_no_error_flag": 0.0030958912470711105,
+  "roc_auc_of_the_error_flag_alone": 0.508469562720453,
+  "roc_auc_of_the_unseen_year_flag_alone": 0.5431858767817036,
+  "fraud_rate_when_year_unseen": 0.003464229990885638,
+  "fraud_rate_when_year_seen": 0.0011687932209993182,
+  "behavioural_only_note": "The behavioural-only rows of the table drop the calendar fields and the error flag and keep the six fields that describe what the transaction did. To be exact about how that set was chosen, because a field choice made after seeing labels would void the whole exercise: the out-of-vocabulary diagnostic above is what prompted the question, but the rule applied is not a threshold on that diagnostic. Month and day carry no out-of-vocabulary share at all and are still dropped, and city carries a substantial one and is still kept. The rule is the one stated on the page, keep the fields that describe the transaction's behaviour and drop the calendar fields and the error flag. It was fixed before any score, interval or AUC existed for this field set, and no fraud label was open at any point in the choice, which is what makes it label-free. It ships in the same table as everything else whichever way it lands."
+ },
+ "check": {
+  "command": "python scripts/fm/protection_pll.py --stage run ... --check",
+  "tolerance": 1e-06,
+  "verified": {
+   "job": "amex-protection-check 751929 (SoC cluster, node xgpf4, Tesla T4)",
+   "date": "2026-08-23",
+   "verdict": "CHECK OK, exit 0",
+   "n_numeric_leaves_compared": "289",
+   "tolerance": "1e-06",
+   "produced_by_job": "amex-protection 751927 (same node, same GPU)",
+   "same_node_note": "The check job was pinned to the node that produced the file, so the forward pass runs on the same silicon and any difference would be a real nondeterminism rather than a kernel difference.",
+   "cross_gpu_note": "An earlier six-score version of this file was produced on a TITAN RTX and passed its own check at CHECK OK, 210 numeric leaves within 1e-06. Its six shared scores reproduce in this nine-score run, produced on a Tesla T4, to about 1e-06 rather than bit-identically, which is what changing GPU generation costs and is recorded rather than smoothed over.",
+   "note": "Values are strings on purpose. This block is metadata about the check, not a measurement, so it adds no numeric leaf for a future --check to compare."
+  }
+ }
+}

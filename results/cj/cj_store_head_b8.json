@@ -1,0 +1,109 @@
+{
+ "seed": 42,
+ "backbone_seed": 8,
+ "versions": {
+  "python": "3.12.3",
+  "numpy": "2.5.2",
+  "polars": "1.43.2",
+  "pyarrow": "25.0.1",
+  "lightgbm": "4.7.0",
+  "sklearn": "1.9.0",
+  "torch": "2.13.0+cu130"
+ },
+ "generated_by": "scripts/fm/cj_store_head.py --check-able",
+ "data_sources": [
+  {
+   "name": "dunnhumby The Complete Journey (real retail transactions)",
+   "url": "https://www.dunnhumby.com/source-files/",
+   "sha256": "5e0a3d72fe8562fe0ab995f70fb58b74359e8ec4bbccd1521e2b137da0558f9a",
+   "terms": "dunnhumby terms: data may be used solely for research, personal or non-commercial purposes"
+  },
+  {
+   "name": "backbone store embeddings (pre-cut pooled, embed.py merchant path)",
+   "url": "/home/e/e1506804/amex-oneloop/cj/store_embeddings_s8.parquet",
+   "sha256": "613795f5bf84e9c3303f156a9a5308ce705c7359838339957d014b7ed4e969f6"
+  }
+ ],
+ "labels": [
+  "real",
+  "predictive not causal"
+ ],
+ "what_this_is": "a store-level head consuming backbone store embeddings against a real store outcome through the shared store key; the honest question is whether embeddings add anything over counts",
+ "outcome": {
+  "definition": "post-cut SALES_VALUE per post day divided by pre-cut SALES_VALUE per pre day, cut at terciles of eligible stores",
+  "classes": [
+   "low growth",
+   "mid growth",
+   "high growth"
+  ],
+  "tercile_edges": [
+   0.435525794660845,
+   1.1630297204445537
+  ],
+  "pre_days": 598,
+  "post_days": 113,
+  "why_growth_not_volume": "raw post-cut volume is mostly pre-cut size restated; the counts control would win by construction without answering the embedding question"
+ },
+ "universe": {
+  "n_stores_total": 582,
+  "n_post_cut_only": 30,
+  "n_na_store_key": 0,
+  "n_below_floor": 321,
+  "n_eligible": 231,
+  "eligibility": "pre-cut rows >= 50 and pre-cut sales > 0; the NA store key and stores with no pre-cut rows are counted separately above, not folded into a floor number",
+  "n_train": 185,
+  "n_test": 46,
+  "split": "store-disjoint (one row per store; the row split is the store split)"
+ },
+ "arms": {
+  "control": {
+   "features": [
+    "log1p_pre_txn_count",
+    "log1p_pre_distinct_households",
+    "pre_mean_basket_value"
+   ],
+   "accuracy": 0.34782608695652173,
+   "macro_f1": 0.34627592824979697
+  },
+  "control_plus_embeddings": {
+   "features": [
+    "log1p_pre_txn_count",
+    "log1p_pre_distinct_households",
+    "pre_mean_basket_value",
+    "backbone store embedding (512d)"
+   ],
+   "accuracy": 0.5652173913043478,
+   "macro_f1": 0.5704510543220221
+  }
+ },
+ "majority_floor": {
+  "accuracy": 0.30434782608695654,
+  "macro_f1": 0.15555555555555556,
+  "note": "predict the most frequent train tercile for every store"
+ },
+ "delta": {
+  "macro_f1": 0.22417512607222517,
+  "macro_f1_ci": [
+   0.0449482315070551,
+   0.4342910225126598
+  ],
+  "accuracy": 0.21739130434782605,
+  "accuracy_ci": [
+   0.021739130434782594,
+   0.4135869565217387
+  ]
+ },
+ "bootstrap": {
+  "method": "store-clustered paired bootstrap (singleton clusters = row bootstrap; shipped machinery)",
+  "B": 1000,
+  "ci": "percentile 95%"
+ },
+ "scale_caveat": "a few hundred stores; intervals are wide because the corpus is small, and the pre-registration says the result ships either way",
+ "required_sentence": "On this corpus the backbone's store embeddings add measurable signal over the counts-only control for post-cut sales growth (macro-F1 delta +0.2242, 95% interval [0.0449, 0.4343] above zero).",
+ "call": "embeddings_add_signal",
+ "check": {
+  "command": "python3 scripts/fm/cj_store_head.py ... --check",
+  "tolerance": 1e-06,
+  "note": "rerun with the same --threads as the producing run; deterministic LightGBM settings are on"
+ }
+}

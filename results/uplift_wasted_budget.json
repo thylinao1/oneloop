@@ -1,0 +1,112 @@
+{
+ "what_this_is": "The wasted-offer-budget claim measured on the randomized Hillstrom arms instead of argued from citations. For each split, the customers a response model ranks in its top group are crossed against the segments the randomized arms measure in the bottom group of actual uplift. No new measurement: every value is a count or ratio over the committed segment table in results/uplift.json.",
+ "derived_from": {
+  "file": "results/uplift.json",
+  "pointer": "/hillstrom/segments"
+ },
+ "generated_by": "scripts/uplift_wasted_budget.py",
+ "labels": [
+  "proxy",
+  "randomized-experiment"
+ ],
+ "n_segments": 28,
+ "best_measured_uplift": {
+  "segment": "4) $350 - $500 x recency 10-12m",
+  "measured_visit_uplift_pp": 11.677,
+  "measured_uplift_rank": 1
+ },
+ "the_split_is_a_choice": "Top and bottom need a cut and the cut moves the answer, so all three cuts are reported here and the page prints the tercile. The tercile is not the flattering one: the half split gives a much larger wasted share and would have been the easy number to quote.",
+ "domain_caveat": "Hillstrom is a retail e-commerce e-mail experiment. The outcome is a site visit, not billed business on a card, and the segments are that retailer's, not a card portfolio's. This measures the mechanism, not the size of the opportunity at Amex.",
+ "splits": {
+  "half": {
+   "group_size_segments": 14,
+   "treated_in_response_top_group": 7926,
+   "treated_also_in_measured_uplift_bottom_group": 5053,
+   "wasted_share": 0.6375220792329044,
+   "wasted_percent": 63.752207923290435,
+   "segments_in_both": [
+    {
+     "segment": "4) $350 - $500 x recency 1-3m",
+     "n_treated": 937,
+     "response_rank": 5,
+     "measured_uplift_rank": 22,
+     "measured_visit_uplift_pp": 2.3126
+    },
+    {
+     "segment": "3) $200 - $350 x recency 1-3m",
+     "n_treated": 1563,
+     "response_rank": 7,
+     "measured_uplift_rank": 19,
+     "measured_visit_uplift_pp": 3.8503
+    },
+    {
+     "segment": "4) $350 - $500 x recency 4-6m",
+     "n_treated": 511,
+     "response_rank": 9,
+     "measured_uplift_rank": 24,
+     "measured_visit_uplift_pp": 1.2627
+    },
+    {
+     "segment": "7) $1,000 + x recency 7-9m",
+     "n_treated": 26,
+     "response_rank": 10,
+     "measured_uplift_rank": 25,
+     "measured_visit_uplift_pp": 0.8547
+    },
+    {
+     "segment": "7) $1,000 + x recency 10-12m",
+     "n_treated": 10,
+     "response_rank": 12,
+     "measured_uplift_rank": 27,
+     "measured_visit_uplift_pp": -5.3846
+    },
+    {
+     "segment": "1) $0 - $100 x recency 1-3m",
+     "n_treated": 2006,
+     "response_rank": 13,
+     "measured_uplift_rank": 20,
+     "measured_visit_uplift_pp": 3.7451
+    }
+   ]
+  },
+  "tercile": {
+   "group_size_segments": 9,
+   "treated_in_response_top_group": 5096,
+   "treated_also_in_measured_uplift_bottom_group": 1448,
+   "wasted_share": 0.28414442700156983,
+   "wasted_percent": 28.414442700156986,
+   "segments_in_both": [
+    {
+     "segment": "4) $350 - $500 x recency 1-3m",
+     "n_treated": 937,
+     "response_rank": 5,
+     "measured_uplift_rank": 22,
+     "measured_visit_uplift_pp": 2.3126
+    },
+    {
+     "segment": "4) $350 - $500 x recency 4-6m",
+     "n_treated": 511,
+     "response_rank": 9,
+     "measured_uplift_rank": 24,
+     "measured_visit_uplift_pp": 1.2627
+    }
+   ]
+  },
+  "quartile": {
+   "group_size_segments": 7,
+   "treated_in_response_top_group": 4467,
+   "treated_also_in_measured_uplift_bottom_group": 937,
+   "wasted_share": 0.20976046563689277,
+   "wasted_percent": 20.976046563689277,
+   "segments_in_both": [
+    {
+     "segment": "4) $350 - $500 x recency 1-3m",
+     "n_treated": 937,
+     "response_rank": 5,
+     "measured_uplift_rank": 22,
+     "measured_visit_uplift_pp": 2.3126
+    }
+   ]
+  }
+ }
+}

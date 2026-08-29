@@ -1,0 +1,241 @@
+{
+ "seed": 42,
+ "versions": {
+  "python": "3.13.1",
+  "polars": "1.43.2",
+  "numpy": "2.5.2",
+  "scipy": "1.18.1"
+ },
+ "generated_by": "scripts/whitespace_temporal.py --check-able",
+ "data_sources": [
+  {
+   "name": "Foursquare OS Places \u2014 SG slice (fsq-os-places dt=2026-08-11)",
+   "url": "https://huggingface.co/datasets/foursquare/fsq-os-places",
+   "sha256": "54effd7b8ead5076090cf65ffa3b2770f006913d854e032536fed8d69c56920e"
+  },
+  {
+   "name": "One Loop whitespace ranking under test (frozen, not modified)",
+   "url": "results/whitespace.json produced by scripts/whitespace_exhibit.py",
+   "sha256": "4e854e7002a5320853401186b81782af6fe4d5c7ef79f670a094c3909bde3ce8"
+  }
+ ],
+ "labels": [
+  "real-public-data",
+  "temporal holdout",
+  "outcome is venue formation, not merchant signing"
+ ],
+ "what_this_is": "the forward-looking check the whitespace head did not have: the composite computed from venues existing before the cutoff, tested against where card-accepting-universe venues actually appeared after it, against a density null and pre-registered controls",
+ "pre_registration": {
+  "file": "WHITESPACE-TEMPORAL-PREREG.md",
+  "committed_before_any_outcome_was_computed": true,
+  "cutoff_rule": "longest outcome window between 12 and 24 months ending at the snapshot whose card-accepting-universe outcome set holds at least 5,000 venues; the 24-month window qualified (9,630 >= 5,000), so T = 2024-08-10",
+  "decision_rule": {
+   "composite_beats_density": "bootstrap 95 percent interval (2.5 to 97.5 percentile) of Spearman(composite, outcome) minus Spearman(raw_venue_count, outcome) lies entirely above zero",
+   "density_beats_composite": "that interval lies entirely below zero",
+   "not_resolved": "the interval covers zero"
+  },
+  "sanity_gates": {
+   "reproduction": "no-cutoff rebuild reproduces results/whitespace.json: 1,536 buckets, 400 released rows, labels identical in order, scores within 1e-6",
+   "identity": "Spearman(outcome, outcome) = 1 within 1e-6",
+   "random_anchor": "mean |spearman| < 0.05 and every draw |spearman| < 0.15 across the 1000 random draws"
+  }
+ },
+ "design": {
+  "cutoff_T": "2024-08-10",
+  "snapshot_S": "2026-08-10",
+  "outcome_window_months": 24,
+  "unit": "the exhibit's own bucket: (cell_x, cell_y, category_group), grid 0.008 deg, formed at >= 10 pre-cutoff venues",
+  "construction_reuse": "assign_group, compute_signals and make_buckets imported from scripts/whitespace_exhibit.py (not edited); frame construction refactored here to accept the date predicate; chain rule, KD-tree density and its p99 normalizer re-estimated within the pre-cutoff subset; tourist zones, MDR priors and the weights 0.30/0.30/0.25/0.15 are constants and stay untouched",
+  "tie_break": "stable (cell_x, cell_y, category_group) order inside every top-k cut, the shipped producer's own sort"
+ },
+ "n_pre_cutoff_universe_venues": 136418,
+ "n_buckets_pre_cutoff": 1510,
+ "outcome_mean_per_bucket": 6.151,
+ "outcome_nonzero_buckets": 957,
+ "coverage": {
+  "n_outcome_venues_total": 9630,
+  "n_in_formed_buckets": 9288,
+  "n_outside_formed_buckets": 342,
+  "share_in_formed_buckets": 0.9645,
+  "n_outcome_bucket_keys_not_formed_pre_cutoff": 199,
+  "note": "venues outside formed buckets fall where fewer than 10 pre-cutoff venues existed; they are a descriptive statistic, not part of any metric"
+ },
+ "gates": {
+  "reproduction_of_shipped": {
+   "n_buckets_rebuilt": 1536,
+   "n_buckets_shipped": 1536,
+   "n_released_rows_compared": 400,
+   "n_bucket_label_mismatches": 0,
+   "max_abs_score_diff": 4.990386962555604e-07,
+   "tolerance": 1e-06,
+   "ok": true
+  },
+  "identity": {
+   "spearman": 1.0,
+   "tolerance": 1e-06,
+   "ok": true
+  },
+  "random_anchor": {
+   "mean_abs_spearman": 0.020888,
+   "max_abs_spearman": 0.085298,
+   "mean_max": 0.05,
+   "per_draw_max": 0.15,
+   "ok": true
+  }
+ },
+ "arms": {
+  "composite": {
+   "what": "the shipped score_real_signals construction on pre-cutoff venues; the arm under test",
+   "spearman_vs_outcome": 0.547724,
+   "precision_at_50": 0.38,
+   "outcome_at_boundary": 38,
+   "n_buckets_tied_at_boundary_total": 2,
+   "n_tied_at_boundary_inside_cut": 1,
+   "lift_top_decile": 4.6199,
+   "lift_by_decile": [
+    4.6199,
+    1.32,
+    1.5041,
+    0.9022,
+    0.4091,
+    0.4737,
+    0.3424,
+    0.1852,
+    0.1238,
+    0.1195
+   ]
+  },
+  "raw_venue_count": {
+   "what": "pre-cutoff venue count per bucket; THE NULL HYPOTHESIS",
+   "spearman_vs_outcome": 0.686927,
+   "precision_at_50": 0.66,
+   "outcome_at_boundary": 38,
+   "n_buckets_tied_at_boundary_total": 2,
+   "n_tied_at_boundary_inside_cut": 1,
+   "lift_top_decile": 6.3318,
+   "lift_by_decile": [
+    6.3318,
+    1.489,
+    0.6481,
+    0.4565,
+    0.3758,
+    0.2315,
+    0.1292,
+    0.1637,
+    0.1098,
+    0.0646
+   ]
+  },
+  "equal_weights": {
+   "what": "the same four channel means at 0.25 each",
+   "spearman_vs_outcome": 0.449767,
+   "precision_at_50": 0.32,
+   "outcome_at_boundary": 38,
+   "n_buckets_tied_at_boundary_total": 2,
+   "n_tied_at_boundary_inside_cut": 1,
+   "lift_top_decile": 4.3949,
+   "lift_by_decile": [
+    4.3949,
+    1.2608,
+    0.9711,
+    1.0121,
+    0.6525,
+    0.4587,
+    0.4134,
+    0.3327,
+    0.2702,
+    0.2336
+   ]
+  },
+  "tourist_zone_channel": {
+   "what": "the pre-cutoff mean tourist-zone score alone",
+   "spearman_vs_outcome": 0.291861,
+   "precision_at_50": 0.18,
+   "outcome_at_boundary": 38,
+   "n_buckets_tied_at_boundary_total": 2,
+   "n_tied_at_boundary_inside_cut": 1,
+   "lift_top_decile": 3.9535,
+   "lift_by_decile": [
+    3.9535,
+    1.3114,
+    0.6643,
+    0.7095,
+    0.8699,
+    0.4177,
+    0.6298,
+    0.772,
+    0.3671,
+    0.3047
+   ]
+  },
+  "random": {
+   "what": "1000 seeded random orderings of the same buckets (default_rng(42))",
+   "spearman_vs_outcome": {
+    "mean": 0.001565,
+    "interval_2p5_97p5": [
+     -0.051364,
+     0.050878
+    ],
+    "max_abs": 0.085298,
+    "analytic_expectation": 0.0
+   },
+   "precision_at_50": {
+    "mean": 0.0333,
+    "interval_2p5_97p5": [
+     0.0,
+     0.08
+    ],
+    "analytic_expectation": 0.0331
+   },
+   "lift_top_decile": {
+    "mean": 0.995,
+    "interval_2p5_97p5": [
+     0.608272,
+     1.544305
+    ],
+    "analytic_expectation": 1.0
+   },
+   "n_draws": 1000
+  }
+ },
+ "bootstrap": {
+  "what": "cell-clustered bootstrap: cluster = grid cell (cell_x, cell_y), 1000 resamples of 455 cells with replacement, default_rng(42), percentile 2.5 to 97.5",
+  "n_cells": 455,
+  "n_resamples": 1000,
+  "n_dropped_undefined": 0,
+  "spearman_diff_composite_minus_density": {
+   "point": -0.139203,
+   "interval_2p5_97p5": [
+    -0.178481,
+    -0.101996
+   ]
+  },
+  "spearman_composite": {
+   "point": 0.547724,
+   "interval_2p5_97p5": [
+    0.503503,
+    0.590413
+   ]
+  }
+ },
+ "decision": {
+  "rule_restated": {
+   "composite_beats_density": "bootstrap 95 percent interval (2.5 to 97.5 percentile) of Spearman(composite, outcome) minus Spearman(raw_venue_count, outcome) lies entirely above zero",
+   "density_beats_composite": "that interval lies entirely below zero",
+   "not_resolved": "the interval covers zero"
+  },
+  "call": "density_beats_composite"
+ },
+ "required_sentence": "Over the 1510 buckets formed before 2024-08-10, plain pre-cutoff venue count predicts where card-accepting venues appeared in the following 24 months better than the shipped composite: Spearman 0.6869 against the composite's 0.5477, difference -0.1392 with a cell-clustered bootstrap 95 percent interval of [-0.1785, -0.1020], entirely below zero. The composite is not shown to add predictive value over density on this outcome, and that is the finding. The outcome is venue formation in Foursquare records, not merchant signing, and date_created is record creation, a proxy for opening, so this is a forward-looking check of the ranking against real subsequent data, not a validation against signings.",
+ "caveats": [
+  "date_created is the date the record entered Foursquare's system, a proxy for the venue's opening date; record creation can lag opening or batch-arrive in ingest waves",
+  "survivorship: the slice filter was country='SG' AND date_closed IS NULL, so venues created before the cutoff that closed before the 2026-08-11 snapshot are absent; pre-cutoff predictors are computed on the survivors, not on the true pre-cutoff population",
+  "the outcome is venue formation, not merchant signing; a place opening is not a merchant signing a card-acceptance agreement, and no arm here is validated against signings",
+  "the backbone wire (score_with_embeddings) is a category-level column, constant per category group; it enters neither score_real_signals nor the shipped ranking order, and restricting venues to pre-T changes which buckets exist but cannot change any bucket's wire value, so it was not recomputed and is not an arm here; this validation tests the composite the page actually ranks by",
+  "post-cutoff venues landing where no pre-cutoff bucket was formed are outside the analysis population; their count is reported under coverage and is not part of any metric"
+ ],
+ "check": {
+  "command": "python3 scripts/whitespace_temporal.py --check",
+  "tolerance": 1e-06
+ }
+}

@@ -1,0 +1,25 @@
+{
+ "what_this_is": "The protection result restated in the unit a review queue runs in. This file contains NO new measurement: every value is exact arithmetic over four numbers stored in results/protection.json, listed under derived_from. The two stored recalls are exactly 566/945 and 305/945, so the caught counts are the underlying integer counts and not rounded products.",
+ "derived_from": {
+  "file": "results/protection.json",
+  "pointers": {
+   "n_scored_rows": "/split/n_scored_rows",
+   "n_positives": "/split/n_positives",
+   "recall_model": "/scores/pll_plus_rarity/recall_at_top_0.01",
+   "recall_control": "/scores/rarity_all_fields/recall_at_top_0.01"
+  }
+ },
+ "generated_by": "scripts/protection_queue.py",
+ "labels": [
+  "synthetic"
+ ],
+ "carries_the_same_caveats_as_the_source": "The corpus is the synthetic IBM TabFormer benchmark, the positive rate is thinned by the split, and the labels are card-fraud labels rather than authorized-scam labels. Restating the result in queue units changes none of that.",
+ "operating_point": "top 1 percent of the ranking, the same operating point the exhibit reports",
+ "n_scored_rows": 300000,
+ "review_queue_rows": 3000,
+ "n_positives": 945,
+ "caught_with_backbone_score": 566,
+ "caught_control_alone": 305,
+ "additional_caught": 261,
+ "relative_increase": 0.8557377049180328
+}

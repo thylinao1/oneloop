@@ -1,0 +1,4023 @@
+{
+ "seed": 42,
+ "versions": {
+  "python": "3.13.1",
+  "polars": "1.43.2",
+  "numpy": "2.5.2",
+  "scipy": "1.18.1"
+ },
+ "generated_by": "scripts/whitespace_exhibit.py --check-able",
+ "data_sources": [
+  {
+   "name": "Foursquare OS Places \u2014 SG slice (fsq-os-places dt=2026-08-11)",
+   "url": "https://huggingface.co/datasets/foursquare/fsq-os-places",
+   "sha256": "54effd7b8ead5076090cf65ffa3b2770f006913d854e032536fed8d69c56920e"
+  }
+ ],
+ "labels": [
+  "real-signals base",
+  "pseudonymized"
+ ],
+ "points": [
+  {
+   "bucket_label": "F&B cluster \u2014 Chinatown area",
+   "area": "Chinatown",
+   "category": "F&B",
+   "lat": 1.28322,
+   "lon": 103.84459,
+   "score_real_signals": 0.853121,
+   "n_pois": 2934,
+   "rank": 1
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Raffles Place area",
+   "area": "Raffles Place",
+   "category": "F&B",
+   "lat": 1.28384,
+   "lon": 103.85049,
+   "score_real_signals": 0.840284,
+   "n_pois": 2158,
+   "rank": 2
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Orchard Road area",
+   "area": "Orchard Road",
+   "category": "F&B",
+   "lat": 1.30588,
+   "lon": 103.82958,
+   "score_real_signals": 0.838471,
+   "n_pois": 684,
+   "rank": 3
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Little India area",
+   "area": "Little India",
+   "category": "F&B",
+   "lat": 1.307,
+   "lon": 103.85274,
+   "score_real_signals": 0.83743,
+   "n_pois": 742,
+   "rank": 4
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Chinatown area",
+   "area": "Chinatown",
+   "category": "Personal Services",
+   "lat": 1.28384,
+   "lon": 103.84418,
+   "score_real_signals": 0.833118,
+   "n_pois": 417,
+   "rank": 5
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bugis area",
+   "area": "Bugis",
+   "category": "F&B",
+   "lat": 1.29976,
+   "lon": 103.85296,
+   "score_real_signals": 0.832158,
+   "n_pois": 2141,
+   "rank": 6
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Orchard Road area \u00b7 sector 2",
+   "area": "Orchard Road",
+   "category": "F&B",
+   "lat": 1.30672,
+   "lon": 103.83425,
+   "score_real_signals": 0.831168,
+   "n_pois": 717,
+   "rank": 7
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Orchard Road area",
+   "area": "Orchard Road",
+   "category": "Personal Services",
+   "lat": 1.30658,
+   "lon": 103.83364,
+   "score_real_signals": 0.82373,
+   "n_pois": 398,
+   "rank": 8
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Bugis area",
+   "area": "Bugis",
+   "category": "Personal Services",
+   "lat": 1.30012,
+   "lon": 103.85348,
+   "score_real_signals": 0.821627,
+   "n_pois": 332,
+   "rank": 9
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Clarke Quay area",
+   "area": "Clarke Quay",
+   "category": "F&B",
+   "lat": 1.29064,
+   "lon": 103.8443,
+   "score_real_signals": 0.81995,
+   "n_pois": 812,
+   "rank": 10
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Kampong Glam area",
+   "area": "Kampong Glam",
+   "category": "F&B",
+   "lat": 1.30111,
+   "lon": 103.85989,
+   "score_real_signals": 0.813705,
+   "n_pois": 1551,
+   "rank": 11
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Raffles Place area",
+   "area": "Raffles Place",
+   "category": "Personal Services",
+   "lat": 1.28408,
+   "lon": 103.85065,
+   "score_real_signals": 0.812471,
+   "n_pois": 170,
+   "rank": 12
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Chinatown area",
+   "area": "Chinatown",
+   "category": "Retail",
+   "lat": 1.28385,
+   "lon": 103.84429,
+   "score_real_signals": 0.808744,
+   "n_pois": 953,
+   "rank": 13
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Orchard Road area \u00b7 sector 2",
+   "area": "Orchard Road",
+   "category": "Personal Services",
+   "lat": 1.30626,
+   "lon": 103.8293,
+   "score_real_signals": 0.805926,
+   "n_pois": 269,
+   "rank": 14
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Little India area",
+   "area": "Little India",
+   "category": "Personal Services",
+   "lat": 1.307,
+   "lon": 103.85302,
+   "score_real_signals": 0.805094,
+   "n_pois": 113,
+   "rank": 15
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Orchard Road area",
+   "area": "Orchard Road",
+   "category": "Retail",
+   "lat": 1.30609,
+   "lon": 103.83362,
+   "score_real_signals": 0.803995,
+   "n_pois": 898,
+   "rank": 16
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Marina Bay area",
+   "area": "Marina Bay",
+   "category": "F&B",
+   "lat": 1.2842,
+   "lon": 103.85968,
+   "score_real_signals": 0.801171,
+   "n_pois": 224,
+   "rank": 17
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Katong area",
+   "area": "Katong",
+   "category": "F&B",
+   "lat": 1.30764,
+   "lon": 103.90182,
+   "score_real_signals": 0.800776,
+   "n_pois": 418,
+   "rank": 18
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Bugis area",
+   "area": "Bugis",
+   "category": "Retail",
+   "lat": 1.30032,
+   "lon": 103.85374,
+   "score_real_signals": 0.796,
+   "n_pois": 1464,
+   "rank": 19
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Orchard Road area \u00b7 sector 2",
+   "area": "Orchard Road",
+   "category": "Retail",
+   "lat": 1.30551,
+   "lon": 103.83012,
+   "score_real_signals": 0.794719,
+   "n_pois": 673,
+   "rank": 20
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Changi Airport area",
+   "area": "Changi Airport",
+   "category": "F&B",
+   "lat": 1.36133,
+   "lon": 103.98998,
+   "score_real_signals": 0.793962,
+   "n_pois": 298,
+   "rank": 21
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Somerset area",
+   "area": "Somerset",
+   "category": "F&B",
+   "lat": 1.30178,
+   "lon": 103.83682,
+   "score_real_signals": 0.792208,
+   "n_pois": 1623,
+   "rank": 22
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Orchard Road area \u00b7 sector 3",
+   "area": "Orchard Road",
+   "category": "F&B",
+   "lat": 1.30228,
+   "lon": 103.83018,
+   "score_real_signals": 0.791334,
+   "n_pois": 56,
+   "rank": 23
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Kampong Glam area",
+   "area": "Kampong Glam",
+   "category": "Personal Services",
+   "lat": 1.30125,
+   "lon": 103.85936,
+   "score_real_signals": 0.790147,
+   "n_pois": 198,
+   "rank": 24
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Marina Bay area",
+   "area": "Marina Bay",
+   "category": "Personal Services",
+   "lat": 1.28377,
+   "lon": 103.85896,
+   "score_real_signals": 0.789399,
+   "n_pois": 22,
+   "rank": 25
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Little India area",
+   "area": "Little India",
+   "category": "Retail",
+   "lat": 1.30703,
+   "lon": 103.85261,
+   "score_real_signals": 0.787974,
+   "n_pois": 384,
+   "rank": 26
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Raffles Place area",
+   "area": "Raffles Place",
+   "category": "Retail",
+   "lat": 1.28375,
+   "lon": 103.85118,
+   "score_real_signals": 0.786531,
+   "n_pois": 453,
+   "rank": 27
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Clarke Quay area",
+   "area": "Clarke Quay",
+   "category": "Personal Services",
+   "lat": 1.29084,
+   "lon": 103.84468,
+   "score_real_signals": 0.785897,
+   "n_pois": 151,
+   "rank": 28
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Tanjong Pagar area",
+   "area": "Tanjong Pagar",
+   "category": "F&B",
+   "lat": 1.27724,
+   "lon": 103.84427,
+   "score_real_signals": 0.783703,
+   "n_pois": 2291,
+   "rank": 29
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 City Hall area",
+   "area": "City Hall",
+   "category": "F&B",
+   "lat": 1.29258,
+   "lon": 103.85212,
+   "score_real_signals": 0.783135,
+   "n_pois": 1220,
+   "rank": 30
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Marine Parade area",
+   "area": "Marine Parade",
+   "category": "F&B",
+   "lat": 1.30649,
+   "lon": 103.9063,
+   "score_real_signals": 0.777954,
+   "n_pois": 478,
+   "rank": 31
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Kampong Glam area",
+   "area": "Kampong Glam",
+   "category": "Retail",
+   "lat": 1.30122,
+   "lon": 103.85941,
+   "score_real_signals": 0.775999,
+   "n_pois": 736,
+   "rank": 32
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Somerset area",
+   "area": "Somerset",
+   "category": "Personal Services",
+   "lat": 1.30182,
+   "lon": 103.83709,
+   "score_real_signals": 0.773661,
+   "n_pois": 331,
+   "rank": 33
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Katong area",
+   "area": "Katong",
+   "category": "Personal Services",
+   "lat": 1.30698,
+   "lon": 103.90219,
+   "score_real_signals": 0.772747,
+   "n_pois": 82,
+   "rank": 34
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Katong area \u00b7 sector 2",
+   "area": "Katong",
+   "category": "Personal Services",
+   "lat": 1.30302,
+   "lon": 103.90137,
+   "score_real_signals": 0.772267,
+   "n_pois": 39,
+   "rank": 35
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Katong area \u00b7 sector 2",
+   "area": "Katong",
+   "category": "F&B",
+   "lat": 1.30222,
+   "lon": 103.9002,
+   "score_real_signals": 0.771261,
+   "n_pois": 121,
+   "rank": 36
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Orchard Road area \u00b7 sector 3",
+   "area": "Orchard Road",
+   "category": "Personal Services",
+   "lat": 1.30279,
+   "lon": 103.82916,
+   "score_real_signals": 0.770731,
+   "n_pois": 14,
+   "rank": 37
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Changi Airport area",
+   "area": "Changi Airport",
+   "category": "Personal Services",
+   "lat": 1.3614,
+   "lon": 103.98962,
+   "score_real_signals": 0.770266,
+   "n_pois": 10,
+   "rank": 38
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 City Hall area",
+   "area": "City Hall",
+   "category": "Personal Services",
+   "lat": 1.29224,
+   "lon": 103.85172,
+   "score_real_signals": 0.769548,
+   "n_pois": 254,
+   "rank": 39
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Marine Parade area \u00b7 sector 2",
+   "area": "Marine Parade",
+   "category": "F&B",
+   "lat": 1.30194,
+   "lon": 103.90598,
+   "score_real_signals": 0.766379,
+   "n_pois": 511,
+   "rank": 40
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Katong area \u00b7 sector 3",
+   "area": "Katong",
+   "category": "Personal Services",
+   "lat": 1.30637,
+   "lon": 103.90618,
+   "score_real_signals": 0.760818,
+   "n_pois": 95,
+   "rank": 41
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Clarke Quay area",
+   "area": "Clarke Quay",
+   "category": "Retail",
+   "lat": 1.29068,
+   "lon": 103.84481,
+   "score_real_signals": 0.75915,
+   "n_pois": 283,
+   "rank": 42
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Orchard Road area",
+   "area": "Orchard Road",
+   "category": "Health & Wellness",
+   "lat": 1.30586,
+   "lon": 103.82981,
+   "score_real_signals": 0.754912,
+   "n_pois": 121,
+   "rank": 43
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Chinatown area",
+   "area": "Chinatown",
+   "category": "Entertainment & Leisure",
+   "lat": 1.28351,
+   "lon": 103.84485,
+   "score_real_signals": 0.750725,
+   "n_pois": 235,
+   "rank": 44
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Orchard Road area \u00b7 sector 2",
+   "area": "Orchard Road",
+   "category": "Health & Wellness",
+   "lat": 1.30491,
+   "lon": 103.83524,
+   "score_real_signals": 0.749468,
+   "n_pois": 287,
+   "rank": 45
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Somerset area",
+   "area": "Somerset",
+   "category": "Retail",
+   "lat": 1.3023,
+   "lon": 103.83633,
+   "score_real_signals": 0.749308,
+   "n_pois": 1829,
+   "rank": 46
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Raffles Place area",
+   "area": "Raffles Place",
+   "category": "Entertainment & Leisure",
+   "lat": 1.2841,
+   "lon": 103.85038,
+   "score_real_signals": 0.748139,
+   "n_pois": 206,
+   "rank": 47
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Tanjong Pagar area \u00b7 sector 2",
+   "area": "Tanjong Pagar",
+   "category": "F&B",
+   "lat": 1.27832,
+   "lon": 103.85074,
+   "score_real_signals": 0.747473,
+   "n_pois": 555,
+   "rank": 48
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Marina Bay area",
+   "area": "Marina Bay",
+   "category": "Retail",
+   "lat": 1.28385,
+   "lon": 103.85922,
+   "score_real_signals": 0.747259,
+   "n_pois": 334,
+   "rank": 49
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Marine Parade area",
+   "area": "Marine Parade",
+   "category": "Personal Services",
+   "lat": 1.30233,
+   "lon": 103.90581,
+   "score_real_signals": 0.74618,
+   "n_pois": 131,
+   "rank": 50
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Esplanade area",
+   "area": "Esplanade",
+   "category": "F&B",
+   "lat": 1.29311,
+   "lon": 103.85862,
+   "score_real_signals": 0.746141,
+   "n_pois": 1225,
+   "rank": 51
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Katong area",
+   "area": "Katong",
+   "category": "Retail",
+   "lat": 1.30728,
+   "lon": 103.90192,
+   "score_real_signals": 0.745995,
+   "n_pois": 154,
+   "rank": 52
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Tanjong Pagar area",
+   "area": "Tanjong Pagar",
+   "category": "Personal Services",
+   "lat": 1.27695,
+   "lon": 103.84385,
+   "score_real_signals": 0.744554,
+   "n_pois": 271,
+   "rank": 53
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Lavender area",
+   "area": "Lavender",
+   "category": "F&B",
+   "lat": 1.30875,
+   "lon": 103.85922,
+   "score_real_signals": 0.741979,
+   "n_pois": 1330,
+   "rank": 54
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Chinatown area",
+   "area": "Chinatown",
+   "category": "Health & Wellness",
+   "lat": 1.28415,
+   "lon": 103.84468,
+   "score_real_signals": 0.740878,
+   "n_pois": 64,
+   "rank": 55
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Dhoby Ghaut area",
+   "area": "Dhoby Ghaut",
+   "category": "F&B",
+   "lat": 1.30043,
+   "lon": 103.8436,
+   "score_real_signals": 0.740677,
+   "n_pois": 979,
+   "rank": 56
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Lavender area \u00b7 sector 2",
+   "area": "Lavender",
+   "category": "F&B",
+   "lat": 1.30274,
+   "lon": 103.86459,
+   "score_real_signals": 0.739477,
+   "n_pois": 161,
+   "rank": 57
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Orchard Road area \u00b7 sector 3",
+   "area": "Orchard Road",
+   "category": "Retail",
+   "lat": 1.30279,
+   "lon": 103.82995,
+   "score_real_signals": 0.738375,
+   "n_pois": 69,
+   "rank": 58
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Changi Airport area \u00b7 sector 2",
+   "area": "Changi Airport",
+   "category": "F&B",
+   "lat": 1.35634,
+   "lon": 103.98787,
+   "score_real_signals": 0.735389,
+   "n_pois": 401,
+   "rank": 59
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 City Hall area",
+   "area": "City Hall",
+   "category": "Retail",
+   "lat": 1.29239,
+   "lon": 103.8519,
+   "score_real_signals": 0.735039,
+   "n_pois": 1038,
+   "rank": 60
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Orchard Road area",
+   "area": "Orchard Road",
+   "category": "Entertainment & Leisure",
+   "lat": 1.30657,
+   "lon": 103.82908,
+   "score_real_signals": 0.734155,
+   "n_pois": 133,
+   "rank": 61
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Little India area",
+   "area": "Little India",
+   "category": "Entertainment & Leisure",
+   "lat": 1.30721,
+   "lon": 103.85303,
+   "score_real_signals": 0.729742,
+   "n_pois": 63,
+   "rank": 62
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Changi Airport area",
+   "area": "Changi Airport",
+   "category": "Entertainment & Leisure",
+   "lat": 1.36125,
+   "lon": 103.98955,
+   "score_real_signals": 0.727875,
+   "n_pois": 14,
+   "rank": 63
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Changi Airport area",
+   "area": "Changi Airport",
+   "category": "Retail",
+   "lat": 1.36147,
+   "lon": 103.99002,
+   "score_real_signals": 0.726189,
+   "n_pois": 210,
+   "rank": 64
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Clarke Quay area",
+   "area": "Clarke Quay",
+   "category": "Entertainment & Leisure",
+   "lat": 1.29094,
+   "lon": 103.84449,
+   "score_real_signals": 0.725927,
+   "n_pois": 144,
+   "rank": 65
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Somerset area",
+   "area": "Somerset",
+   "category": "Health & Wellness",
+   "lat": 1.3024,
+   "lon": 103.83617,
+   "score_real_signals": 0.725049,
+   "n_pois": 176,
+   "rank": 66
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Raffles Place area",
+   "area": "Raffles Place",
+   "category": "Health & Wellness",
+   "lat": 1.28316,
+   "lon": 103.85124,
+   "score_real_signals": 0.724731,
+   "n_pois": 84,
+   "rank": 67
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Katong area \u00b7 sector 2",
+   "area": "Katong",
+   "category": "Retail",
+   "lat": 1.3025,
+   "lon": 103.90051,
+   "score_real_signals": 0.723477,
+   "n_pois": 65,
+   "rank": 68
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Bugis area",
+   "area": "Bugis",
+   "category": "Entertainment & Leisure",
+   "lat": 1.29952,
+   "lon": 103.85167,
+   "score_real_signals": 0.721599,
+   "n_pois": 386,
+   "rank": 69
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Tanjong Pagar area \u00b7 sector 2",
+   "area": "Tanjong Pagar",
+   "category": "Personal Services",
+   "lat": 1.2784,
+   "lon": 103.85027,
+   "score_real_signals": 0.721309,
+   "n_pois": 34,
+   "rank": 70
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Bugis area",
+   "area": "Bugis",
+   "category": "Health & Wellness",
+   "lat": 1.30042,
+   "lon": 103.85232,
+   "score_real_signals": 0.720841,
+   "n_pois": 58,
+   "rank": 71
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Changi Airport area \u00b7 sector 2",
+   "area": "Changi Airport",
+   "category": "Personal Services",
+   "lat": 1.35596,
+   "lon": 103.98726,
+   "score_real_signals": 0.720295,
+   "n_pois": 21,
+   "rank": 72
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Katong area \u00b7 sector 3",
+   "area": "Katong",
+   "category": "Retail",
+   "lat": 1.30627,
+   "lon": 103.9058,
+   "score_real_signals": 0.719711,
+   "n_pois": 223,
+   "rank": 73
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Orchard Road area \u00b7 sector 2",
+   "area": "Orchard Road",
+   "category": "Entertainment & Leisure",
+   "lat": 1.30694,
+   "lon": 103.83451,
+   "score_real_signals": 0.718373,
+   "n_pois": 91,
+   "rank": 74
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Kampong Glam area",
+   "area": "Kampong Glam",
+   "category": "Entertainment & Leisure",
+   "lat": 1.3014,
+   "lon": 103.86004,
+   "score_real_signals": 0.717027,
+   "n_pois": 145,
+   "rank": 75
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Clarke Quay area",
+   "area": "Clarke Quay",
+   "category": "Health & Wellness",
+   "lat": 1.29061,
+   "lon": 103.84455,
+   "score_real_signals": 0.715882,
+   "n_pois": 28,
+   "rank": 76
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Lavender area",
+   "area": "Lavender",
+   "category": "Personal Services",
+   "lat": 1.30866,
+   "lon": 103.85971,
+   "score_real_signals": 0.71522,
+   "n_pois": 128,
+   "rank": 77
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Little India area",
+   "area": "Little India",
+   "category": "Health & Wellness",
+   "lat": 1.30759,
+   "lon": 103.85238,
+   "score_real_signals": 0.713486,
+   "n_pois": 24,
+   "rank": 78
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Dhoby Ghaut area",
+   "area": "Dhoby Ghaut",
+   "category": "Personal Services",
+   "lat": 1.30036,
+   "lon": 103.8431,
+   "score_real_signals": 0.713399,
+   "n_pois": 288,
+   "rank": 79
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 City Hall area",
+   "area": "City Hall",
+   "category": "Entertainment & Leisure",
+   "lat": 1.29206,
+   "lon": 103.85145,
+   "score_real_signals": 0.71276,
+   "n_pois": 181,
+   "rank": 80
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Esplanade area",
+   "area": "Esplanade",
+   "category": "Personal Services",
+   "lat": 1.29323,
+   "lon": 103.85865,
+   "score_real_signals": 0.712392,
+   "n_pois": 108,
+   "rank": 81
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Tanjong Pagar area",
+   "area": "Tanjong Pagar",
+   "category": "Retail",
+   "lat": 1.27671,
+   "lon": 103.84419,
+   "score_real_signals": 0.711463,
+   "n_pois": 452,
+   "rank": 82
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 City Hall area",
+   "area": "City Hall",
+   "category": "Health & Wellness",
+   "lat": 1.29163,
+   "lon": 103.85097,
+   "score_real_signals": 0.709535,
+   "n_pois": 52,
+   "rank": 83
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Marine Parade area",
+   "area": "Marine Parade",
+   "category": "Retail",
+   "lat": 1.30191,
+   "lon": 103.90553,
+   "score_real_signals": 0.708774,
+   "n_pois": 396,
+   "rank": 84
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Katong area",
+   "area": "Katong",
+   "category": "Entertainment & Leisure",
+   "lat": 1.30718,
+   "lon": 103.90197,
+   "score_real_signals": 0.708374,
+   "n_pois": 51,
+   "rank": 85
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Marina Bay area",
+   "area": "Marina Bay",
+   "category": "Entertainment & Leisure",
+   "lat": 1.28397,
+   "lon": 103.85939,
+   "score_real_signals": 0.704635,
+   "n_pois": 52,
+   "rank": 86
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Sentosa area",
+   "area": "Sentosa",
+   "category": "F&B",
+   "lat": 1.25091,
+   "lon": 103.82586,
+   "score_real_signals": 0.699588,
+   "n_pois": 24,
+   "rank": 87
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Marine Parade area",
+   "area": "Marine Parade",
+   "category": "Entertainment & Leisure",
+   "lat": 1.30211,
+   "lon": 103.90598,
+   "score_real_signals": 0.699145,
+   "n_pois": 40,
+   "rank": 88
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Joo Chiat area",
+   "area": "Joo Chiat",
+   "category": "F&B",
+   "lat": 1.3154,
+   "lon": 103.89967,
+   "score_real_signals": 0.699105,
+   "n_pois": 421,
+   "rank": 89
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Lavender area \u00b7 sector 2",
+   "area": "Lavender",
+   "category": "Personal Services",
+   "lat": 1.30259,
+   "lon": 103.86484,
+   "score_real_signals": 0.699067,
+   "n_pois": 21,
+   "rank": 90
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 River Valley area",
+   "area": "River Valley",
+   "category": "F&B",
+   "lat": 1.29113,
+   "lon": 103.83641,
+   "score_real_signals": 0.698464,
+   "n_pois": 329,
+   "rank": 91
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Kampong Glam area",
+   "area": "Kampong Glam",
+   "category": "Health & Wellness",
+   "lat": 1.30122,
+   "lon": 103.85958,
+   "score_real_signals": 0.697453,
+   "n_pois": 33,
+   "rank": 92
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Tiong Bahru area",
+   "area": "Tiong Bahru",
+   "category": "F&B",
+   "lat": 1.28454,
+   "lon": 103.83409,
+   "score_real_signals": 0.697311,
+   "n_pois": 382,
+   "rank": 93
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Somerset area",
+   "area": "Somerset",
+   "category": "Entertainment & Leisure",
+   "lat": 1.30119,
+   "lon": 103.83655,
+   "score_real_signals": 0.695969,
+   "n_pois": 172,
+   "rank": 94
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Farrer Park area",
+   "area": "Farrer Park",
+   "category": "F&B",
+   "lat": 1.31518,
+   "lon": 103.85213,
+   "score_real_signals": 0.69528,
+   "n_pois": 273,
+   "rank": 95
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Sentosa area \u00b7 sector 2",
+   "area": "Sentosa",
+   "category": "F&B",
+   "lat": 1.24523,
+   "lon": 103.82752,
+   "score_real_signals": 0.690541,
+   "n_pois": 23,
+   "rank": 96
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Esplanade area",
+   "area": "Esplanade",
+   "category": "Retail",
+   "lat": 1.29326,
+   "lon": 103.85849,
+   "score_real_signals": 0.690272,
+   "n_pois": 937,
+   "rank": 97
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Orchard Road area \u00b7 sector 4",
+   "area": "Orchard Road",
+   "category": "Personal Services",
+   "lat": 1.30503,
+   "lon": 103.82318,
+   "score_real_signals": 0.690264,
+   "n_pois": 15,
+   "rank": 98
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Tanjong Pagar area \u00b7 sector 2",
+   "area": "Tanjong Pagar",
+   "category": "Retail",
+   "lat": 1.27788,
+   "lon": 103.84992,
+   "score_real_signals": 0.688996,
+   "n_pois": 71,
+   "rank": 99
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 Chinatown area",
+   "area": "Chinatown",
+   "category": "Hotels & Lodging",
+   "lat": 1.28373,
+   "lon": 103.84445,
+   "score_real_signals": 0.688442,
+   "n_pois": 137,
+   "rank": 100
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Orchard Road area \u00b7 sector 4",
+   "area": "Orchard Road",
+   "category": "F&B",
+   "lat": 1.30565,
+   "lon": 103.82245,
+   "score_real_signals": 0.688294,
+   "n_pois": 60,
+   "rank": 101
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Lavender area",
+   "area": "Lavender",
+   "category": "Retail",
+   "lat": 1.30911,
+   "lon": 103.85888,
+   "score_real_signals": 0.687256,
+   "n_pois": 544,
+   "rank": 102
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Joo Chiat area \u00b7 sector 2",
+   "area": "Joo Chiat",
+   "category": "F&B",
+   "lat": 1.3082,
+   "lon": 103.89381,
+   "score_real_signals": 0.686613,
+   "n_pois": 135,
+   "rank": 103
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Outram area",
+   "area": "Outram",
+   "category": "F&B",
+   "lat": 1.27703,
+   "lon": 103.83682,
+   "score_real_signals": 0.685751,
+   "n_pois": 252,
+   "rank": 104
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Katong area \u00b7 sector 2",
+   "area": "Katong",
+   "category": "Entertainment & Leisure",
+   "lat": 1.30682,
+   "lon": 103.90613,
+   "score_real_signals": 0.684249,
+   "n_pois": 57,
+   "rank": 105
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Tanjong Pagar area",
+   "area": "Tanjong Pagar",
+   "category": "Entertainment & Leisure",
+   "lat": 1.27715,
+   "lon": 103.84401,
+   "score_real_signals": 0.679867,
+   "n_pois": 189,
+   "rank": 106
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Farrer Park area",
+   "area": "Farrer Park",
+   "category": "Personal Services",
+   "lat": 1.31485,
+   "lon": 103.85269,
+   "score_real_signals": 0.678998,
+   "n_pois": 40,
+   "rank": 107
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Changi Airport area \u00b7 sector 2",
+   "area": "Changi Airport",
+   "category": "Entertainment & Leisure",
+   "lat": 1.35588,
+   "lon": 103.98806,
+   "score_real_signals": 0.677532,
+   "n_pois": 39,
+   "rank": 108
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Changi Airport area \u00b7 sector 2",
+   "area": "Changi Airport",
+   "category": "Retail",
+   "lat": 1.35634,
+   "lon": 103.98761,
+   "score_real_signals": 0.675388,
+   "n_pois": 242,
+   "rank": 109
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Marine Parade area",
+   "area": "Marine Parade",
+   "category": "Health & Wellness",
+   "lat": 1.30215,
+   "lon": 103.90592,
+   "score_real_signals": 0.675321,
+   "n_pois": 42,
+   "rank": 110
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Lavender area \u00b7 sector 2",
+   "area": "Lavender",
+   "category": "Retail",
+   "lat": 1.30249,
+   "lon": 103.86505,
+   "score_real_signals": 0.675139,
+   "n_pois": 45,
+   "rank": 111
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Farrer Park area \u00b7 sector 2",
+   "area": "Farrer Park",
+   "category": "F&B",
+   "lat": 1.31578,
+   "lon": 103.86059,
+   "score_real_signals": 0.674957,
+   "n_pois": 593,
+   "rank": 112
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Dhoby Ghaut area",
+   "area": "Dhoby Ghaut",
+   "category": "Retail",
+   "lat": 1.30004,
+   "lon": 103.84445,
+   "score_real_signals": 0.674235,
+   "n_pois": 767,
+   "rank": 113
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Outram area",
+   "area": "Outram",
+   "category": "Personal Services",
+   "lat": 1.27712,
+   "lon": 103.83774,
+   "score_real_signals": 0.673904,
+   "n_pois": 34,
+   "rank": 114
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Tiong Bahru area",
+   "area": "Tiong Bahru",
+   "category": "Personal Services",
+   "lat": 1.28444,
+   "lon": 103.83482,
+   "score_real_signals": 0.6723,
+   "n_pois": 43,
+   "rank": 115
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Tanjong Pagar area \u00b7 sector 2",
+   "area": "Tanjong Pagar",
+   "category": "Entertainment & Leisure",
+   "lat": 1.2784,
+   "lon": 103.8499,
+   "score_real_signals": 0.671656,
+   "n_pois": 94,
+   "rank": 116
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Little India area \u00b7 sector 2",
+   "area": "Little India",
+   "category": "F&B",
+   "lat": 1.30906,
+   "lon": 103.8456,
+   "score_real_signals": 0.671348,
+   "n_pois": 95,
+   "rank": 117
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Katong area",
+   "area": "Katong",
+   "category": "Health & Wellness",
+   "lat": 1.30321,
+   "lon": 103.89988,
+   "score_real_signals": 0.669542,
+   "n_pois": 10,
+   "rank": 118
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Joo Chiat area",
+   "area": "Joo Chiat",
+   "category": "Personal Services",
+   "lat": 1.30854,
+   "lon": 103.89466,
+   "score_real_signals": 0.667593,
+   "n_pois": 27,
+   "rank": 119
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Farrer Park area \u00b7 sector 2",
+   "area": "Farrer Park",
+   "category": "Personal Services",
+   "lat": 1.31528,
+   "lon": 103.8598,
+   "score_real_signals": 0.667077,
+   "n_pois": 89,
+   "rank": 120
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Katong area \u00b7 sector 2",
+   "area": "Katong",
+   "category": "Health & Wellness",
+   "lat": 1.30645,
+   "lon": 103.90609,
+   "score_real_signals": 0.666102,
+   "n_pois": 30,
+   "rank": 121
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Katong area \u00b7 sector 3",
+   "area": "Katong",
+   "category": "Health & Wellness",
+   "lat": 1.30805,
+   "lon": 103.90102,
+   "score_real_signals": 0.664512,
+   "n_pois": 16,
+   "rank": 122
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Sentosa area \u00b7 sector 3",
+   "area": "Sentosa",
+   "category": "F&B",
+   "lat": 1.25331,
+   "lon": 103.82013,
+   "score_real_signals": 0.664364,
+   "n_pois": 180,
+   "rank": 123
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Esplanade area",
+   "area": "Esplanade",
+   "category": "Entertainment & Leisure",
+   "lat": 1.29297,
+   "lon": 103.85851,
+   "score_real_signals": 0.662798,
+   "n_pois": 136,
+   "rank": 124
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Marina Bay area \u00b7 sector 2",
+   "area": "Marina Bay",
+   "category": "F&B",
+   "lat": 1.28248,
+   "lon": 103.86685,
+   "score_real_signals": 0.66268,
+   "n_pois": 57,
+   "rank": 125
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 Boat Quay area",
+   "area": "Boat Quay",
+   "category": "Hotels & Lodging",
+   "lat": 1.28568,
+   "lon": 103.84985,
+   "score_real_signals": 0.660426,
+   "n_pois": 48,
+   "rank": 126
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 Orchard Road area",
+   "area": "Orchard Road",
+   "category": "Hotels & Lodging",
+   "lat": 1.30681,
+   "lon": 103.83423,
+   "score_real_signals": 0.659743,
+   "n_pois": 70,
+   "rank": 127
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Lavender area",
+   "area": "Lavender",
+   "category": "Entertainment & Leisure",
+   "lat": 1.30891,
+   "lon": 103.85962,
+   "score_real_signals": 0.659383,
+   "n_pois": 123,
+   "rank": 128
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Novena area",
+   "area": "Novena",
+   "category": "F&B",
+   "lat": 1.31798,
+   "lon": 103.84367,
+   "score_real_signals": 0.656326,
+   "n_pois": 342,
+   "rank": 129
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 HarbourFront area",
+   "area": "HarbourFront",
+   "category": "F&B",
+   "lat": 1.26077,
+   "lon": 103.82147,
+   "score_real_signals": 0.653722,
+   "n_pois": 379,
+   "rank": 130
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 Marina Bay area",
+   "area": "Marina Bay",
+   "category": "Hotels & Lodging",
+   "lat": 1.28318,
+   "lon": 103.85999,
+   "score_real_signals": 0.653472,
+   "n_pois": 30,
+   "rank": 131
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Dhoby Ghaut area",
+   "area": "Dhoby Ghaut",
+   "category": "Entertainment & Leisure",
+   "lat": 1.30025,
+   "lon": 103.84348,
+   "score_real_signals": 0.653416,
+   "n_pois": 155,
+   "rank": 132
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Orchard Road area \u00b7 sector 3",
+   "area": "Orchard Road",
+   "category": "Health & Wellness",
+   "lat": 1.30269,
+   "lon": 103.82703,
+   "score_real_signals": 0.653268,
+   "n_pois": 16,
+   "rank": 133
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Marina Bay area \u00b7 sector 3",
+   "area": "Marina Bay",
+   "category": "F&B",
+   "lat": 1.27835,
+   "lon": 103.86612,
+   "score_real_signals": 0.653267,
+   "n_pois": 13,
+   "rank": 134
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Joo Chiat area \u00b7 sector 2",
+   "area": "Joo Chiat",
+   "category": "Personal Services",
+   "lat": 1.31564,
+   "lon": 103.90003,
+   "score_real_signals": 0.65262,
+   "n_pois": 62,
+   "rank": 135
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Tanjong Pagar area",
+   "area": "Tanjong Pagar",
+   "category": "Health & Wellness",
+   "lat": 1.27862,
+   "lon": 103.85058,
+   "score_real_signals": 0.652239,
+   "n_pois": 27,
+   "rank": 136
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Tanjong Pagar area \u00b7 sector 2",
+   "area": "Tanjong Pagar",
+   "category": "Health & Wellness",
+   "lat": 1.27655,
+   "lon": 103.84424,
+   "score_real_signals": 0.652235,
+   "n_pois": 83,
+   "rank": 137
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Katong area \u00b7 sector 3",
+   "area": "Katong",
+   "category": "Entertainment & Leisure",
+   "lat": 1.30124,
+   "lon": 103.90096,
+   "score_real_signals": 0.652191,
+   "n_pois": 32,
+   "rank": 138
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Dhoby Ghaut area",
+   "area": "Dhoby Ghaut",
+   "category": "Health & Wellness",
+   "lat": 1.30012,
+   "lon": 103.84264,
+   "score_real_signals": 0.651897,
+   "n_pois": 53,
+   "rank": 139
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 Kampong Glam area",
+   "area": "Kampong Glam",
+   "category": "Hotels & Lodging",
+   "lat": 1.30045,
+   "lon": 103.85873,
+   "score_real_signals": 0.65183,
+   "n_pois": 84,
+   "rank": 140
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Tiong Bahru area \u00b7 sector 2",
+   "area": "Tiong Bahru",
+   "category": "F&B",
+   "lat": 1.29153,
+   "lon": 103.82913,
+   "score_real_signals": 0.651348,
+   "n_pois": 409,
+   "rank": 141
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Kallang area",
+   "area": "Kallang",
+   "category": "Personal Services",
+   "lat": 1.30917,
+   "lon": 103.86489,
+   "score_real_signals": 0.651072,
+   "n_pois": 10,
+   "rank": 142
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Paya Lebar area",
+   "area": "Paya Lebar",
+   "category": "F&B",
+   "lat": 1.3166,
+   "lon": 103.89304,
+   "score_real_signals": 0.650454,
+   "n_pois": 844,
+   "rank": 143
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Kallang area",
+   "area": "Kallang",
+   "category": "F&B",
+   "lat": 1.30908,
+   "lon": 103.86552,
+   "score_real_signals": 0.650164,
+   "n_pois": 115,
+   "rank": 144
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Lavender area",
+   "area": "Lavender",
+   "category": "Health & Wellness",
+   "lat": 1.30811,
+   "lon": 103.85994,
+   "score_real_signals": 0.647717,
+   "n_pois": 31,
+   "rank": 145
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Esplanade area",
+   "area": "Esplanade",
+   "category": "Health & Wellness",
+   "lat": 1.29322,
+   "lon": 103.85824,
+   "score_real_signals": 0.647695,
+   "n_pois": 22,
+   "rank": 146
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 Bugis area",
+   "area": "Bugis",
+   "category": "Hotels & Lodging",
+   "lat": 1.29959,
+   "lon": 103.85271,
+   "score_real_signals": 0.647687,
+   "n_pois": 79,
+   "rank": 147
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 Little India area",
+   "area": "Little India",
+   "category": "Hotels & Lodging",
+   "lat": 1.30698,
+   "lon": 103.85355,
+   "score_real_signals": 0.647339,
+   "n_pois": 102,
+   "rank": 148
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 River Valley area",
+   "area": "River Valley",
+   "category": "Personal Services",
+   "lat": 1.29088,
+   "lon": 103.83504,
+   "score_real_signals": 0.646456,
+   "n_pois": 44,
+   "rank": 149
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Tiong Bahru area",
+   "area": "Tiong Bahru",
+   "category": "Retail",
+   "lat": 1.28522,
+   "lon": 103.83396,
+   "score_real_signals": 0.645316,
+   "n_pois": 227,
+   "rank": 150
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Newton area",
+   "area": "Newton",
+   "category": "F&B",
+   "lat": 1.3142,
+   "lon": 103.83797,
+   "score_real_signals": 0.64486,
+   "n_pois": 96,
+   "rank": 151
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Joo Chiat area",
+   "area": "Joo Chiat",
+   "category": "Retail",
+   "lat": 1.31575,
+   "lon": 103.8991,
+   "score_real_signals": 0.643554,
+   "n_pois": 238,
+   "rank": 152
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Katong area \u00b7 sector 3",
+   "area": "Katong",
+   "category": "F&B",
+   "lat": 1.30035,
+   "lon": 103.89347,
+   "score_real_signals": 0.643237,
+   "n_pois": 45,
+   "rank": 153
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Joo Chiat area \u00b7 sector 3",
+   "area": "Joo Chiat",
+   "category": "F&B",
+   "lat": 1.31692,
+   "lon": 103.90786,
+   "score_real_signals": 0.643228,
+   "n_pois": 169,
+   "rank": 154
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Little India area \u00b7 sector 2",
+   "area": "Little India",
+   "category": "Personal Services",
+   "lat": 1.30852,
+   "lon": 103.84492,
+   "score_real_signals": 0.642779,
+   "n_pois": 20,
+   "rank": 155
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 East Coast area",
+   "area": "East Coast",
+   "category": "F&B",
+   "lat": 1.30639,
+   "lon": 103.915,
+   "score_real_signals": 0.639424,
+   "n_pois": 140,
+   "rank": 156
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Novena area \u00b7 sector 2",
+   "area": "Novena",
+   "category": "F&B",
+   "lat": 1.32236,
+   "lon": 103.84417,
+   "score_real_signals": 0.638834,
+   "n_pois": 467,
+   "rank": 157
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Geylang area",
+   "area": "Geylang",
+   "category": "F&B",
+   "lat": 1.30831,
+   "lon": 103.88511,
+   "score_real_signals": 0.637975,
+   "n_pois": 414,
+   "rank": 158
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Novena area",
+   "area": "Novena",
+   "category": "Personal Services",
+   "lat": 1.31789,
+   "lon": 103.84378,
+   "score_real_signals": 0.63647,
+   "n_pois": 56,
+   "rank": 159
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Marina Bay area \u00b7 sector 4",
+   "area": "Marina Bay",
+   "category": "F&B",
+   "lat": 1.27716,
+   "lon": 103.85812,
+   "score_real_signals": 0.635484,
+   "n_pois": 10,
+   "rank": 160
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Balestier area",
+   "area": "Balestier",
+   "category": "F&B",
+   "lat": 1.32389,
+   "lon": 103.85303,
+   "score_real_signals": 0.633769,
+   "n_pois": 438,
+   "rank": 161
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Orchard Road area \u00b7 sector 4",
+   "area": "Orchard Road",
+   "category": "Retail",
+   "lat": 1.30528,
+   "lon": 103.82309,
+   "score_real_signals": 0.632541,
+   "n_pois": 89,
+   "rank": 162
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Newton area \u00b7 sector 2",
+   "area": "Newton",
+   "category": "F&B",
+   "lat": 1.31534,
+   "lon": 103.82835,
+   "score_real_signals": 0.628169,
+   "n_pois": 56,
+   "rank": 163
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 HarbourFront area \u00b7 sector 2",
+   "area": "HarbourFront",
+   "category": "F&B",
+   "lat": 1.26544,
+   "lon": 103.82131,
+   "score_real_signals": 0.627894,
+   "n_pois": 457,
+   "rank": 164
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Paya Lebar area",
+   "area": "Paya Lebar",
+   "category": "Personal Services",
+   "lat": 1.31639,
+   "lon": 103.89298,
+   "score_real_signals": 0.627728,
+   "n_pois": 139,
+   "rank": 165
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Sentosa area \u00b7 sector 4",
+   "area": "Sentosa",
+   "category": "F&B",
+   "lat": 1.24677,
+   "lon": 103.84212,
+   "score_real_signals": 0.627358,
+   "n_pois": 31,
+   "rank": 166
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Farrer Park area",
+   "area": "Farrer Park",
+   "category": "Retail",
+   "lat": 1.31531,
+   "lon": 103.85258,
+   "score_real_signals": 0.626766,
+   "n_pois": 94,
+   "rank": 167
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 Somerset area",
+   "area": "Somerset",
+   "category": "Hotels & Lodging",
+   "lat": 1.30165,
+   "lon": 103.83685,
+   "score_real_signals": 0.626649,
+   "n_pois": 41,
+   "rank": 168
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Outram area",
+   "area": "Outram",
+   "category": "Retail",
+   "lat": 1.277,
+   "lon": 103.83711,
+   "score_real_signals": 0.625499,
+   "n_pois": 82,
+   "rank": 169
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Tanjong Pagar area \u00b7 sector 3",
+   "area": "Tanjong Pagar",
+   "category": "F&B",
+   "lat": 1.27037,
+   "lon": 103.84294,
+   "score_real_signals": 0.625207,
+   "n_pois": 26,
+   "rank": 170
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Marina Bay area \u00b7 sector 5",
+   "area": "Marina Bay",
+   "category": "F&B",
+   "lat": 1.29307,
+   "lon": 103.8672,
+   "score_real_signals": 0.625171,
+   "n_pois": 13,
+   "rank": 171
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Farrer Park area \u00b7 sector 2",
+   "area": "Farrer Park",
+   "category": "Retail",
+   "lat": 1.31581,
+   "lon": 103.86047,
+   "score_real_signals": 0.625075,
+   "n_pois": 199,
+   "rank": 172
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Lavender area \u00b7 sector 2",
+   "area": "Lavender",
+   "category": "Entertainment & Leisure",
+   "lat": 1.30151,
+   "lon": 103.86541,
+   "score_real_signals": 0.623747,
+   "n_pois": 27,
+   "rank": 173
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Changi Airport area \u00b7 sector 3",
+   "area": "Changi Airport",
+   "category": "Retail",
+   "lat": 1.36386,
+   "lon": 103.99268,
+   "score_real_signals": 0.623377,
+   "n_pois": 12,
+   "rank": 174
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 HarbourFront area \u00b7 sector 3",
+   "area": "HarbourFront",
+   "category": "F&B",
+   "lat": 1.2665,
+   "lon": 103.82543,
+   "score_real_signals": 0.62191,
+   "n_pois": 60,
+   "rank": 175
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Little India area \u00b7 sector 2",
+   "area": "Little India",
+   "category": "Retail",
+   "lat": 1.30953,
+   "lon": 103.8452,
+   "score_real_signals": 0.620521,
+   "n_pois": 58,
+   "rank": 176
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Novena area \u00b7 sector 2",
+   "area": "Novena",
+   "category": "Personal Services",
+   "lat": 1.32243,
+   "lon": 103.84436,
+   "score_real_signals": 0.618886,
+   "n_pois": 107,
+   "rank": 177
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Orchard Road area \u00b7 sector 3",
+   "area": "Orchard Road",
+   "category": "Entertainment & Leisure",
+   "lat": 1.29967,
+   "lon": 103.82875,
+   "score_real_signals": 0.618679,
+   "n_pois": 13,
+   "rank": 178
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Tiong Bahru area \u00b7 sector 2",
+   "area": "Tiong Bahru",
+   "category": "Personal Services",
+   "lat": 1.29148,
+   "lon": 103.8284,
+   "score_real_signals": 0.618233,
+   "n_pois": 68,
+   "rank": 179
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Kallang area \u00b7 sector 2",
+   "area": "Kallang",
+   "category": "F&B",
+   "lat": 1.31513,
+   "lon": 103.8705,
+   "score_real_signals": 0.616143,
+   "n_pois": 249,
+   "rank": 180
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 Clarke Quay area",
+   "area": "Clarke Quay",
+   "category": "Hotels & Lodging",
+   "lat": 1.2902,
+   "lon": 103.84422,
+   "score_real_signals": 0.616035,
+   "n_pois": 30,
+   "rank": 181
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Tiong Bahru area",
+   "area": "Tiong Bahru",
+   "category": "Entertainment & Leisure",
+   "lat": 1.28478,
+   "lon": 103.83616,
+   "score_real_signals": 0.61603,
+   "n_pois": 31,
+   "rank": 182
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 East Coast area \u00b7 sector 2",
+   "area": "East Coast",
+   "category": "F&B",
+   "lat": 1.30211,
+   "lon": 103.91481,
+   "score_real_signals": 0.615695,
+   "n_pois": 37,
+   "rank": 183
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 HarbourFront area",
+   "area": "HarbourFront",
+   "category": "Personal Services",
+   "lat": 1.26317,
+   "lon": 103.82107,
+   "score_real_signals": 0.615035,
+   "n_pois": 24,
+   "rank": 184
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Orchard Road area \u00b7 sector 4",
+   "area": "Orchard Road",
+   "category": "Health & Wellness",
+   "lat": 1.30283,
+   "lon": 103.8235,
+   "score_real_signals": 0.614832,
+   "n_pois": 33,
+   "rank": 185
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Little India area \u00b7 sector 2",
+   "area": "Little India",
+   "category": "Health & Wellness",
+   "lat": 1.31065,
+   "lon": 103.84634,
+   "score_real_signals": 0.614376,
+   "n_pois": 31,
+   "rank": 186
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Changi Airport area \u00b7 sector 3",
+   "area": "Changi Airport",
+   "category": "F&B",
+   "lat": 1.34996,
+   "lon": 103.98632,
+   "score_real_signals": 0.614021,
+   "n_pois": 19,
+   "rank": 187
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 River Valley area",
+   "area": "River Valley",
+   "category": "Retail",
+   "lat": 1.292,
+   "lon": 103.83539,
+   "score_real_signals": 0.613449,
+   "n_pois": 149,
+   "rank": 188
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Joo Chiat area \u00b7 sector 2",
+   "area": "Joo Chiat",
+   "category": "Retail",
+   "lat": 1.30848,
+   "lon": 103.89341,
+   "score_real_signals": 0.613275,
+   "n_pois": 34,
+   "rank": 189
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Paya Lebar area \u00b7 sector 2",
+   "area": "Paya Lebar",
+   "category": "F&B",
+   "lat": 1.3235,
+   "lon": 103.90138,
+   "score_real_signals": 0.61306,
+   "n_pois": 215,
+   "rank": 190
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bukit Merah area",
+   "area": "Bukit Merah",
+   "category": "F&B",
+   "lat": 1.28446,
+   "lon": 103.82758,
+   "score_real_signals": 0.611507,
+   "n_pois": 467,
+   "rank": 191
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Farrer Park area \u00b7 sector 3",
+   "area": "Farrer Park",
+   "category": "F&B",
+   "lat": 1.3231,
+   "lon": 103.86097,
+   "score_real_signals": 0.611361,
+   "n_pois": 170,
+   "rank": 192
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Sentosa area",
+   "area": "Sentosa",
+   "category": "Entertainment & Leisure",
+   "lat": 1.25297,
+   "lon": 103.82551,
+   "score_real_signals": 0.610951,
+   "n_pois": 20,
+   "rank": 193
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 East Coast area",
+   "area": "East Coast",
+   "category": "Personal Services",
+   "lat": 1.30635,
+   "lon": 103.9144,
+   "score_real_signals": 0.60986,
+   "n_pois": 22,
+   "rank": 194
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Kallang area \u00b7 sector 3",
+   "area": "Kallang",
+   "category": "F&B",
+   "lat": 1.32236,
+   "lon": 103.86914,
+   "score_real_signals": 0.609403,
+   "n_pois": 437,
+   "rank": 195
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Novena area",
+   "area": "Novena",
+   "category": "Retail",
+   "lat": 1.31801,
+   "lon": 103.84379,
+   "score_real_signals": 0.608941,
+   "n_pois": 219,
+   "rank": 196
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Geylang area \u00b7 sector 2",
+   "area": "Geylang",
+   "category": "F&B",
+   "lat": 1.31516,
+   "lon": 103.88381,
+   "score_real_signals": 0.608413,
+   "n_pois": 473,
+   "rank": 197
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Joo Chiat area \u00b7 sector 3",
+   "area": "Joo Chiat",
+   "category": "Personal Services",
+   "lat": 1.31698,
+   "lon": 103.90789,
+   "score_real_signals": 0.607574,
+   "n_pois": 31,
+   "rank": 198
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 City Hall area",
+   "area": "City Hall",
+   "category": "Hotels & Lodging",
+   "lat": 1.2931,
+   "lon": 103.85236,
+   "score_real_signals": 0.607238,
+   "n_pois": 51,
+   "rank": 199
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Orchard Road area \u00b7 sector 5",
+   "area": "Orchard Road",
+   "category": "F&B",
+   "lat": 1.3009,
+   "lon": 103.821,
+   "score_real_signals": 0.606281,
+   "n_pois": 19,
+   "rank": 200
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Joo Chiat area \u00b7 sector 4",
+   "area": "Joo Chiat",
+   "category": "F&B",
+   "lat": 1.32195,
+   "lon": 103.90603,
+   "score_real_signals": 0.606009,
+   "n_pois": 92,
+   "rank": 201
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Paya Lebar area",
+   "area": "Paya Lebar",
+   "category": "Retail",
+   "lat": 1.3165,
+   "lon": 103.89304,
+   "score_real_signals": 0.605671,
+   "n_pois": 559,
+   "rank": 202
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Balestier area",
+   "area": "Balestier",
+   "category": "Personal Services",
+   "lat": 1.32359,
+   "lon": 103.85274,
+   "score_real_signals": 0.604946,
+   "n_pois": 57,
+   "rank": 203
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 HarbourFront area \u00b7 sector 2",
+   "area": "HarbourFront",
+   "category": "Personal Services",
+   "lat": 1.26527,
+   "lon": 103.82097,
+   "score_real_signals": 0.603107,
+   "n_pois": 33,
+   "rank": 204
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bedok area",
+   "area": "Bedok",
+   "category": "F&B",
+   "lat": 1.31739,
+   "lon": 103.91573,
+   "score_real_signals": 0.60205,
+   "n_pois": 83,
+   "rank": 205
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Sentosa area",
+   "area": "Sentosa",
+   "category": "Retail",
+   "lat": 1.25424,
+   "lon": 103.82045,
+   "score_real_signals": 0.602016,
+   "n_pois": 76,
+   "rank": 206
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 River Valley area",
+   "area": "River Valley",
+   "category": "Entertainment & Leisure",
+   "lat": 1.29203,
+   "lon": 103.83635,
+   "score_real_signals": 0.601985,
+   "n_pois": 88,
+   "rank": 207
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Farrer Park area",
+   "area": "Farrer Park",
+   "category": "Entertainment & Leisure",
+   "lat": 1.3156,
+   "lon": 103.85326,
+   "score_real_signals": 0.60114,
+   "n_pois": 25,
+   "rank": 208
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Farrer Park area \u00b7 sector 2",
+   "area": "Farrer Park",
+   "category": "Entertainment & Leisure",
+   "lat": 1.31462,
+   "lon": 103.85934,
+   "score_real_signals": 0.600655,
+   "n_pois": 77,
+   "rank": 209
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Geylang area \u00b7 sector 3",
+   "area": "Geylang",
+   "category": "F&B",
+   "lat": 1.3144,
+   "lon": 103.87678,
+   "score_real_signals": 0.600348,
+   "n_pois": 506,
+   "rank": 210
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Toa Payoh area",
+   "area": "Toa Payoh",
+   "category": "F&B",
+   "lat": 1.33306,
+   "lon": 103.85022,
+   "score_real_signals": 0.60017,
+   "n_pois": 480,
+   "rank": 211
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Farrer Park area",
+   "area": "Farrer Park",
+   "category": "Health & Wellness",
+   "lat": 1.31442,
+   "lon": 103.85265,
+   "score_real_signals": 0.600073,
+   "n_pois": 30,
+   "rank": 212
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 Orchard Road area \u00b7 sector 2",
+   "area": "Orchard Road",
+   "category": "Hotels & Lodging",
+   "lat": 1.3071,
+   "lon": 103.82759,
+   "score_real_signals": 0.599143,
+   "n_pois": 65,
+   "rank": 213
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Changi Airport area \u00b7 sector 4",
+   "area": "Changi Airport",
+   "category": "F&B",
+   "lat": 1.38913,
+   "lon": 103.98766,
+   "score_real_signals": 0.59877,
+   "n_pois": 282,
+   "rank": 214
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Outram area",
+   "area": "Outram",
+   "category": "Health & Wellness",
+   "lat": 1.27864,
+   "lon": 103.83672,
+   "score_real_signals": 0.598347,
+   "n_pois": 48,
+   "rank": 215
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Outram area \u00b7 sector 2",
+   "area": "Outram",
+   "category": "Health & Wellness",
+   "lat": 1.28254,
+   "lon": 103.83609,
+   "score_real_signals": 0.597544,
+   "n_pois": 24,
+   "rank": 216
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 HarbourFront area \u00b7 sector 4",
+   "area": "HarbourFront",
+   "category": "F&B",
+   "lat": 1.25406,
+   "lon": 103.81463,
+   "score_real_signals": 0.597187,
+   "n_pois": 23,
+   "rank": 217
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Sentosa area \u00b7 sector 2",
+   "area": "Sentosa",
+   "category": "Entertainment & Leisure",
+   "lat": 1.25419,
+   "lon": 103.82114,
+   "score_real_signals": 0.597145,
+   "n_pois": 97,
+   "rank": 218
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 Changi Airport area",
+   "area": "Changi Airport",
+   "category": "Hotels & Lodging",
+   "lat": 1.35613,
+   "lon": 103.98782,
+   "score_real_signals": 0.596921,
+   "n_pois": 20,
+   "rank": 219
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Newton area",
+   "area": "Newton",
+   "category": "Entertainment & Leisure",
+   "lat": 1.30883,
+   "lon": 103.84412,
+   "score_real_signals": 0.596705,
+   "n_pois": 21,
+   "rank": 220
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Kallang area \u00b7 sector 2",
+   "area": "Kallang",
+   "category": "Personal Services",
+   "lat": 1.31552,
+   "lon": 103.87042,
+   "score_real_signals": 0.596654,
+   "n_pois": 21,
+   "rank": 221
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bukit Merah area \u00b7 sector 2",
+   "area": "Bukit Merah",
+   "category": "F&B",
+   "lat": 1.28492,
+   "lon": 103.8194,
+   "score_real_signals": 0.593998,
+   "n_pois": 583,
+   "rank": 222
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Joo Chiat area",
+   "area": "Joo Chiat",
+   "category": "Entertainment & Leisure",
+   "lat": 1.31514,
+   "lon": 103.89986,
+   "score_real_signals": 0.593312,
+   "n_pois": 35,
+   "rank": 223
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Geylang area \u00b7 sector 4",
+   "area": "Geylang",
+   "category": "F&B",
+   "lat": 1.31059,
+   "lon": 103.87564,
+   "score_real_signals": 0.592968,
+   "n_pois": 172,
+   "rank": 224
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Tiong Bahru area \u00b7 sector 3",
+   "area": "Tiong Bahru",
+   "category": "Personal Services",
+   "lat": 1.28499,
+   "lon": 103.82756,
+   "score_real_signals": 0.592765,
+   "n_pois": 77,
+   "rank": 225
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Geylang area \u00b7 sector 5",
+   "area": "Geylang",
+   "category": "F&B",
+   "lat": 1.30139,
+   "lon": 103.8835,
+   "score_real_signals": 0.592123,
+   "n_pois": 93,
+   "rank": 226
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Holland Village area",
+   "area": "Holland Village",
+   "category": "F&B",
+   "lat": 1.30563,
+   "lon": 103.81069,
+   "score_real_signals": 0.591484,
+   "n_pois": 92,
+   "rank": 227
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Orchard Road area \u00b7 sector 4",
+   "area": "Orchard Road",
+   "category": "Entertainment & Leisure",
+   "lat": 1.30596,
+   "lon": 103.82234,
+   "score_real_signals": 0.591222,
+   "n_pois": 14,
+   "rank": 228
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Joo Chiat area \u00b7 sector 3",
+   "area": "Joo Chiat",
+   "category": "Retail",
+   "lat": 1.31725,
+   "lon": 103.90783,
+   "score_real_signals": 0.591196,
+   "n_pois": 87,
+   "rank": 229
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Kallang area",
+   "area": "Kallang",
+   "category": "Retail",
+   "lat": 1.30896,
+   "lon": 103.86613,
+   "score_real_signals": 0.589757,
+   "n_pois": 50,
+   "rank": 230
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Farrer Park area \u00b7 sector 3",
+   "area": "Farrer Park",
+   "category": "Personal Services",
+   "lat": 1.32245,
+   "lon": 103.86083,
+   "score_real_signals": 0.589265,
+   "n_pois": 41,
+   "rank": 231
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Toa Payoh area",
+   "area": "Toa Payoh",
+   "category": "Personal Services",
+   "lat": 1.33324,
+   "lon": 103.84994,
+   "score_real_signals": 0.588651,
+   "n_pois": 119,
+   "rank": 232
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Novena area",
+   "area": "Novena",
+   "category": "Health & Wellness",
+   "lat": 1.31815,
+   "lon": 103.84384,
+   "score_real_signals": 0.588455,
+   "n_pois": 21,
+   "rank": 233
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 MacPherson / Ubi area",
+   "area": "MacPherson / Ubi",
+   "category": "F&B",
+   "lat": 1.32347,
+   "lon": 103.88605,
+   "score_real_signals": 0.588425,
+   "n_pois": 353,
+   "rank": 234
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Alexandra area",
+   "area": "Alexandra",
+   "category": "F&B",
+   "lat": 1.28629,
+   "lon": 103.805,
+   "score_real_signals": 0.587378,
+   "n_pois": 426,
+   "rank": 235
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Outram area",
+   "area": "Outram",
+   "category": "Entertainment & Leisure",
+   "lat": 1.27626,
+   "lon": 103.83648,
+   "score_real_signals": 0.587343,
+   "n_pois": 51,
+   "rank": 236
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Novena area \u00b7 sector 2",
+   "area": "Novena",
+   "category": "Retail",
+   "lat": 1.32266,
+   "lon": 103.84426,
+   "score_real_signals": 0.587225,
+   "n_pois": 289,
+   "rank": 237
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Paya Lebar area \u00b7 sector 2",
+   "area": "Paya Lebar",
+   "category": "Personal Services",
+   "lat": 1.32457,
+   "lon": 103.89861,
+   "score_real_signals": 0.58705,
+   "n_pois": 83,
+   "rank": 238
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Newton area",
+   "area": "Newton",
+   "category": "Personal Services",
+   "lat": 1.3161,
+   "lon": 103.8355,
+   "score_real_signals": 0.586531,
+   "n_pois": 15,
+   "rank": 239
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 Esplanade area",
+   "area": "Esplanade",
+   "category": "Hotels & Lodging",
+   "lat": 1.29198,
+   "lon": 103.85868,
+   "score_real_signals": 0.585975,
+   "n_pois": 41,
+   "rank": 240
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Geylang area",
+   "area": "Geylang",
+   "category": "Personal Services",
+   "lat": 1.31518,
+   "lon": 103.88469,
+   "score_real_signals": 0.585592,
+   "n_pois": 76,
+   "rank": 241
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bukit Merah area \u00b7 sector 3",
+   "area": "Bukit Merah",
+   "category": "F&B",
+   "lat": 1.27709,
+   "lon": 103.82772,
+   "score_real_signals": 0.585562,
+   "n_pois": 143,
+   "rank": 242
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 Tanjong Pagar area",
+   "area": "Tanjong Pagar",
+   "category": "Hotels & Lodging",
+   "lat": 1.2762,
+   "lon": 103.84387,
+   "score_real_signals": 0.585095,
+   "n_pois": 60,
+   "rank": 243
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Changi Airport area \u00b7 sector 5",
+   "area": "Changi Airport",
+   "category": "F&B",
+   "lat": 1.36548,
+   "lon": 103.98044,
+   "score_real_signals": 0.584632,
+   "n_pois": 11,
+   "rank": 244
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Kallang area \u00b7 sector 3",
+   "area": "Kallang",
+   "category": "Personal Services",
+   "lat": 1.32225,
+   "lon": 103.86835,
+   "score_real_signals": 0.584191,
+   "n_pois": 38,
+   "rank": 245
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Outram area \u00b7 sector 2",
+   "area": "Outram",
+   "category": "F&B",
+   "lat": 1.27011,
+   "lon": 103.8363,
+   "score_real_signals": 0.582591,
+   "n_pois": 18,
+   "rank": 246
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Katong area \u00b7 sector 4",
+   "area": "Katong",
+   "category": "Retail",
+   "lat": 1.3005,
+   "lon": 103.89376,
+   "score_real_signals": 0.582042,
+   "n_pois": 23,
+   "rank": 247
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Bukit Merah area",
+   "area": "Bukit Merah",
+   "category": "Personal Services",
+   "lat": 1.27671,
+   "lon": 103.82695,
+   "score_real_signals": 0.581753,
+   "n_pois": 15,
+   "rank": 248
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Changi Airport area \u00b7 sector 6",
+   "area": "Changi Airport",
+   "category": "F&B",
+   "lat": 1.37238,
+   "lon": 103.9814,
+   "score_real_signals": 0.580516,
+   "n_pois": 13,
+   "rank": 249
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Novena area",
+   "area": "Novena",
+   "category": "Entertainment & Leisure",
+   "lat": 1.31701,
+   "lon": 103.84381,
+   "score_real_signals": 0.580141,
+   "n_pois": 63,
+   "rank": 250
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Geylang area \u00b7 sector 2",
+   "area": "Geylang",
+   "category": "Personal Services",
+   "lat": 1.31441,
+   "lon": 103.8761,
+   "score_real_signals": 0.579731,
+   "n_pois": 49,
+   "rank": 251
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Geylang area \u00b7 sector 3",
+   "area": "Geylang",
+   "category": "Personal Services",
+   "lat": 1.30932,
+   "lon": 103.88343,
+   "score_real_signals": 0.579687,
+   "n_pois": 19,
+   "rank": 252
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 East Coast area",
+   "area": "East Coast",
+   "category": "Retail",
+   "lat": 1.30647,
+   "lon": 103.915,
+   "score_real_signals": 0.579258,
+   "n_pois": 46,
+   "rank": 253
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 MacPherson / Ubi area \u00b7 sector 2",
+   "area": "MacPherson / Ubi",
+   "category": "F&B",
+   "lat": 1.33089,
+   "lon": 103.90085,
+   "score_real_signals": 0.579042,
+   "n_pois": 255,
+   "rank": 254
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Balestier area",
+   "area": "Balestier",
+   "category": "Retail",
+   "lat": 1.324,
+   "lon": 103.85218,
+   "score_real_signals": 0.57845,
+   "n_pois": 167,
+   "rank": 255
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 HarbourFront area",
+   "area": "HarbourFront",
+   "category": "Retail",
+   "lat": 1.26266,
+   "lon": 103.82186,
+   "score_real_signals": 0.577503,
+   "n_pois": 220,
+   "rank": 256
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Toa Payoh area \u00b7 sector 2",
+   "area": "Toa Payoh",
+   "category": "F&B",
+   "lat": 1.33246,
+   "lon": 103.84611,
+   "score_real_signals": 0.577376,
+   "n_pois": 167,
+   "rank": 257
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Joo Chiat area",
+   "area": "Joo Chiat",
+   "category": "Health & Wellness",
+   "lat": 1.31644,
+   "lon": 103.90022,
+   "score_real_signals": 0.576731,
+   "n_pois": 17,
+   "rank": 258
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 MacPherson / Ubi area \u00b7 sector 3",
+   "area": "MacPherson / Ubi",
+   "category": "F&B",
+   "lat": 1.32474,
+   "lon": 103.89267,
+   "score_real_signals": 0.576239,
+   "n_pois": 116,
+   "rank": 259
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bukit Merah area \u00b7 sector 4",
+   "area": "Bukit Merah",
+   "category": "F&B",
+   "lat": 1.27652,
+   "lon": 103.81954,
+   "score_real_signals": 0.576188,
+   "n_pois": 179,
+   "rank": 260
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Changi Airport area \u00b7 sector 7",
+   "area": "Changi Airport",
+   "category": "F&B",
+   "lat": 1.37328,
+   "lon": 103.99569,
+   "score_real_signals": 0.576171,
+   "n_pois": 10,
+   "rank": 261
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Tiong Bahru area \u00b7 sector 2",
+   "area": "Tiong Bahru",
+   "category": "Retail",
+   "lat": 1.29213,
+   "lon": 103.8289,
+   "score_real_signals": 0.57592,
+   "n_pois": 139,
+   "rank": 262
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bedok area \u00b7 sector 2",
+   "area": "Bedok",
+   "category": "F&B",
+   "lat": 1.31342,
+   "lon": 103.92477,
+   "score_real_signals": 0.575225,
+   "n_pois": 162,
+   "rank": 263
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Marina Bay area \u00b7 sector 2",
+   "area": "Marina Bay",
+   "category": "Retail",
+   "lat": 1.2782,
+   "lon": 103.86687,
+   "score_real_signals": 0.575058,
+   "n_pois": 13,
+   "rank": 264
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 HarbourFront area \u00b7 sector 2",
+   "area": "HarbourFront",
+   "category": "Retail",
+   "lat": 1.26506,
+   "lon": 103.82159,
+   "score_real_signals": 0.574335,
+   "n_pois": 401,
+   "rank": 265
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 MacPherson / Ubi area",
+   "area": "MacPherson / Ubi",
+   "category": "Personal Services",
+   "lat": 1.32223,
+   "lon": 103.88591,
+   "score_real_signals": 0.574139,
+   "n_pois": 37,
+   "rank": 266
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Paya Lebar area \u00b7 sector 3",
+   "area": "Paya Lebar",
+   "category": "Personal Services",
+   "lat": 1.32326,
+   "lon": 103.8929,
+   "score_real_signals": 0.573773,
+   "n_pois": 44,
+   "rank": 267
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Alexandra area",
+   "area": "Alexandra",
+   "category": "Personal Services",
+   "lat": 1.28585,
+   "lon": 103.80479,
+   "score_real_signals": 0.572737,
+   "n_pois": 97,
+   "rank": 268
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Alexandra area \u00b7 sector 2",
+   "area": "Alexandra",
+   "category": "F&B",
+   "lat": 1.28549,
+   "lon": 103.8107,
+   "score_real_signals": 0.572729,
+   "n_pois": 371,
+   "rank": 269
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Geylang area \u00b7 sector 4",
+   "area": "Geylang",
+   "category": "Personal Services",
+   "lat": 1.31085,
+   "lon": 103.87563,
+   "score_real_signals": 0.572698,
+   "n_pois": 19,
+   "rank": 270
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Alexandra area \u00b7 sector 3",
+   "area": "Alexandra",
+   "category": "F&B",
+   "lat": 1.29091,
+   "lon": 103.81266,
+   "score_real_signals": 0.571102,
+   "n_pois": 119,
+   "rank": 271
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 East Coast area \u00b7 sector 3",
+   "area": "East Coast",
+   "category": "F&B",
+   "lat": 1.3091,
+   "lon": 103.92354,
+   "score_real_signals": 0.571066,
+   "n_pois": 38,
+   "rank": 272
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Bukit Merah area \u00b7 sector 2",
+   "area": "Bukit Merah",
+   "category": "Personal Services",
+   "lat": 1.28419,
+   "lon": 103.81863,
+   "score_real_signals": 0.570932,
+   "n_pois": 43,
+   "rank": 273
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 Joo Chiat area",
+   "area": "Joo Chiat",
+   "category": "Hotels & Lodging",
+   "lat": 1.30919,
+   "lon": 103.9012,
+   "score_real_signals": 0.57033,
+   "n_pois": 11,
+   "rank": 274
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Holland Village area \u00b7 sector 2",
+   "area": "Holland Village",
+   "category": "F&B",
+   "lat": 1.31308,
+   "lon": 103.79598,
+   "score_real_signals": 0.570283,
+   "n_pois": 26,
+   "rank": 275
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 MacPherson / Ubi area \u00b7 sector 4",
+   "area": "MacPherson / Ubi",
+   "category": "F&B",
+   "lat": 1.33735,
+   "lon": 103.90759,
+   "score_real_signals": 0.569777,
+   "n_pois": 44,
+   "rank": 276
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 Dhoby Ghaut area",
+   "area": "Dhoby Ghaut",
+   "category": "Hotels & Lodging",
+   "lat": 1.30056,
+   "lon": 103.84415,
+   "score_real_signals": 0.569531,
+   "n_pois": 34,
+   "rank": 277
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Marina Bay area \u00b7 sector 6",
+   "area": "Marina Bay",
+   "category": "F&B",
+   "lat": 1.2684,
+   "lon": 103.86152,
+   "score_real_signals": 0.568868,
+   "n_pois": 20,
+   "rank": 278
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bedok area \u00b7 sector 3",
+   "area": "Bedok",
+   "category": "F&B",
+   "lat": 1.32455,
+   "lon": 103.93205,
+   "score_real_signals": 0.568193,
+   "n_pois": 794,
+   "rank": 279
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Alexandra area \u00b7 sector 4",
+   "area": "Alexandra",
+   "category": "F&B",
+   "lat": 1.30123,
+   "lon": 103.81123,
+   "score_real_signals": 0.567815,
+   "n_pois": 60,
+   "rank": 280
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 Lavender area",
+   "area": "Lavender",
+   "category": "Hotels & Lodging",
+   "lat": 1.3098,
+   "lon": 103.86004,
+   "score_real_signals": 0.567751,
+   "n_pois": 84,
+   "rank": 281
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Joo Chiat area \u00b7 sector 4",
+   "area": "Joo Chiat",
+   "category": "Personal Services",
+   "lat": 1.32269,
+   "lon": 103.90717,
+   "score_real_signals": 0.567438,
+   "n_pois": 22,
+   "rank": 282
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bedok area \u00b7 sector 4",
+   "area": "Bedok",
+   "category": "F&B",
+   "lat": 1.33164,
+   "lon": 103.92529,
+   "score_real_signals": 0.564772,
+   "n_pois": 180,
+   "rank": 283
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Toa Payoh area \u00b7 sector 3",
+   "area": "Toa Payoh",
+   "category": "F&B",
+   "lat": 1.33471,
+   "lon": 103.85785,
+   "score_real_signals": 0.564653,
+   "n_pois": 217,
+   "rank": 284
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Toa Payoh area \u00b7 sector 4",
+   "area": "Toa Payoh",
+   "category": "F&B",
+   "lat": 1.3393,
+   "lon": 103.85197,
+   "score_real_signals": 0.564488,
+   "n_pois": 430,
+   "rank": 285
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Holland Village area \u00b7 sector 3",
+   "area": "Holland Village",
+   "category": "F&B",
+   "lat": 1.30983,
+   "lon": 103.79464,
+   "score_real_signals": 0.564371,
+   "n_pois": 499,
+   "rank": 286
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Novena area \u00b7 sector 2",
+   "area": "Novena",
+   "category": "Health & Wellness",
+   "lat": 1.32186,
+   "lon": 103.8441,
+   "score_real_signals": 0.564048,
+   "n_pois": 240,
+   "rank": 287
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 HarbourFront area \u00b7 sector 5",
+   "area": "HarbourFront",
+   "category": "F&B",
+   "lat": 1.25888,
+   "lon": 103.81113,
+   "score_real_signals": 0.56394,
+   "n_pois": 34,
+   "rank": 288
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Newton area",
+   "area": "Newton",
+   "category": "Retail",
+   "lat": 1.3157,
+   "lon": 103.83647,
+   "score_real_signals": 0.563771,
+   "n_pois": 34,
+   "rank": 289
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 MacPherson / Ubi area \u00b7 sector 2",
+   "area": "MacPherson / Ubi",
+   "category": "Personal Services",
+   "lat": 1.33093,
+   "lon": 103.89353,
+   "score_real_signals": 0.563655,
+   "n_pois": 124,
+   "rank": 290
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Tiong Bahru area \u00b7 sector 3",
+   "area": "Tiong Bahru",
+   "category": "Retail",
+   "lat": 1.28471,
+   "lon": 103.82768,
+   "score_real_signals": 0.563509,
+   "n_pois": 217,
+   "rank": 291
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Paya Lebar area \u00b7 sector 2",
+   "area": "Paya Lebar",
+   "category": "Retail",
+   "lat": 1.32342,
+   "lon": 103.89987,
+   "score_real_signals": 0.56337,
+   "n_pois": 158,
+   "rank": 292
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 MacPherson / Ubi area \u00b7 sector 5",
+   "area": "MacPherson / Ubi",
+   "category": "F&B",
+   "lat": 1.33284,
+   "lon": 103.88504,
+   "score_real_signals": 0.563355,
+   "n_pois": 279,
+   "rank": 293
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Kallang area \u00b7 sector 4",
+   "area": "Kallang",
+   "category": "Personal Services",
+   "lat": 1.30222,
+   "lon": 103.87634,
+   "score_real_signals": 0.562913,
+   "n_pois": 15,
+   "rank": 294
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Alexandra area \u00b7 sector 2",
+   "area": "Alexandra",
+   "category": "Personal Services",
+   "lat": 1.29068,
+   "lon": 103.81264,
+   "score_real_signals": 0.562599,
+   "n_pois": 67,
+   "rank": 295
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Pasir Ris area",
+   "area": "Pasir Ris",
+   "category": "F&B",
+   "lat": 1.37183,
+   "lon": 103.95631,
+   "score_real_signals": 0.562289,
+   "n_pois": 278,
+   "rank": 296
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bedok area \u00b7 sector 5",
+   "area": "Bedok",
+   "category": "F&B",
+   "lat": 1.33288,
+   "lon": 103.91454,
+   "score_real_signals": 0.561716,
+   "n_pois": 129,
+   "rank": 297
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 MacPherson / Ubi area \u00b7 sector 6",
+   "area": "MacPherson / Ubi",
+   "category": "F&B",
+   "lat": 1.33834,
+   "lon": 103.88583,
+   "score_real_signals": 0.561439,
+   "n_pois": 152,
+   "rank": 298
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Changi Airport area \u00b7 sector 8",
+   "area": "Changi Airport",
+   "category": "F&B",
+   "lat": 1.37559,
+   "lon": 104.00224,
+   "score_real_signals": 0.561418,
+   "n_pois": 10,
+   "rank": 299
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 River Valley area",
+   "area": "River Valley",
+   "category": "Health & Wellness",
+   "lat": 1.29259,
+   "lon": 103.83427,
+   "score_real_signals": 0.561391,
+   "n_pois": 12,
+   "rank": 300
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 HarbourFront area",
+   "area": "HarbourFront",
+   "category": "Entertainment & Leisure",
+   "lat": 1.26512,
+   "lon": 103.82479,
+   "score_real_signals": 0.56131,
+   "n_pois": 32,
+   "rank": 301
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 MacPherson / Ubi area \u00b7 sector 7",
+   "area": "MacPherson / Ubi",
+   "category": "F&B",
+   "lat": 1.3325,
+   "lon": 103.8918,
+   "score_real_signals": 0.561008,
+   "n_pois": 215,
+   "rank": 302
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bedok area \u00b7 sector 6",
+   "area": "Bedok",
+   "category": "F&B",
+   "lat": 1.307,
+   "lon": 103.93397,
+   "score_real_signals": 0.560808,
+   "n_pois": 140,
+   "rank": 303
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bukit Timah area",
+   "area": "Bukit Timah",
+   "category": "F&B",
+   "lat": 1.32353,
+   "lon": 103.81242,
+   "score_real_signals": 0.560525,
+   "n_pois": 145,
+   "rank": 304
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 MacPherson / Ubi area \u00b7 sector 3",
+   "area": "MacPherson / Ubi",
+   "category": "Personal Services",
+   "lat": 1.3325,
+   "lon": 103.9004,
+   "score_real_signals": 0.56025,
+   "n_pois": 142,
+   "rank": 305
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Orchard Road area \u00b7 sector 5",
+   "area": "Orchard Road",
+   "category": "Health & Wellness",
+   "lat": 1.30721,
+   "lon": 103.82,
+   "score_real_signals": 0.560177,
+   "n_pois": 135,
+   "rank": 306
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Toa Payoh area \u00b7 sector 5",
+   "area": "Toa Payoh",
+   "category": "F&B",
+   "lat": 1.33938,
+   "lon": 103.84547,
+   "score_real_signals": 0.56001,
+   "n_pois": 243,
+   "rank": 307
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Holland Village area \u00b7 sector 4",
+   "area": "Holland Village",
+   "category": "F&B",
+   "lat": 1.31586,
+   "lon": 103.80526,
+   "score_real_signals": 0.559716,
+   "n_pois": 74,
+   "rank": 308
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 River Valley area \u00b7 sector 2",
+   "area": "River Valley",
+   "category": "Entertainment & Leisure",
+   "lat": 1.29304,
+   "lon": 103.82849,
+   "score_real_signals": 0.559479,
+   "n_pois": 41,
+   "rank": 309
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Serangoon area",
+   "area": "Serangoon",
+   "category": "F&B",
+   "lat": 1.36425,
+   "lon": 103.86634,
+   "score_real_signals": 0.559262,
+   "n_pois": 284,
+   "rank": 310
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Toa Payoh area",
+   "area": "Toa Payoh",
+   "category": "Retail",
+   "lat": 1.33321,
+   "lon": 103.84996,
+   "score_real_signals": 0.558981,
+   "n_pois": 271,
+   "rank": 311
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Kallang area \u00b7 sector 4",
+   "area": "Kallang",
+   "category": "F&B",
+   "lat": 1.30247,
+   "lon": 103.87521,
+   "score_real_signals": 0.558287,
+   "n_pois": 148,
+   "rank": 312
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Tanjong Pagar area \u00b7 sector 4",
+   "area": "Tanjong Pagar",
+   "category": "F&B",
+   "lat": 1.26817,
+   "lon": 103.85006,
+   "score_real_signals": 0.558127,
+   "n_pois": 10,
+   "rank": 313
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Paya Lebar area",
+   "area": "Paya Lebar",
+   "category": "Entertainment & Leisure",
+   "lat": 1.30817,
+   "lon": 103.89218,
+   "score_real_signals": 0.557825,
+   "n_pois": 18,
+   "rank": 314
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Kallang area",
+   "area": "Kallang",
+   "category": "Entertainment & Leisure",
+   "lat": 1.30883,
+   "lon": 103.86543,
+   "score_real_signals": 0.557719,
+   "n_pois": 18,
+   "rank": 315
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Farrer Park area \u00b7 sector 2",
+   "area": "Farrer Park",
+   "category": "Health & Wellness",
+   "lat": 1.31658,
+   "lon": 103.86059,
+   "score_real_signals": 0.557497,
+   "n_pois": 22,
+   "rank": 316
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Upper Thomson area",
+   "area": "Upper Thomson",
+   "category": "F&B",
+   "lat": 1.35505,
+   "lon": 103.83576,
+   "score_real_signals": 0.556974,
+   "n_pois": 340,
+   "rank": 317
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Kallang area \u00b7 sector 2",
+   "area": "Kallang",
+   "category": "Retail",
+   "lat": 1.31578,
+   "lon": 103.86863,
+   "score_real_signals": 0.556797,
+   "n_pois": 99,
+   "rank": 318
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Bukit Merah area \u00b7 sector 3",
+   "area": "Bukit Merah",
+   "category": "Personal Services",
+   "lat": 1.27644,
+   "lon": 103.82006,
+   "score_real_signals": 0.556396,
+   "n_pois": 23,
+   "rank": 319
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Kallang area \u00b7 sector 3",
+   "area": "Kallang",
+   "category": "Retail",
+   "lat": 1.32245,
+   "lon": 103.86878,
+   "score_real_signals": 0.555587,
+   "n_pois": 134,
+   "rank": 320
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Bukit Merah area",
+   "area": "Bukit Merah",
+   "category": "Health & Wellness",
+   "lat": 1.28457,
+   "lon": 103.82745,
+   "score_real_signals": 0.555028,
+   "n_pois": 24,
+   "rank": 321
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bedok area \u00b7 sector 7",
+   "area": "Bedok",
+   "category": "F&B",
+   "lat": 1.32384,
+   "lon": 103.9159,
+   "score_real_signals": 0.554751,
+   "n_pois": 82,
+   "rank": 322
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Alexandra area",
+   "area": "Alexandra",
+   "category": "Retail",
+   "lat": 1.28674,
+   "lon": 103.80402,
+   "score_real_signals": 0.553867,
+   "n_pois": 202,
+   "rank": 323
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bedok area \u00b7 sector 8",
+   "area": "Bedok",
+   "category": "F&B",
+   "lat": 1.32435,
+   "lon": 103.92437,
+   "score_real_signals": 0.553757,
+   "n_pois": 163,
+   "rank": 324
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 HarbourFront area \u00b7 sector 2",
+   "area": "HarbourFront",
+   "category": "Entertainment & Leisure",
+   "lat": 1.2654,
+   "lon": 103.82157,
+   "score_real_signals": 0.553484,
+   "n_pois": 28,
+   "rank": 325
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Alexandra area \u00b7 sector 5",
+   "area": "Alexandra",
+   "category": "F&B",
+   "lat": 1.29143,
+   "lon": 103.80415,
+   "score_real_signals": 0.55328,
+   "n_pois": 215,
+   "rank": 326
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Tampines area",
+   "area": "Tampines",
+   "category": "F&B",
+   "lat": 1.35484,
+   "lon": 103.95524,
+   "score_real_signals": 0.553231,
+   "n_pois": 216,
+   "rank": 327
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Expo area",
+   "area": "Expo",
+   "category": "Personal Services",
+   "lat": 1.33446,
+   "lon": 103.96292,
+   "score_real_signals": 0.553003,
+   "n_pois": 17,
+   "rank": 328
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Upper Thomson area \u00b7 sector 2",
+   "area": "Upper Thomson",
+   "category": "F&B",
+   "lat": 1.35122,
+   "lon": 103.83659,
+   "score_real_signals": 0.552979,
+   "n_pois": 83,
+   "rank": 329
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Tampines area \u00b7 sector 2",
+   "area": "Tampines",
+   "category": "F&B",
+   "lat": 1.35433,
+   "lon": 103.94563,
+   "score_real_signals": 0.552822,
+   "n_pois": 564,
+   "rank": 330
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bukit Merah area \u00b7 sector 5",
+   "area": "Bukit Merah",
+   "category": "F&B",
+   "lat": 1.28974,
+   "lon": 103.81761,
+   "score_real_signals": 0.552606,
+   "n_pois": 51,
+   "rank": 331
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bedok area \u00b7 sector 9",
+   "area": "Bedok",
+   "category": "F&B",
+   "lat": 1.33141,
+   "lon": 103.93109,
+   "score_real_signals": 0.552336,
+   "n_pois": 271,
+   "rank": 332
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Geylang area",
+   "area": "Geylang",
+   "category": "Retail",
+   "lat": 1.31546,
+   "lon": 103.88381,
+   "score_real_signals": 0.552207,
+   "n_pois": 172,
+   "rank": 333
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Bedok area",
+   "area": "Bedok",
+   "category": "Personal Services",
+   "lat": 1.31772,
+   "lon": 103.91511,
+   "score_real_signals": 0.551955,
+   "n_pois": 20,
+   "rank": 334
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Pasir Ris area \u00b7 sector 2",
+   "area": "Pasir Ris",
+   "category": "F&B",
+   "lat": 1.36262,
+   "lon": 103.95466,
+   "score_real_signals": 0.551299,
+   "n_pois": 132,
+   "rank": 335
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Paya Lebar area",
+   "area": "Paya Lebar",
+   "category": "Health & Wellness",
+   "lat": 1.31691,
+   "lon": 103.89314,
+   "score_real_signals": 0.550603,
+   "n_pois": 36,
+   "rank": 336
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Alexandra area \u00b7 sector 6",
+   "area": "Alexandra",
+   "category": "F&B",
+   "lat": 1.29783,
+   "lon": 103.80354,
+   "score_real_signals": 0.550391,
+   "n_pois": 112,
+   "rank": 337
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 East Coast area",
+   "area": "East Coast",
+   "category": "Health & Wellness",
+   "lat": 1.30635,
+   "lon": 103.91498,
+   "score_real_signals": 0.549717,
+   "n_pois": 13,
+   "rank": 338
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Newton area \u00b7 sector 3",
+   "area": "Newton",
+   "category": "F&B",
+   "lat": 1.32254,
+   "lon": 103.82589,
+   "score_real_signals": 0.549716,
+   "n_pois": 16,
+   "rank": 339
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Tanah Merah area",
+   "area": "Tanah Merah",
+   "category": "F&B",
+   "lat": 1.33162,
+   "lon": 103.93841,
+   "score_real_signals": 0.549626,
+   "n_pois": 235,
+   "rank": 340
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Tanah Merah area \u00b7 sector 2",
+   "area": "Tanah Merah",
+   "category": "F&B",
+   "lat": 1.33183,
+   "lon": 103.9476,
+   "score_real_signals": 0.549423,
+   "n_pois": 246,
+   "rank": 341
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Bedok area \u00b7 sector 2",
+   "area": "Bedok",
+   "category": "Personal Services",
+   "lat": 1.32514,
+   "lon": 103.93183,
+   "score_real_signals": 0.549094,
+   "n_pois": 134,
+   "rank": 342
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Paya Lebar area \u00b7 sector 2",
+   "area": "Paya Lebar",
+   "category": "Entertainment & Leisure",
+   "lat": 1.31563,
+   "lon": 103.89165,
+   "score_real_signals": 0.549002,
+   "n_pois": 73,
+   "rank": 343
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Alexandra area \u00b7 sector 3",
+   "area": "Alexandra",
+   "category": "Personal Services",
+   "lat": 1.28489,
+   "lon": 103.81135,
+   "score_real_signals": 0.548465,
+   "n_pois": 28,
+   "rank": 344
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Bedok area \u00b7 sector 3",
+   "area": "Bedok",
+   "category": "Personal Services",
+   "lat": 1.33296,
+   "lon": 103.91426,
+   "score_real_signals": 0.548255,
+   "n_pois": 24,
+   "rank": 345
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Tiong Bahru area \u00b7 sector 2",
+   "area": "Tiong Bahru",
+   "category": "Entertainment & Leisure",
+   "lat": 1.28359,
+   "lon": 103.8282,
+   "score_real_signals": 0.548125,
+   "n_pois": 64,
+   "rank": 346
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Kallang area \u00b7 sector 5",
+   "area": "Kallang",
+   "category": "Personal Services",
+   "lat": 1.33098,
+   "lon": 103.86873,
+   "score_real_signals": 0.548105,
+   "n_pois": 30,
+   "rank": 347
+  },
+  {
+   "bucket_label": "Hotels & Lodging cluster \u2014 Marine Parade area",
+   "area": "Marine Parade",
+   "category": "Hotels & Lodging",
+   "lat": 1.3073,
+   "lon": 103.90904,
+   "score_real_signals": 0.548054,
+   "n_pois": 15,
+   "rank": 348
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Holland Village area",
+   "area": "Holland Village",
+   "category": "Personal Services",
+   "lat": 1.30924,
+   "lon": 103.79544,
+   "score_real_signals": 0.547767,
+   "n_pois": 152,
+   "rank": 349
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Ang Mo Kio area",
+   "area": "Ang Mo Kio",
+   "category": "F&B",
+   "lat": 1.37115,
+   "lon": 103.84626,
+   "score_real_signals": 0.547767,
+   "n_pois": 394,
+   "rank": 350
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Changi Airport area \u00b7 sector 9",
+   "area": "Changi Airport",
+   "category": "F&B",
+   "lat": 1.37944,
+   "lon": 103.99747,
+   "score_real_signals": 0.54756,
+   "n_pois": 23,
+   "rank": 351
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Boon Lay / Pioneer area",
+   "area": "Boon Lay / Pioneer",
+   "category": "F&B",
+   "lat": 1.33954,
+   "lon": 103.70626,
+   "score_real_signals": 0.547389,
+   "n_pois": 459,
+   "rank": 352
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Yishun area",
+   "area": "Yishun",
+   "category": "F&B",
+   "lat": 1.42951,
+   "lon": 103.82827,
+   "score_real_signals": 0.547346,
+   "n_pois": 349,
+   "rank": 353
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Clementi area",
+   "area": "Clementi",
+   "category": "F&B",
+   "lat": 1.31136,
+   "lon": 103.75844,
+   "score_real_signals": 0.547145,
+   "n_pois": 123,
+   "rank": 354
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bukit Batok area",
+   "area": "Bukit Batok",
+   "category": "F&B",
+   "lat": 1.34025,
+   "lon": 103.77773,
+   "score_real_signals": 0.546877,
+   "n_pois": 196,
+   "rank": 355
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 MacPherson / Ubi area \u00b7 sector 8",
+   "area": "MacPherson / Ubi",
+   "category": "F&B",
+   "lat": 1.33306,
+   "lon": 103.90804,
+   "score_real_signals": 0.546607,
+   "n_pois": 149,
+   "rank": 356
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Toa Payoh area \u00b7 sector 2",
+   "area": "Toa Payoh",
+   "category": "Personal Services",
+   "lat": 1.33323,
+   "lon": 103.84649,
+   "score_real_signals": 0.546255,
+   "n_pois": 32,
+   "rank": 357
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Tiong Bahru area",
+   "area": "Tiong Bahru",
+   "category": "Health & Wellness",
+   "lat": 1.29115,
+   "lon": 103.82756,
+   "score_real_signals": 0.546206,
+   "n_pois": 27,
+   "rank": 358
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Hougang area",
+   "area": "Hougang",
+   "category": "F&B",
+   "lat": 1.35778,
+   "lon": 103.88574,
+   "score_real_signals": 0.545797,
+   "n_pois": 346,
+   "rank": 359
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Yishun area \u00b7 sector 2",
+   "area": "Yishun",
+   "category": "F&B",
+   "lat": 1.42802,
+   "lon": 103.83547,
+   "score_real_signals": 0.545549,
+   "n_pois": 744,
+   "rank": 360
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Mount Faber / Telok Blangah area",
+   "area": "Mount Faber / Telok Blangah",
+   "category": "F&B",
+   "lat": 1.27559,
+   "lon": 103.79731,
+   "score_real_signals": 0.545324,
+   "n_pois": 123,
+   "rank": 361
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Holland Village area \u00b7 sector 5",
+   "area": "Holland Village",
+   "category": "F&B",
+   "lat": 1.30726,
+   "lon": 103.80086,
+   "score_real_signals": 0.545067,
+   "n_pois": 85,
+   "rank": 362
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Geylang area \u00b7 sector 2",
+   "area": "Geylang",
+   "category": "Retail",
+   "lat": 1.31499,
+   "lon": 103.87701,
+   "score_real_signals": 0.544833,
+   "n_pois": 155,
+   "rank": 363
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Toa Payoh area \u00b7 sector 3",
+   "area": "Toa Payoh",
+   "category": "Personal Services",
+   "lat": 1.33929,
+   "lon": 103.84598,
+   "score_real_signals": 0.544815,
+   "n_pois": 54,
+   "rank": 364
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Tampines area \u00b7 sector 3",
+   "area": "Tampines",
+   "category": "F&B",
+   "lat": 1.3535,
+   "lon": 103.94142,
+   "score_real_signals": 0.54462,
+   "n_pois": 395,
+   "rank": 365
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bishan area",
+   "area": "Bishan",
+   "category": "F&B",
+   "lat": 1.34905,
+   "lon": 103.85025,
+   "score_real_signals": 0.5441,
+   "n_pois": 471,
+   "rank": 366
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Tampines area \u00b7 sector 4",
+   "area": "Tampines",
+   "category": "F&B",
+   "lat": 1.34741,
+   "lon": 103.95555,
+   "score_real_signals": 0.544069,
+   "n_pois": 120,
+   "rank": 367
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Tampines area \u00b7 sector 5",
+   "area": "Tampines",
+   "category": "F&B",
+   "lat": 1.35518,
+   "lon": 103.96151,
+   "score_real_signals": 0.543862,
+   "n_pois": 67,
+   "rank": 368
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Geylang area \u00b7 sector 3",
+   "area": "Geylang",
+   "category": "Retail",
+   "lat": 1.30811,
+   "lon": 103.88401,
+   "score_real_signals": 0.543551,
+   "n_pois": 63,
+   "rank": 369
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 HarbourFront area \u00b7 sector 3",
+   "area": "HarbourFront",
+   "category": "Entertainment & Leisure",
+   "lat": 1.25984,
+   "lon": 103.82164,
+   "score_real_signals": 0.543243,
+   "n_pois": 47,
+   "rank": 370
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Toa Payoh area \u00b7 sector 6",
+   "area": "Toa Payoh",
+   "category": "F&B",
+   "lat": 1.33111,
+   "lon": 103.86837,
+   "score_real_signals": 0.54268,
+   "n_pois": 218,
+   "rank": 371
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Simei area",
+   "area": "Simei",
+   "category": "F&B",
+   "lat": 1.34872,
+   "lon": 103.93366,
+   "score_real_signals": 0.542523,
+   "n_pois": 243,
+   "rank": 372
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Toa Payoh area \u00b7 sector 4",
+   "area": "Toa Payoh",
+   "category": "Personal Services",
+   "lat": 1.33883,
+   "lon": 103.85053,
+   "score_real_signals": 0.542244,
+   "n_pois": 33,
+   "rank": 373
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Bishan area",
+   "area": "Bishan",
+   "category": "Personal Services",
+   "lat": 1.3489,
+   "lon": 103.85005,
+   "score_real_signals": 0.541744,
+   "n_pois": 82,
+   "rank": 374
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Tanah Merah area \u00b7 sector 3",
+   "area": "Tanah Merah",
+   "category": "F&B",
+   "lat": 1.32441,
+   "lon": 103.94083,
+   "score_real_signals": 0.541552,
+   "n_pois": 223,
+   "rank": 375
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Clementi area \u00b7 sector 2",
+   "area": "Clementi",
+   "category": "F&B",
+   "lat": 1.31444,
+   "lon": 103.76484,
+   "score_real_signals": 0.541541,
+   "n_pois": 469,
+   "rank": 376
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Hougang area \u00b7 sector 2",
+   "area": "Hougang",
+   "category": "F&B",
+   "lat": 1.36169,
+   "lon": 103.88601,
+   "score_real_signals": 0.540928,
+   "n_pois": 133,
+   "rank": 377
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Expo area",
+   "area": "Expo",
+   "category": "F&B",
+   "lat": 1.33412,
+   "lon": 103.96352,
+   "score_real_signals": 0.540919,
+   "n_pois": 338,
+   "rank": 378
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Balestier area",
+   "area": "Balestier",
+   "category": "Entertainment & Leisure",
+   "lat": 1.32389,
+   "lon": 103.85201,
+   "score_real_signals": 0.540882,
+   "n_pois": 59,
+   "rank": 379
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Ang Mo Kio area \u00b7 sector 2",
+   "area": "Ang Mo Kio",
+   "category": "F&B",
+   "lat": 1.37098,
+   "lon": 103.85118,
+   "score_real_signals": 0.540434,
+   "n_pois": 414,
+   "rank": 380
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Bedok area \u00b7 sector 4",
+   "area": "Bedok",
+   "category": "Personal Services",
+   "lat": 1.31335,
+   "lon": 103.92465,
+   "score_real_signals": 0.540299,
+   "n_pois": 46,
+   "rank": 381
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Jurong West area",
+   "area": "Jurong West",
+   "category": "F&B",
+   "lat": 1.33384,
+   "lon": 103.72203,
+   "score_real_signals": 0.540141,
+   "n_pois": 230,
+   "rank": 382
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 MacPherson / Ubi area \u00b7 sector 9",
+   "area": "MacPherson / Ubi",
+   "category": "F&B",
+   "lat": 1.33736,
+   "lon": 103.9002,
+   "score_real_signals": 0.53969,
+   "n_pois": 25,
+   "rank": 383
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Tanah Merah area",
+   "area": "Tanah Merah",
+   "category": "Personal Services",
+   "lat": 1.3246,
+   "lon": 103.94085,
+   "score_real_signals": 0.539148,
+   "n_pois": 33,
+   "rank": 384
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Buona Vista / one-north area",
+   "area": "Buona Vista / one-north",
+   "category": "F&B",
+   "lat": 1.30096,
+   "lon": 103.79666,
+   "score_real_signals": 0.53891,
+   "n_pois": 176,
+   "rank": 385
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Ang Mo Kio area",
+   "area": "Ang Mo Kio",
+   "category": "Personal Services",
+   "lat": 1.37137,
+   "lon": 103.84644,
+   "score_real_signals": 0.538873,
+   "n_pois": 104,
+   "rank": 386
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Bukit Batok area \u00b7 sector 2",
+   "area": "Bukit Batok",
+   "category": "F&B",
+   "lat": 1.3411,
+   "lon": 103.77428,
+   "score_real_signals": 0.538636,
+   "n_pois": 247,
+   "rank": 387
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Clementi area \u00b7 sector 3",
+   "area": "Clementi",
+   "category": "F&B",
+   "lat": 1.30308,
+   "lon": 103.76459,
+   "score_real_signals": 0.53858,
+   "n_pois": 161,
+   "rank": 388
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 East Coast area",
+   "area": "East Coast",
+   "category": "Entertainment & Leisure",
+   "lat": 1.30279,
+   "lon": 103.9152,
+   "score_real_signals": 0.538406,
+   "n_pois": 12,
+   "rank": 389
+  },
+  {
+   "bucket_label": "Entertainment & Leisure cluster \u2014 Novena area \u00b7 sector 2",
+   "area": "Novena",
+   "category": "Entertainment & Leisure",
+   "lat": 1.32364,
+   "lon": 103.84431,
+   "score_real_signals": 0.538261,
+   "n_pois": 23,
+   "rank": 390
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 MacPherson / Ubi area \u00b7 sector 4",
+   "area": "MacPherson / Ubi",
+   "category": "Personal Services",
+   "lat": 1.33247,
+   "lon": 103.88442,
+   "score_real_signals": 0.538241,
+   "n_pois": 37,
+   "rank": 391
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Pasir Ris area \u00b7 sector 3",
+   "area": "Pasir Ris",
+   "category": "F&B",
+   "lat": 1.37727,
+   "lon": 103.95505,
+   "score_real_signals": 0.538117,
+   "n_pois": 144,
+   "rank": 392
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Bedok area \u00b7 sector 5",
+   "area": "Bedok",
+   "category": "Personal Services",
+   "lat": 1.32508,
+   "lon": 103.92424,
+   "score_real_signals": 0.537831,
+   "n_pois": 21,
+   "rank": 393
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Pasir Ris area \u00b7 sector 4",
+   "area": "Pasir Ris",
+   "category": "F&B",
+   "lat": 1.36594,
+   "lon": 103.96375,
+   "score_real_signals": 0.537808,
+   "n_pois": 86,
+   "rank": 394
+  },
+  {
+   "bucket_label": "Personal Services cluster \u2014 Buona Vista / one-north area",
+   "area": "Buona Vista / one-north",
+   "category": "Personal Services",
+   "lat": 1.30038,
+   "lon": 103.79748,
+   "score_real_signals": 0.537797,
+   "n_pois": 19,
+   "rank": 395
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Hougang area \u00b7 sector 3",
+   "area": "Hougang",
+   "category": "F&B",
+   "lat": 1.35584,
+   "lon": 103.89036,
+   "score_real_signals": 0.537738,
+   "n_pois": 207,
+   "rank": 396
+  },
+  {
+   "bucket_label": "Health & Wellness cluster \u2014 Balestier area",
+   "area": "Balestier",
+   "category": "Health & Wellness",
+   "lat": 1.32363,
+   "lon": 103.85191,
+   "score_real_signals": 0.537666,
+   "n_pois": 25,
+   "rank": 397
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 MacPherson / Ubi area",
+   "area": "MacPherson / Ubi",
+   "category": "Retail",
+   "lat": 1.32504,
+   "lon": 103.89273,
+   "score_real_signals": 0.537602,
+   "n_pois": 109,
+   "rank": 398
+  },
+  {
+   "bucket_label": "Retail cluster \u2014 Changi Airport area \u00b7 sector 4",
+   "area": "Changi Airport",
+   "category": "Retail",
+   "lat": 1.38896,
+   "lon": 103.98797,
+   "score_real_signals": 0.537581,
+   "n_pois": 27,
+   "rank": 399
+  },
+  {
+   "bucket_label": "F&B cluster \u2014 Buona Vista / one-north area \u00b7 sector 2",
+   "area": "Buona Vista / one-north",
+   "category": "F&B",
+   "lat": 1.30813,
+   "lon": 103.78841,
+   "score_real_signals": 0.537549,
+   "n_pois": 415,
+   "rank": 400
+  }
+ ]
+}

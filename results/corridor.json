@@ -1,0 +1,2231 @@
+{
+  "seed": 42,
+  "versions": {
+    "python": "3.13.1",
+    "numpy": "2.5.2",
+    "lightgbm": "4.7.0",
+    "shap": "0.52.0",
+    "scikit-learn": "1.9.0",
+    "openpyxl": "3.1.5"
+  },
+  "generated_by": "scripts/corridor_exhibit.py --check-able",
+  "data_sources": [
+    {
+      "name": "SingStat International Visitor Arrivals by place of residence, monthly (data.gov.sg, Open Data Licence)",
+      "url": "https://data.gov.sg/datasets/d_7e7b2ee60c6ffc962f80fef129cf306e/view",
+      "sha256": "ae8de641daef06d98c275a715ddad342eb1d9cfac1ba273ba5b41e5a18932bdf"
+    },
+    {
+      "name": "KNOMAD bilateral remittance matrix 2021 (static gravity covariates only)",
+      "url": "https://web.archive.org/web/20230424090916/https://knomad.org/sites/default/files/2022-12/bilateral_remittance_matrix_2021_0.xlsx",
+      "sha256": "66ae02420627ce210d9e650c7a21d5ec7d9e77197be9f94d1fa27140402c268a"
+    }
+  ],
+  "labels": [
+    "proxy: tourism arrivals stand in for cross-border card spend"
+  ],
+  "target": "SingStat IVA monthly by residence (d_7e7b2ee60c6ffc962f80fef129cf306e)",
+  "design": {
+    "train_window": "2008-01..2024-12 (features valid from 2009-01: lag-12)",
+    "holdout": "2025-01..2026-01 (13 months, one-month-ahead rolling backtest; features use actuals only through t-1)",
+    "corridor_selection": "top 12 origin countries by 2025 volume",
+    "model": "one global LightGBM (500 trees, lr 0.05, num_leaves 31, corridor id + month categorical) on log1p(arrivals)",
+    "baseline": "per-corridor seasonal naive (actual at t-12)",
+    "mase_scale": "in-sample mean |y_t - y_{t-12}| over 2009-01..2024-12 (COVID months included in the scale; identical scale for model and baseline, so the comparison is unaffected)"
+  },
+  "covid_note": "The training window contains the 2020-2022 COVID structural break (arrivals collapse to near zero, then a staggered reopening recovery). Pre-registered handling: keep the break in training (the model sees the regime through its lag features), hold out 2025-01..2026-01 \u2014 13 post-recovery months \u2014 and report accuracy only on the holdout. The MASE denominator also spans the break, shrinking MASE values for model and baseline alike; model-vs-naive comparison is scale-invariant.",
+  "covariate_provenance": "KNOMAD bilateral remittance matrices are themselves constructed by a gravity-style allocation (aggregate remittances distributed using bilateral migrant stocks and income levels), so they are model output, not direct measurement. Used here as a STATIC cross-sectional covariate only \u2014 the Singapore SENDING row (SG->origin, USD millions, 2021 vintage) as a proxy for origin-country migrant stock resident in SG \u2014 never as a target. Distance = great-circle SG->origin capital; common-language = shares an official language with SG (English/Malay/Mandarin/Tamil). Taiwan and some high-income receivers are missing from the KNOMAD matrix -> NaN (LightGBM handles natively).",
+  "covariate_lag": "t-1+",
+  "holdout_months": 13,
+  "holdout_month_labels": [
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01"
+  ],
+  "mase_model": 0.622977,
+  "mase_seasonal_naive": 0.530169,
+  "mase_definition": "macro mean of per-corridor MASE over the 12 corridors",
+  "pooled": {
+    "mae_model": 12338.31,
+    "mae_seasonal_naive": 9434.31,
+    "mase_model_reconciled": 0.61273
+  },
+  "corridors": [
+    {
+      "origin": "China",
+      "region": "Greater China",
+      "volume_2025": 3100145,
+      "mae_model": 54322.01,
+      "mae_seasonal_naive": 39784.38,
+      "mae_model_reconciled": 52863.94,
+      "mase_model": 0.904513,
+      "mase_seasonal_naive": 0.662448,
+      "mase_model_reconciled": 0.880235,
+      "attribution_top3": [
+        {
+          "feature": "lag1",
+          "mean_abs_shap_log1p_units": 2.098509
+        },
+        {
+          "feature": "lag3",
+          "mean_abs_shap_log1p_units": 0.370494
+        },
+        {
+          "feature": "corridor_id",
+          "mean_abs_shap_log1p_units": 0.141983
+        }
+      ]
+    },
+    {
+      "origin": "Indonesia",
+      "region": "Southeast Asia",
+      "volume_2025": 2439831,
+      "mae_model": 27108.55,
+      "mae_seasonal_naive": 10942.77,
+      "mae_model_reconciled": 26509.46,
+      "mase_model": 0.594087,
+      "mase_seasonal_naive": 0.239812,
+      "mase_model_reconciled": 0.580958,
+      "attribution_top3": [
+        {
+          "feature": "lag1",
+          "mean_abs_shap_log1p_units": 1.979378
+        },
+        {
+          "feature": "lag3",
+          "mean_abs_shap_log1p_units": 0.328731
+        },
+        {
+          "feature": "roll12",
+          "mean_abs_shap_log1p_units": 0.143669
+        }
+      ]
+    },
+    {
+      "origin": "Malaysia",
+      "region": "Southeast Asia",
+      "volume_2025": 1275378,
+      "mae_model": 8197.54,
+      "mae_seasonal_naive": 10522.23,
+      "mae_model_reconciled": 8222.48,
+      "mase_model": 0.448559,
+      "mase_seasonal_naive": 0.575763,
+      "mase_model_reconciled": 0.449924,
+      "attribution_top3": [
+        {
+          "feature": "lag1",
+          "mean_abs_shap_log1p_units": 1.0314
+        },
+        {
+          "feature": "lag3",
+          "mean_abs_shap_log1p_units": 0.25353
+        },
+        {
+          "feature": "corridor_id",
+          "mean_abs_shap_log1p_units": 0.193725
+        }
+      ]
+    },
+    {
+      "origin": "Australia",
+      "region": "Oceania",
+      "volume_2025": 1267428,
+      "mae_model": 8115.86,
+      "mae_seasonal_naive": 9133.69,
+      "mae_model_reconciled": 8434.62,
+      "mase_model": 0.496249,
+      "mase_seasonal_naive": 0.558485,
+      "mase_model_reconciled": 0.51574,
+      "attribution_top3": [
+        {
+          "feature": "lag1",
+          "mean_abs_shap_log1p_units": 1.067286
+        },
+        {
+          "feature": "lag3",
+          "mean_abs_shap_log1p_units": 0.275361
+        },
+        {
+          "feature": "corridor_id",
+          "mean_abs_shap_log1p_units": 0.146919
+        }
+      ]
+    },
+    {
+      "origin": "India",
+      "region": "South Asia",
+      "volume_2025": 1207162,
+      "mae_model": 8022.01,
+      "mae_seasonal_naive": 5459.23,
+      "mae_model_reconciled": 8622.33,
+      "mase_model": 0.430026,
+      "mase_seasonal_naive": 0.292646,
+      "mase_model_reconciled": 0.462206,
+      "attribution_top3": [
+        {
+          "feature": "lag1",
+          "mean_abs_shap_log1p_units": 1.043312
+        },
+        {
+          "feature": "lag3",
+          "mean_abs_shap_log1p_units": 0.259181
+        },
+        {
+          "feature": "corridor_id",
+          "mean_abs_shap_log1p_units": 0.161062
+        }
+      ]
+    },
+    {
+      "origin": "Philippines",
+      "region": "Southeast Asia",
+      "volume_2025": 726065,
+      "mae_model": 7375.78,
+      "mae_seasonal_naive": 10604.31,
+      "mae_model_reconciled": 7590.02,
+      "mase_model": 0.637233,
+      "mase_seasonal_naive": 0.916163,
+      "mase_model_reconciled": 0.655743,
+      "attribution_top3": [
+        {
+          "feature": "lag1",
+          "mean_abs_shap_log1p_units": 0.627055
+        },
+        {
+          "feature": "lag3",
+          "mean_abs_shap_log1p_units": 0.207754
+        },
+        {
+          "feature": "lag2",
+          "mean_abs_shap_log1p_units": 0.052976
+        }
+      ]
+    },
+    {
+      "origin": "USA",
+      "region": "Americas",
+      "volume_2025": 716909,
+      "mae_model": 5048.21,
+      "mae_seasonal_naive": 3671.92,
+      "mae_model_reconciled": 4965.87,
+      "mase_model": 0.516833,
+      "mase_seasonal_naive": 0.375929,
+      "mase_model_reconciled": 0.508402,
+      "attribution_top3": [
+        {
+          "feature": "lag1",
+          "mean_abs_shap_log1p_units": 0.578983
+        },
+        {
+          "feature": "lag3",
+          "mean_abs_shap_log1p_units": 0.185976
+        },
+        {
+          "feature": "corridor_id",
+          "mean_abs_shap_log1p_units": 0.080384
+        }
+      ]
+    },
+    {
+      "origin": "Japan",
+      "region": "North Asia",
+      "volume_2025": 627513,
+      "mae_model": 6766.65,
+      "mae_seasonal_naive": 4566.62,
+      "mae_model_reconciled": 7184.06,
+      "mase_model": 0.605795,
+      "mase_seasonal_naive": 0.408834,
+      "mase_model_reconciled": 0.643165,
+      "attribution_top3": [
+        {
+          "feature": "lag1",
+          "mean_abs_shap_log1p_units": 0.411705
+        },
+        {
+          "feature": "lag3",
+          "mean_abs_shap_log1p_units": 0.154107
+        },
+        {
+          "feature": "lag12",
+          "mean_abs_shap_log1p_units": 0.05023
+        }
+      ]
+    },
+    {
+      "origin": "United Kingdom",
+      "region": "Europe",
+      "volume_2025": 587356,
+      "mae_model": 3415.36,
+      "mae_seasonal_naive": 4407.15,
+      "mae_model_reconciled": 3665.57,
+      "mase_model": 0.428636,
+      "mase_seasonal_naive": 0.553109,
+      "mase_model_reconciled": 0.460038,
+      "attribution_top3": [
+        {
+          "feature": "lag1",
+          "mean_abs_shap_log1p_units": 0.367768
+        },
+        {
+          "feature": "lag3",
+          "mean_abs_shap_log1p_units": 0.148946
+        },
+        {
+          "feature": "corridor_id",
+          "mean_abs_shap_log1p_units": 0.105693
+        }
+      ]
+    },
+    {
+      "origin": "South Korea",
+      "region": "North Asia",
+      "volume_2025": 587010,
+      "mae_model": 8568.86,
+      "mae_seasonal_naive": 4507.54,
+      "mae_model_reconciled": 7573.41,
+      "mase_model": 0.829143,
+      "mase_seasonal_naive": 0.43616,
+      "mase_model_reconciled": 0.732821,
+      "attribution_top3": [
+        {
+          "feature": "lag1",
+          "mean_abs_shap_log1p_units": 0.299541
+        },
+        {
+          "feature": "lag3",
+          "mean_abs_shap_log1p_units": 0.145944
+        },
+        {
+          "feature": "corridor_id",
+          "mean_abs_shap_log1p_units": 0.088791
+        }
+      ]
+    },
+    {
+      "origin": "Taiwan",
+      "region": "Greater China",
+      "volume_2025": 422688,
+      "mae_model": 7488.46,
+      "mae_seasonal_naive": 5531.23,
+      "mae_model_reconciled": 6693.12,
+      "mase_model": 1.137818,
+      "mase_seasonal_naive": 0.840431,
+      "mase_model_reconciled": 1.016972,
+      "attribution_top3": [
+        {
+          "feature": "lag1",
+          "mean_abs_shap_log1p_units": 0.244893
+        },
+        {
+          "feature": "corridor_id",
+          "mean_abs_shap_log1p_units": 0.132313
+        },
+        {
+          "feature": "lag3",
+          "mean_abs_shap_log1p_units": 0.12867
+        }
+      ]
+    },
+    {
+      "origin": "Thailand",
+      "region": "Southeast Asia",
+      "volume_2025": 386488,
+      "mae_model": 3630.4,
+      "mae_seasonal_naive": 4080.62,
+      "mae_model_reconciled": 3628.13,
+      "mase_model": 0.446833,
+      "mase_seasonal_naive": 0.502246,
+      "mase_model_reconciled": 0.446553,
+      "attribution_top3": [
+        {
+          "feature": "lag1",
+          "mean_abs_shap_log1p_units": 0.119489
+        },
+        {
+          "feature": "corridor_id",
+          "mean_abs_shap_log1p_units": 0.11914
+        },
+        {
+          "feature": "lag12",
+          "mean_abs_shap_log1p_units": 0.087935
+        }
+      ]
+    }
+  ],
+  "reconciliation": "grouped MinT (coherent by construction); base-vs-reconciled accuracy compared",
+  "reconciliation_detail": {
+    "method": "MinT-shrink (Schafer-Strimmer shrunk covariance of in-sample one-step base-forecast errors; summing matrix over selected-corridor hierarchy country->region->total)",
+    "shrinkage_lambda": 0.179239,
+    "hierarchy": {
+      "total": "TOTAL::selected (sum of the 12 modeled corridors)",
+      "regions": [
+        "Americas",
+        "Europe",
+        "Greater China",
+        "North Asia",
+        "Oceania",
+        "South Asia",
+        "Southeast Asia"
+      ],
+      "countries": [
+        "China",
+        "Indonesia",
+        "Malaysia",
+        "Australia",
+        "India",
+        "Philippines",
+        "USA",
+        "Japan",
+        "United Kingdom",
+        "South Korea",
+        "Taiwan",
+        "Thailand"
+      ]
+    },
+    "holdout_accuracy": {
+      "countries": {
+        "base": {
+          "mase_macro_mean": 0.622977,
+          "mae_mean": 12338.31
+        },
+        "reconciled": {
+          "mase_macro_mean": 0.61273,
+          "mae_mean": 12162.75
+        },
+        "seasonal_naive": {
+          "mase_macro_mean": 0.530169,
+          "mae_mean": 9434.31
+        }
+      },
+      "regions": {
+        "base": {
+          "mase_macro_mean": 0.627963,
+          "mae_mean": 24679.23
+        },
+        "reconciled": {
+          "mase_macro_mean": 0.535117,
+          "mae_mean": 17827.9
+        },
+        "seasonal_naive": {
+          "mase_macro_mean": 0.43641,
+          "mae_mean": 13299.63
+        }
+      },
+      "total": {
+        "base": {
+          "mase_macro_mean": 0.904291,
+          "mae_mean": 181727.72
+        },
+        "reconciled": {
+          "mase_macro_mean": 0.441069,
+          "mae_mean": 88637.99
+        },
+        "seasonal_naive": {
+          "mase_macro_mean": 0.347634,
+          "mae_mean": 69861.08
+        }
+      }
+    }
+  },
+  "driver_families": [
+    {
+      "family": "recent level (persistence)",
+      "features": [
+        "lag1",
+        "lag2",
+        "lag3",
+        "roll3"
+      ],
+      "mean_abs_shap_log1p_units": 1.477835,
+      "share_of_total_attribution": 0.821386,
+      "percent_of_total_attribution": 82.1386,
+      "rank": 1
+    },
+    {
+      "family": "seasonality (same month last year)",
+      "features": [
+        "lag12",
+        "roll12"
+      ],
+      "mean_abs_shap_log1p_units": 0.145175,
+      "share_of_total_attribution": 0.080689,
+      "percent_of_total_attribution": 8.0689,
+      "rank": 2
+    },
+    {
+      "family": "corridor identity (origin-specific level)",
+      "features": [
+        "corridor_id"
+      ],
+      "mean_abs_shap_log1p_units": 0.113938,
+      "share_of_total_attribution": 0.063327,
+      "percent_of_total_attribution": 6.3327,
+      "rank": 3
+    },
+    {
+      "family": "seasonality (calendar month)",
+      "features": [
+        "month"
+      ],
+      "mean_abs_shap_log1p_units": 0.056005,
+      "share_of_total_attribution": 0.031128,
+      "percent_of_total_attribution": 3.1128,
+      "rank": 4
+    },
+    {
+      "family": "traveler mix (distance)",
+      "features": [
+        "dist_log"
+      ],
+      "mean_abs_shap_log1p_units": 0.003109,
+      "share_of_total_attribution": 0.001728,
+      "percent_of_total_attribution": 0.1728,
+      "rank": 5
+    },
+    {
+      "family": "traveler mix (migrant-stock proxy)",
+      "features": [
+        "knomad_remit_log"
+      ],
+      "mean_abs_shap_log1p_units": 0.002661,
+      "share_of_total_attribution": 0.001479,
+      "percent_of_total_attribution": 0.1479,
+      "rank": 6
+    },
+    {
+      "family": "traveler mix (shared language)",
+      "features": [
+        "common_language"
+      ],
+      "mean_abs_shap_log1p_units": 0.000474,
+      "share_of_total_attribution": 0.000263,
+      "percent_of_total_attribution": 0.0263,
+      "rank": 7
+    }
+  ],
+  "drivers_named_by_the_brief_this_model_cannot_speak_to": [
+    "customer segments (no segment field in public arrivals data)",
+    "merchant category shifts (arrivals carry no spend category)"
+  ],
+  "driver_families_note": "The same holdout SHAP matrix as attribution_top3, summed by feature family across all twelve corridors, so a reader sees what kind of thing the model relies on rather than which lag. Association, not cause, exactly as attribution_top3 is labeled.",
+  "attribution_label": "model attributions (mean |SHAP| on holdout rows, log1p-arrivals units): associations learned by the model, not causal drivers",
+  "figures_schema": "figures.corridors[] = {origin, series:{months:[YYYY-MM context window 2023-01..2026-01], actual:[arrivals aligned to months], forecast_model:[13 one-step-ahead holdout forecasts aligned to forecast_months], forecast_seasonal_naive:[same alignment], forecast_months:[YYYY-MM holdout months]}, attribution_bars:[{feature, mean_abs_shap_log1p_units} top-3, descending]}. Render: line chart actual vs the two forecast series (forecasts non-null only over forecast_months); horizontal bar chart for attribution_bars, labeled 'model attributions (mean |SHAP|, log1p-arrivals units)'.",
+  "figures": {
+    "corridors": [
+      {
+        "origin": "China",
+        "series": {
+          "months": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12",
+            "2024-01",
+            "2024-02",
+            "2024-03",
+            "2024-04",
+            "2024-05",
+            "2024-06",
+            "2024-07",
+            "2024-08",
+            "2024-09",
+            "2024-10",
+            "2024-11",
+            "2024-12",
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ],
+          "actual": [
+            28375.0,
+            35312.0,
+            60888.0,
+            90725.0,
+            95613.0,
+            113290.0,
+            231331.0,
+            215442.0,
+            135677.0,
+            122765.0,
+            104347.0,
+            130156.0,
+            211178.0,
+            326900.0,
+            247658.0,
+            220435.0,
+            222335.0,
+            217656.0,
+            412951.0,
+            403138.0,
+            217205.0,
+            234528.0,
+            174751.0,
+            193483.0,
+            376481.0,
+            267974.0,
+            187036.0,
+            207505.0,
+            242013.0,
+            197185.0,
+            414488.0,
+            398206.0,
+            207028.0,
+            226010.0,
+            203531.0,
+            172688.0,
+            271953.0
+          ],
+          "forecast_model": [
+            235505.4,
+            382454.1,
+            266088.5,
+            139863.4,
+            194990.7,
+            230055.1,
+            418364.0,
+            449950.6,
+            235156.6,
+            213771.6,
+            208308.6,
+            236385.2,
+            212271.6
+          ],
+          "forecast_seasonal_naive": [
+            211178.0,
+            326900.0,
+            247658.0,
+            220435.0,
+            222335.0,
+            217656.0,
+            412951.0,
+            403138.0,
+            217205.0,
+            234528.0,
+            174751.0,
+            193483.0,
+            376481.0
+          ],
+          "forecast_months": [
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ]
+        },
+        "attribution_bars": [
+          {
+            "feature": "lag1",
+            "mean_abs_shap_log1p_units": 2.098509
+          },
+          {
+            "feature": "lag3",
+            "mean_abs_shap_log1p_units": 0.370494
+          },
+          {
+            "feature": "corridor_id",
+            "mean_abs_shap_log1p_units": 0.141983
+          }
+        ]
+      },
+      {
+        "origin": "Indonesia",
+        "series": {
+          "months": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12",
+            "2024-01",
+            "2024-02",
+            "2024-03",
+            "2024-04",
+            "2024-05",
+            "2024-06",
+            "2024-07",
+            "2024-08",
+            "2024-09",
+            "2024-10",
+            "2024-11",
+            "2024-12",
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ],
+          "actual": [
+            168975.0,
+            156448.0,
+            171507.0,
+            220067.0,
+            183758.0,
+            217052.0,
+            229886.0,
+            168122.0,
+            175603.0,
+            180884.0,
+            184281.0,
+            244322.0,
+            268958.0,
+            190713.0,
+            204970.0,
+            243892.0,
+            189182.0,
+            200085.0,
+            209826.0,
+            163910.0,
+            173613.0,
+            183714.0,
+            194446.0,
+            266033.0,
+            251772.0,
+            192616.0,
+            195890.0,
+            236847.0,
+            197881.0,
+            205552.0,
+            223463.0,
+            162901.0,
+            169866.0,
+            177211.0,
+            181468.0,
+            244364.0,
+            218439.0
+          ],
+          "forecast_model": [
+            257578.0,
+            231374.2,
+            249266.9,
+            122926.0,
+            220450.8,
+            224068.4,
+            215643.2,
+            194972.7,
+            169994.5,
+            191009.8,
+            187555.3,
+            225336.6,
+            238968.3
+          ],
+          "forecast_seasonal_naive": [
+            268958.0,
+            190713.0,
+            204970.0,
+            243892.0,
+            189182.0,
+            200085.0,
+            209826.0,
+            163910.0,
+            173613.0,
+            183714.0,
+            194446.0,
+            266033.0,
+            251772.0
+          ],
+          "forecast_months": [
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ]
+        },
+        "attribution_bars": [
+          {
+            "feature": "lag1",
+            "mean_abs_shap_log1p_units": 1.979378
+          },
+          {
+            "feature": "lag3",
+            "mean_abs_shap_log1p_units": 0.328731
+          },
+          {
+            "feature": "roll12",
+            "mean_abs_shap_log1p_units": 0.143669
+          }
+        ]
+      },
+      {
+        "origin": "Malaysia",
+        "series": {
+          "months": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12",
+            "2024-01",
+            "2024-02",
+            "2024-03",
+            "2024-04",
+            "2024-05",
+            "2024-06",
+            "2024-07",
+            "2024-08",
+            "2024-09",
+            "2024-10",
+            "2024-11",
+            "2024-12",
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ],
+          "actual": [
+            72756.0,
+            88040.0,
+            97835.0,
+            98190.0,
+            98347.0,
+            85945.0,
+            84876.0,
+            88044.0,
+            89384.0,
+            88643.0,
+            93414.0,
+            102683.0,
+            93381.0,
+            100051.0,
+            120242.0,
+            106186.0,
+            95621.0,
+            83558.0,
+            83068.0,
+            79895.0,
+            112151.0,
+            103432.0,
+            101920.0,
+            105622.0,
+            102328.0,
+            105762.0,
+            104150.0,
+            109253.0,
+            111673.0,
+            100986.0,
+            88384.0,
+            88675.0,
+            120634.0,
+            110303.0,
+            117163.0,
+            116067.0,
+            116682.0
+          ],
+          "forecast_model": [
+            100274.6,
+            93619.7,
+            119932.4,
+            107664.1,
+            106947.4,
+            92979.3,
+            92449.6,
+            92338.9,
+            106580.9,
+            102523.5,
+            101255.6,
+            113408.3,
+            102541.7
+          ],
+          "forecast_seasonal_naive": [
+            93381.0,
+            100051.0,
+            120242.0,
+            106186.0,
+            95621.0,
+            83558.0,
+            83068.0,
+            79895.0,
+            112151.0,
+            103432.0,
+            101920.0,
+            105622.0,
+            102328.0
+          ],
+          "forecast_months": [
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ]
+        },
+        "attribution_bars": [
+          {
+            "feature": "lag1",
+            "mean_abs_shap_log1p_units": 1.0314
+          },
+          {
+            "feature": "lag3",
+            "mean_abs_shap_log1p_units": 0.25353
+          },
+          {
+            "feature": "corridor_id",
+            "mean_abs_shap_log1p_units": 0.193725
+          }
+        ]
+      },
+      {
+        "origin": "Australia",
+        "series": {
+          "months": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12",
+            "2024-01",
+            "2024-02",
+            "2024-03",
+            "2024-04",
+            "2024-05",
+            "2024-06",
+            "2024-07",
+            "2024-08",
+            "2024-09",
+            "2024-10",
+            "2024-11",
+            "2024-12",
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ],
+          "actual": [
+            102888.0,
+            72385.0,
+            74268.0,
+            92937.0,
+            79700.0,
+            90770.0,
+            98408.0,
+            80605.0,
+            104497.0,
+            88033.0,
+            88201.0,
+            112197.0,
+            124104.0,
+            79386.0,
+            90438.0,
+            96752.0,
+            79588.0,
+            88043.0,
+            105660.0,
+            82959.0,
+            110930.0,
+            100935.0,
+            92661.0,
+            122321.0,
+            141337.0,
+            85012.0,
+            81781.0,
+            116848.0,
+            90145.0,
+            90887.0,
+            121503.0,
+            84925.0,
+            107322.0,
+            116372.0,
+            103828.0,
+            127468.0,
+            140780.0
+          ],
+          "forecast_model": [
+            129869.4,
+            87391.4,
+            85576.9,
+            85267.7,
+            86144.3,
+            87869.7,
+            110000.0,
+            84767.5,
+            106061.0,
+            104905.4,
+            94314.5,
+            120280.3,
+            132604.3
+          ],
+          "forecast_seasonal_naive": [
+            124104.0,
+            79386.0,
+            90438.0,
+            96752.0,
+            79588.0,
+            88043.0,
+            105660.0,
+            82959.0,
+            110930.0,
+            100935.0,
+            92661.0,
+            122321.0,
+            141337.0
+          ],
+          "forecast_months": [
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ]
+        },
+        "attribution_bars": [
+          {
+            "feature": "lag1",
+            "mean_abs_shap_log1p_units": 1.067286
+          },
+          {
+            "feature": "lag3",
+            "mean_abs_shap_log1p_units": 0.275361
+          },
+          {
+            "feature": "corridor_id",
+            "mean_abs_shap_log1p_units": 0.146919
+          }
+        ]
+      },
+      {
+        "origin": "India",
+        "series": {
+          "months": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12",
+            "2024-01",
+            "2024-02",
+            "2024-03",
+            "2024-04",
+            "2024-05",
+            "2024-06",
+            "2024-07",
+            "2024-08",
+            "2024-09",
+            "2024-10",
+            "2024-11",
+            "2024-12",
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ],
+          "actual": [
+            56605.0,
+            61301.0,
+            75339.0,
+            97032.0,
+            130444.0,
+            114588.0,
+            93056.0,
+            83601.0,
+            81016.0,
+            94334.0,
+            90231.0,
+            92620.0,
+            82113.0,
+            66149.0,
+            97027.0,
+            106715.0,
+            156572.0,
+            120380.0,
+            89701.0,
+            91805.0,
+            87767.0,
+            102233.0,
+            92905.0,
+            103740.0,
+            85400.0,
+            74869.0,
+            101198.0,
+            118660.0,
+            154403.0,
+            112726.0,
+            85791.0,
+            91142.0,
+            99038.0,
+            103054.0,
+            84252.0,
+            96629.0,
+            85995.0
+          ],
+          "forecast_model": [
+            90255.5,
+            71000.4,
+            101994.9,
+            108753.5,
+            167368.3,
+            122373.8,
+            99866.6,
+            91941.7,
+            90805.0,
+            101126.3,
+            100379.4,
+            112413.0,
+            91293.1
+          ],
+          "forecast_seasonal_naive": [
+            82113.0,
+            66149.0,
+            97027.0,
+            106715.0,
+            156572.0,
+            120380.0,
+            89701.0,
+            91805.0,
+            87767.0,
+            102233.0,
+            92905.0,
+            103740.0,
+            85400.0
+          ],
+          "forecast_months": [
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ]
+        },
+        "attribution_bars": [
+          {
+            "feature": "lag1",
+            "mean_abs_shap_log1p_units": 1.043312
+          },
+          {
+            "feature": "lag3",
+            "mean_abs_shap_log1p_units": 0.259181
+          },
+          {
+            "feature": "corridor_id",
+            "mean_abs_shap_log1p_units": 0.161062
+          }
+        ]
+      },
+      {
+        "origin": "Philippines",
+        "series": {
+          "months": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12",
+            "2024-01",
+            "2024-02",
+            "2024-03",
+            "2024-04",
+            "2024-05",
+            "2024-06",
+            "2024-07",
+            "2024-08",
+            "2024-09",
+            "2024-10",
+            "2024-11",
+            "2024-12",
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ],
+          "actual": [
+            38484.0,
+            47446.0,
+            50591.0,
+            57030.0,
+            59346.0,
+            71409.0,
+            77160.0,
+            61802.0,
+            50679.0,
+            54649.0,
+            61213.0,
+            62866.0,
+            46287.0,
+            55604.0,
+            100271.0,
+            53154.0,
+            58311.0,
+            76120.0,
+            72589.0,
+            60174.0,
+            55976.0,
+            61489.0,
+            66942.0,
+            72162.0,
+            49088.0,
+            50154.0,
+            51623.0,
+            69047.0,
+            74560.0,
+            66647.0,
+            62381.0,
+            61462.0,
+            51355.0,
+            64398.0,
+            59859.0,
+            65491.0,
+            42526.0
+          ],
+          "forecast_model": [
+            51633.0,
+            52475.5,
+            54464.0,
+            53715.9,
+            64007.4,
+            75252.0,
+            76067.0,
+            67706.7,
+            59910.5,
+            65473.0,
+            67558.5,
+            72948.2,
+            51497.0
+          ],
+          "forecast_seasonal_naive": [
+            46287.0,
+            55604.0,
+            100271.0,
+            53154.0,
+            58311.0,
+            76120.0,
+            72589.0,
+            60174.0,
+            55976.0,
+            61489.0,
+            66942.0,
+            72162.0,
+            49088.0
+          ],
+          "forecast_months": [
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ]
+        },
+        "attribution_bars": [
+          {
+            "feature": "lag1",
+            "mean_abs_shap_log1p_units": 0.627055
+          },
+          {
+            "feature": "lag3",
+            "mean_abs_shap_log1p_units": 0.207754
+          },
+          {
+            "feature": "lag2",
+            "mean_abs_shap_log1p_units": 0.052976
+          }
+        ]
+      },
+      {
+        "origin": "USA",
+        "series": {
+          "months": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12",
+            "2024-01",
+            "2024-02",
+            "2024-03",
+            "2024-04",
+            "2024-05",
+            "2024-06",
+            "2024-07",
+            "2024-08",
+            "2024-09",
+            "2024-10",
+            "2024-11",
+            "2024-12",
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ],
+          "actual": [
+            50492.0,
+            52830.0,
+            54157.0,
+            44779.0,
+            50898.0,
+            59074.0,
+            64786.0,
+            48489.0,
+            46605.0,
+            44140.0,
+            58805.0,
+            65946.0,
+            62008.0,
+            60333.0,
+            64440.0,
+            49741.0,
+            54520.0,
+            61459.0,
+            65204.0,
+            51082.0,
+            47493.0,
+            50339.0,
+            61005.0,
+            64842.0,
+            70962.0,
+            65777.0,
+            68300.0,
+            54197.0,
+            47768.0,
+            62920.0,
+            67604.0,
+            49956.0,
+            44191.0,
+            50146.0,
+            63161.0,
+            71927.0,
+            71508.0
+          ],
+          "forecast_model": [
+            61341.8,
+            54939.9,
+            60781.9,
+            50391.3,
+            55953.1,
+            58977.1,
+            68972.5,
+            57517.9,
+            48110.5,
+            50041.7,
+            58732.1,
+            67637.6,
+            71553.1
+          ],
+          "forecast_seasonal_naive": [
+            62008.0,
+            60333.0,
+            64440.0,
+            49741.0,
+            54520.0,
+            61459.0,
+            65204.0,
+            51082.0,
+            47493.0,
+            50339.0,
+            61005.0,
+            64842.0,
+            70962.0
+          ],
+          "forecast_months": [
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ]
+        },
+        "attribution_bars": [
+          {
+            "feature": "lag1",
+            "mean_abs_shap_log1p_units": 0.578983
+          },
+          {
+            "feature": "lag3",
+            "mean_abs_shap_log1p_units": 0.185976
+          },
+          {
+            "feature": "corridor_id",
+            "mean_abs_shap_log1p_units": 0.080384
+          }
+        ]
+      },
+      {
+        "origin": "Japan",
+        "series": {
+          "months": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12",
+            "2024-01",
+            "2024-02",
+            "2024-03",
+            "2024-04",
+            "2024-05",
+            "2024-06",
+            "2024-07",
+            "2024-08",
+            "2024-09",
+            "2024-10",
+            "2024-11",
+            "2024-12",
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ],
+          "actual": [
+            18335.0,
+            32932.0,
+            36302.0,
+            22134.0,
+            29130.0,
+            25370.0,
+            42730.0,
+            68304.0,
+            45989.0,
+            38073.0,
+            41412.0,
+            32124.0,
+            37684.0,
+            45284.0,
+            54884.0,
+            32434.0,
+            39077.0,
+            33936.0,
+            51162.0,
+            81803.0,
+            57825.0,
+            51819.0,
+            44327.0,
+            43001.0,
+            40053.0,
+            55785.0,
+            65548.0,
+            31817.0,
+            40441.0,
+            35118.0,
+            56097.0,
+            92867.0,
+            59315.0,
+            54862.0,
+            53018.0,
+            42592.0,
+            43090.0
+          ],
+          "forecast_model": [
+            41012.3,
+            43563.5,
+            62434.6,
+            49333.5,
+            35368.3,
+            39394.2,
+            53189.2,
+            78540.5,
+            69098.8,
+            56916.9,
+            59994.4,
+            50045.8,
+            44393.7
+          ],
+          "forecast_seasonal_naive": [
+            37684.0,
+            45284.0,
+            54884.0,
+            32434.0,
+            39077.0,
+            33936.0,
+            51162.0,
+            81803.0,
+            57825.0,
+            51819.0,
+            44327.0,
+            43001.0,
+            40053.0
+          ],
+          "forecast_months": [
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ]
+        },
+        "attribution_bars": [
+          {
+            "feature": "lag1",
+            "mean_abs_shap_log1p_units": 0.411705
+          },
+          {
+            "feature": "lag3",
+            "mean_abs_shap_log1p_units": 0.154107
+          },
+          {
+            "feature": "lag12",
+            "mean_abs_shap_log1p_units": 0.05023
+          }
+        ]
+      },
+      {
+        "origin": "United Kingdom",
+        "series": {
+          "months": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12",
+            "2024-01",
+            "2024-02",
+            "2024-03",
+            "2024-04",
+            "2024-05",
+            "2024-06",
+            "2024-07",
+            "2024-08",
+            "2024-09",
+            "2024-10",
+            "2024-11",
+            "2024-12",
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ],
+          "actual": [
+            38123.0,
+            45785.0,
+            50330.0,
+            41576.0,
+            30608.0,
+            24244.0,
+            36886.0,
+            41765.0,
+            38715.0,
+            36194.0,
+            43195.0,
+            46184.0,
+            59068.0,
+            68148.0,
+            73518.0,
+            47507.0,
+            33195.0,
+            28752.0,
+            42233.0,
+            47305.0,
+            43032.0,
+            43943.0,
+            48607.0,
+            44650.0,
+            56474.0,
+            60238.0,
+            63276.0,
+            56713.0,
+            37413.0,
+            30327.0,
+            47971.0,
+            53247.0,
+            39297.0,
+            47267.0,
+            49372.0,
+            45761.0,
+            55541.0
+          ],
+          "forecast_model": [
+            58208.5,
+            70419.1,
+            63983.9,
+            50177.6,
+            41639.5,
+            31495.1,
+            41861.9,
+            51224.8,
+            45364.0,
+            44669.4,
+            51002.2,
+            46015.0,
+            56707.0
+          ],
+          "forecast_seasonal_naive": [
+            59068.0,
+            68148.0,
+            73518.0,
+            47507.0,
+            33195.0,
+            28752.0,
+            42233.0,
+            47305.0,
+            43032.0,
+            43943.0,
+            48607.0,
+            44650.0,
+            56474.0
+          ],
+          "forecast_months": [
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ]
+        },
+        "attribution_bars": [
+          {
+            "feature": "lag1",
+            "mean_abs_shap_log1p_units": 0.367768
+          },
+          {
+            "feature": "lag3",
+            "mean_abs_shap_log1p_units": 0.148946
+          },
+          {
+            "feature": "corridor_id",
+            "mean_abs_shap_log1p_units": 0.105693
+          }
+        ]
+      },
+      {
+        "origin": "South Korea",
+        "series": {
+          "months": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12",
+            "2024-01",
+            "2024-02",
+            "2024-03",
+            "2024-04",
+            "2024-05",
+            "2024-06",
+            "2024-07",
+            "2024-08",
+            "2024-09",
+            "2024-10",
+            "2024-11",
+            "2024-12",
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ],
+          "actual": [
+            60457.0,
+            64876.0,
+            35396.0,
+            31780.0,
+            39203.0,
+            40187.0,
+            60960.0,
+            62177.0,
+            48187.0,
+            45621.0,
+            42614.0,
+            39198.0,
+            79254.0,
+            69112.0,
+            42064.0,
+            37346.0,
+            39825.0,
+            39496.0,
+            57399.0,
+            60986.0,
+            44886.0,
+            42088.0,
+            39600.0,
+            42842.0,
+            79301.0,
+            72230.0,
+            38446.0,
+            32026.0,
+            39936.0,
+            36356.0,
+            59416.0,
+            64983.0,
+            35676.0,
+            50782.0,
+            41934.0,
+            35924.0,
+            69227.0
+          ],
+          "forecast_model": [
+            55643.4,
+            66547.3,
+            46501.0,
+            24793.1,
+            36466.9,
+            40756.6,
+            56001.5,
+            62004.1,
+            45993.6,
+            39213.1,
+            44607.1,
+            43905.8,
+            49264.4
+          ],
+          "forecast_seasonal_naive": [
+            79254.0,
+            69112.0,
+            42064.0,
+            37346.0,
+            39825.0,
+            39496.0,
+            57399.0,
+            60986.0,
+            44886.0,
+            42088.0,
+            39600.0,
+            42842.0,
+            79301.0
+          ],
+          "forecast_months": [
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ]
+        },
+        "attribution_bars": [
+          {
+            "feature": "lag1",
+            "mean_abs_shap_log1p_units": 0.299541
+          },
+          {
+            "feature": "lag3",
+            "mean_abs_shap_log1p_units": 0.145944
+          },
+          {
+            "feature": "corridor_id",
+            "mean_abs_shap_log1p_units": 0.088791
+          }
+        ]
+      },
+      {
+        "origin": "Taiwan",
+        "series": {
+          "months": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12",
+            "2024-01",
+            "2024-02",
+            "2024-03",
+            "2024-04",
+            "2024-05",
+            "2024-06",
+            "2024-07",
+            "2024-08",
+            "2024-09",
+            "2024-10",
+            "2024-11",
+            "2024-12",
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ],
+          "actual": [
+            31444.0,
+            25037.0,
+            19204.0,
+            25280.0,
+            24313.0,
+            28980.0,
+            43097.0,
+            38432.0,
+            25818.0,
+            28466.0,
+            21575.0,
+            17394.0,
+            38454.0,
+            45705.0,
+            30344.0,
+            30309.0,
+            28797.0,
+            34154.0,
+            49930.0,
+            42282.0,
+            30408.0,
+            29237.0,
+            23190.0,
+            20557.0,
+            46126.0,
+            33492.0,
+            26892.0,
+            31428.0,
+            35961.0,
+            32582.0,
+            54386.0,
+            47731.0,
+            26379.0,
+            41971.0,
+            25070.0,
+            20670.0,
+            36073.0
+          ],
+          "forecast_model": [
+            47444.0,
+            39617.8,
+            23163.2,
+            22088.4,
+            30774.7,
+            33872.8,
+            49721.3,
+            44477.4,
+            31344.0,
+            25158.5,
+            29914.3,
+            14206.7,
+            6715.8
+          ],
+          "forecast_seasonal_naive": [
+            38454.0,
+            45705.0,
+            30344.0,
+            30309.0,
+            28797.0,
+            34154.0,
+            49930.0,
+            42282.0,
+            30408.0,
+            29237.0,
+            23190.0,
+            20557.0,
+            46126.0
+          ],
+          "forecast_months": [
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ]
+        },
+        "attribution_bars": [
+          {
+            "feature": "lag1",
+            "mean_abs_shap_log1p_units": 0.244893
+          },
+          {
+            "feature": "corridor_id",
+            "mean_abs_shap_log1p_units": 0.132313
+          },
+          {
+            "feature": "lag3",
+            "mean_abs_shap_log1p_units": 0.12867
+          }
+        ]
+      },
+      {
+        "origin": "Thailand",
+        "series": {
+          "months": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12",
+            "2024-01",
+            "2024-02",
+            "2024-03",
+            "2024-04",
+            "2024-05",
+            "2024-06",
+            "2024-07",
+            "2024-08",
+            "2024-09",
+            "2024-10",
+            "2024-11",
+            "2024-12",
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ],
+          "actual": [
+            29735.0,
+            37156.0,
+            43145.0,
+            49727.0,
+            40375.0,
+            31029.0,
+            41367.0,
+            34938.0,
+            32307.0,
+            53442.0,
+            26808.0,
+            29987.0,
+            27194.0,
+            31089.0,
+            45975.0,
+            42507.0,
+            32818.0,
+            25459.0,
+            32834.0,
+            27966.0,
+            27707.0,
+            44447.0,
+            26740.0,
+            30436.0,
+            23423.0,
+            26711.0,
+            29757.0,
+            41843.0,
+            39123.0,
+            26174.0,
+            36228.0,
+            31917.0,
+            26947.0,
+            49763.0,
+            27797.0,
+            26805.0,
+            26311.0
+          ],
+          "forecast_model": [
+            26728.0,
+            22408.3,
+            32906.3,
+            42222.7,
+            34412.7,
+            31806.0,
+            32309.4,
+            31924.6,
+            30864.3,
+            38981.7,
+            32005.4,
+            26389.6,
+            23843.4
+          ],
+          "forecast_seasonal_naive": [
+            27194.0,
+            31089.0,
+            45975.0,
+            42507.0,
+            32818.0,
+            25459.0,
+            32834.0,
+            27966.0,
+            27707.0,
+            44447.0,
+            26740.0,
+            30436.0,
+            23423.0
+          ],
+          "forecast_months": [
+            "2025-01",
+            "2025-02",
+            "2025-03",
+            "2025-04",
+            "2025-05",
+            "2025-06",
+            "2025-07",
+            "2025-08",
+            "2025-09",
+            "2025-10",
+            "2025-11",
+            "2025-12",
+            "2026-01"
+          ]
+        },
+        "attribution_bars": [
+          {
+            "feature": "lag1",
+            "mean_abs_shap_log1p_units": 0.119489
+          },
+          {
+            "feature": "corridor_id",
+            "mean_abs_shap_log1p_units": 0.11914
+          },
+          {
+            "feature": "lag12",
+            "mean_abs_shap_log1p_units": 0.087935
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,377 @@
+{
+ "what_this_is": "What the measurement apparatus is worth, priced on this project's own hit rate rather than on a revenue assumption. Every value here is read from the committed pre-registered record and the committed uplift exhibit; nothing is modelled and no input is declared.",
+ "generated_by": "scripts/protocol_value.py",
+ "labels": [
+  "real",
+  "measured on our own work"
+ ],
+ "inclusion_rule": "One row per metric the pre-registration named for that comparison, per registered depth or rung, per seed and per registered arm, read from the committed results file that produced it. A comparison registered at three depths is three rows. A registered metric that was not the decision metric is still a row. Comparisons built after the first run are drawn in the same figure under their own heading and are in no count.",
+ "n_preregistered_comparisons_with_an_interval": 27,
+ "n_cleared_zero": 7,
+ "n_did_not_clear_zero": 7,
+ "n_straddling_zero": 13,
+ "n_not_cleared_either_way": 20,
+ "share_that_did_not_clear": 0.25925925925925924,
+ "share_not_cleared_either_way": 0.7407407407407407,
+ "did_not_clear": [
+  "Offer targeting, conversions, top decile (the primary)",
+  "Offer targeting, conversions, top 20 percent (the primary)",
+  "Offer targeting, conversions, top 30 percent (the primary)",
+  "Fraud, model alone against the counting control, ROC-AUC",
+  "Whitespace composite against venue density, forward check",
+  "Real-corpus transfer, households, top-1, seed 7",
+  "Real-corpus transfer, households, top-1, seed 8"
+ ],
+ "cleared": [
+  "Next-category top-1, embeddings added to the baseline",
+  "Next-category top-5, embeddings added to the baseline",
+  "Offer targeting, site visits, top decile",
+  "Real-corpus store head, macro-F1, seed 7",
+  "Real-corpus store head, macro-F1, seed 8",
+  "Real-corpus store head, accuracy, seed 8",
+  "Real-corpus offers head, AUC, seed 8"
+ ],
+ "straddling": [
+  "Offer targeting, site visits, top 20 percent",
+  "Offer targeting, site visits, top 30 percent",
+  "Fraud, model alone against the counting control, PR-AUC",
+  "Real-corpus transfer, households, top-5, seed 7",
+  "Real-corpus transfer, households, top-5, seed 8",
+  "Real-corpus store head, accuracy, seed 7",
+  "Real-corpus offers head, AUC, seed 7",
+  "Real-corpus offers head, PR-AUC, seed 7",
+  "Real-corpus offers head, PR-AUC, seed 8",
+  "Pair retention, merchant-axis embedding, ROC-AUC",
+  "Pair retention, merchant-axis embedding, PR-AUC",
+  "Pair retention, cardholder-axis embedding, ROC-AUC",
+  "Pair retention, cardholder-axis embedding, PR-AUC"
+ ],
+ "rows": [
+  {
+   "label": "Next-category top-1, embeddings added to the baseline",
+   "value": 0.021843333333333326,
+   "ci": [
+    0.010300143042363553,
+    0.03427451719858911
+   ],
+   "side": "above",
+   "source": "results/ladder.json#/deltas_by_rung/next_mcc_top1/L3"
+  },
+  {
+   "label": "Next-category top-5, embeddings added to the baseline",
+   "value": 0.021763333333333357,
+   "ci": [
+    0.0105787640267239,
+    0.0336235282610014
+   ],
+   "side": "above",
+   "source": "results/ladder.json#/deltas_by_rung/next_mcc_top5/L3"
+  },
+  {
+   "label": "Offer targeting, site visits, top decile",
+   "value": 0.011048540574994214,
+   "ci": [
+    0.00854500821556418,
+    0.014453363363733146
+   ],
+   "side": "above",
+   "source": "results/uplift.json#/criteo/targeting_at_k/outcomes/visit/k/10/difference_cate_minus_response/value"
+  },
+  {
+   "label": "Offer targeting, site visits, top 20 percent",
+   "value": 0.00119912583418047,
+   "ci": [
+    -0.00017482369285562802,
+    0.0025340125576869214
+   ],
+   "side": "straddles",
+   "source": "results/uplift.json#/criteo/targeting_at_k/outcomes/visit/k/20/difference_cate_minus_response/value"
+  },
+  {
+   "label": "Offer targeting, site visits, top 30 percent",
+   "value": 0.00045432900452502256,
+   "ci": [
+    -0.00047412739140352577,
+    0.0012305458927468235
+   ],
+   "side": "straddles",
+   "source": "results/uplift.json#/criteo/targeting_at_k/outcomes/visit/k/30/difference_cate_minus_response/value"
+  },
+  {
+   "label": "Offer targeting, conversions, top decile (the primary)",
+   "value": -0.0010221771732878034,
+   "ci": [
+    -0.00166964842666253,
+    -0.00027669704594764625
+   ],
+   "side": "below",
+   "source": "results/uplift.json#/criteo/targeting_at_k/outcomes/conversion/k/10/difference_cate_minus_response/value"
+  },
+  {
+   "label": "Offer targeting, conversions, top 20 percent (the primary)",
+   "value": -0.0005215163740750397,
+   "ci": [
+    -0.000841587645939622,
+    -0.00018355913551397281
+   ],
+   "side": "below",
+   "source": "results/uplift.json#/criteo/targeting_at_k/outcomes/conversion/k/20/difference_cate_minus_response/value"
+  },
+  {
+   "label": "Offer targeting, conversions, top 30 percent (the primary)",
+   "value": -0.0004788725678548473,
+   "ci": [
+    -0.0006747026035883149,
+    -0.00024901845186006813
+   ],
+   "side": "below",
+   "source": "results/uplift.json#/criteo/targeting_at_k/outcomes/conversion/k/30/difference_cate_minus_response/value"
+  },
+  {
+   "label": "Fraud, model alone against the counting control, PR-AUC",
+   "value": 0.0056210341562281385,
+   "ci": [
+    -0.03909354913325854,
+    0.05056708235268516
+   ],
+   "side": "straddles",
+   "source": "results/protection.json#/comparisons_by_key/pll_all_fields_vs_rarity_all_fields/pr_auc/difference"
+  },
+  {
+   "label": "Fraud, model alone against the counting control, ROC-AUC",
+   "value": -0.034528500225445735,
+   "ci": [
+    -0.052331256887034584,
+    -0.015892600743034273
+   ],
+   "side": "below",
+   "source": "results/protection.json#/comparisons_by_key/pll_all_fields_vs_rarity_all_fields/roc_auc/difference"
+  },
+  {
+   "label": "Whitespace composite against venue density, forward check",
+   "value": -0.139203,
+   "ci": [
+    -0.178481,
+    -0.101996
+   ],
+   "side": "below",
+   "source": "results/whitespace_temporal.json#/bootstrap/spearman_diff_composite_minus_density/point"
+  },
+  {
+   "label": "Real-corpus transfer, households, top-1, seed 7",
+   "value": -0.015960436102056885,
+   "ci": [
+    -0.020728618281150718,
+    -0.011325686193294236
+   ],
+   "side": "below",
+   "source": "results/cj/cj_transfer.json#/per_seed/7/delta_top1"
+  },
+  {
+   "label": "Real-corpus transfer, households, top-1, seed 8",
+   "value": -0.014724064291334105,
+   "ci": [
+    -0.019683739230089276,
+    -0.010079221950178921
+   ],
+   "side": "below",
+   "source": "results/cj/cj_transfer.json#/per_seed/8/delta_top1"
+  },
+  {
+   "label": "Real-corpus transfer, households, top-5, seed 7",
+   "value": 0.002360346184106965,
+   "ci": [
+    -0.00260406374315581,
+    0.007481036662452649
+   ],
+   "side": "straddles",
+   "source": "results/cj/cj_transfer.json#/per_seed/7/delta_top5"
+  },
+  {
+   "label": "Real-corpus transfer, households, top-5, seed 8",
+   "value": 0.00472069236821393,
+   "ci": [
+    -0.0005771134914434595,
+    0.010794945240458589
+   ],
+   "side": "straddles",
+   "source": "results/cj/cj_transfer.json#/per_seed/8/delta_top5"
+  },
+  {
+   "label": "Real-corpus store head, macro-F1, seed 7",
+   "value": 0.191224071750203,
+   "ci": [
+    0.00642147183662618,
+    0.3864939533136834
+   ],
+   "side": "above",
+   "source": "results/cj/cj_store_head_b7.json#/delta/macro_f1"
+  },
+  {
+   "label": "Real-corpus store head, macro-F1, seed 8",
+   "value": 0.22417512607222517,
+   "ci": [
+    0.0449482315070551,
+    0.4342910225126598
+   ],
+   "side": "above",
+   "source": "results/cj/cj_store_head_b8.json#/delta/macro_f1"
+  },
+  {
+   "label": "Real-corpus store head, accuracy, seed 7",
+   "value": 0.19565217391304346,
+   "ci": [
+    -0.021739130434782594,
+    0.4130434782608695
+   ],
+   "side": "straddles",
+   "source": "results/cj/cj_store_head_b7.json#/delta/accuracy"
+  },
+  {
+   "label": "Real-corpus store head, accuracy, seed 8",
+   "value": 0.21739130434782605,
+   "ci": [
+    0.021739130434782594,
+    0.4135869565217387
+   ],
+   "side": "above",
+   "source": "results/cj/cj_store_head_b8.json#/delta/accuracy"
+  },
+  {
+   "label": "Real-corpus offers head, AUC, seed 7",
+   "value": 0.014121634343814748,
+   "ci": [
+    -0.009442901190713004,
+    0.03819335606697635
+   ],
+   "side": "straddles",
+   "source": "results/cj/cj_offer_head_b7.json#/delta/auc"
+  },
+  {
+   "label": "Real-corpus offers head, AUC, seed 8",
+   "value": 0.02692524948220676,
+   "ci": [
+    0.0023144874988983324,
+    0.05506519880694447
+   ],
+   "side": "above",
+   "source": "results/cj/cj_offer_head_b8.json#/delta/auc"
+  },
+  {
+   "label": "Real-corpus offers head, PR-AUC, seed 7",
+   "value": 0.012091065376842791,
+   "ci": [
+    -0.06971516495679425,
+    0.10997605586795214
+   ],
+   "side": "straddles",
+   "source": "results/cj/cj_offer_head_b7.json#/delta/prauc"
+  },
+  {
+   "label": "Real-corpus offers head, PR-AUC, seed 8",
+   "value": 0.06610208930265293,
+   "ci": [
+    -0.0299757890276525,
+    0.16327723980522887
+   ],
+   "side": "straddles",
+   "source": "results/cj/cj_offer_head_b8.json#/delta/prauc"
+  },
+  {
+   "label": "Pair retention, merchant-axis embedding, ROC-AUC",
+   "value": 0.0005889360611845973,
+   "ci": [
+    -0.0004747385453346048,
+    0.0015666344856114925
+   ],
+   "side": "straddles",
+   "source": "results/pair_retention.json#/deltas/with_v2/delta_auc"
+  },
+  {
+   "label": "Pair retention, merchant-axis embedding, PR-AUC",
+   "value": 0.0028285800415605022,
+   "ci": [
+    -0.0004215014745512335,
+    0.006311025144042519
+   ],
+   "side": "straddles",
+   "source": "results/pair_retention.json#/deltas/with_v2/delta_prauc"
+  },
+  {
+   "label": "Pair retention, cardholder-axis embedding, ROC-AUC",
+   "value": -0.0008471872610231745,
+   "ci": [
+    -0.0033903220721540396,
+    0.0013580118823888511
+   ],
+   "side": "straddles",
+   "source": "results/pair_retention.json#/deltas/with_v1/delta_auc"
+  },
+  {
+   "label": "Pair retention, cardholder-axis embedding, PR-AUC",
+   "value": -0.001341757705558333,
+   "ci": [
+    -0.006704440700693473,
+    0.003589187223874524
+   ],
+   "side": "straddles",
+   "source": "results/pair_retention.json#/deltas/with_v1/delta_prauc"
+  }
+ ],
+ "post_hoc_drawn_not_counted": [
+  {
+   "label": "Fraud, model added to the counting control, PR-AUC",
+   "value": 0.20142270570189216,
+   "ci": [
+    0.14803055285495012,
+    0.24501680073527154
+   ],
+   "side": "above",
+   "source": "results/protection.json#/comparisons_by_key/pll_plus_rarity_vs_rarity_all_fields/pr_auc/difference"
+  },
+  {
+   "label": "Fraud, model added to the counting control, ROC-AUC",
+   "value": 0.012945214816442396,
+   "ci": [
+    0.004078120985757172,
+    0.022612116644210346
+   ],
+   "side": "above",
+   "source": "results/protection.json#/comparisons_by_key/pll_plus_rarity_vs_rarity_all_fields/roc_auc/difference"
+  }
+ ],
+ "what_the_rate_is_not": "This is not a claim that seven hypotheses failed. Two of the seven wrong-side rows are the model measured alone against the counting control, on the metric where the intervals separate, a comparison reported because the honest question is whether the model ADDS to that control, not whether it replaces it. Three are the pre-registered primary endpoint on offer targeting at each of its three registered depths, one is the whitespace composite against plain venue density on its forward check, and two are household transfer on the real corpus in both seeds. The thirteen straddling rows are nulls, not losses: registered metrics, depths and arms whose intervals could not be told from zero, printed at the same size as everything else.",
+ "what_changed_and_why": "An earlier version counted eleven rows, six cleared and five wrong-side, from a curated list. A reviewer showed that the same pre-registrations it drew on also registered metrics, depths and arms it left out, and that two of its cleared rows were the protection combination built after the first run. The census is now the mechanical rule above; the combination is drawn and not counted.",
+ "why_it_is_the_number_that_travels": "It depends on no assumption in the value model. An Amex reader can price it against their own rate, which they know and we do not, and the comparison needs no shared unit and no shared corpus.",
+ "ladder_correction": {
+  "task": "next-category top-1",
+  "permissive_protocol_delta": 0.05904000000000001,
+  "shipped_protocol_delta": 0.021843333333333326,
+  "share_of_headline_that_was_protocol": 0.630024841915086,
+  "percent_of_headline_that_was_protocol": 63.0024841915086,
+  "never_pointed_at_an_external_claim": "The ladder has been run on this project's own checkpoint and on nothing else. This is the size of the correction it made to OUR claim. It is not a catch rate on anyone else's models, no such rate has been measured, and none is implied."
+ },
+ "endpoints": {
+  "visit": {
+   "is_preregistered_primary": false,
+   "share_uplift_ranking": 0.593067728753398,
+   "share_response_ranking": 0.48607255242286024,
+   "share_percent_uplift_ranking": 59.306772875339796,
+   "share_percent_response_ranking": 48.60725524228602
+  },
+  "conversion": {
+   "is_preregistered_primary": true,
+   "share_uplift_ranking": 0.5921667261813359,
+   "share_response_ranking": 0.6857110344515275,
+   "share_percent_uplift_ranking": 59.21667261813359,
+   "share_percent_response_ranking": 68.57110344515274
+  }
+ },
+ "endpoint_winner_flips": true,
+ "uplift_share_spread": 0.0009010025720620485,
+ "response_share_spread": 0.19963848202866724,
+ "uplift_share_spread_points": 0.09010025720620485,
+ "response_share_spread_points": 19.963848202866725,
+ "endpoint_note": "Same customers, same randomized arms, same depth, two pre-registered outcomes. The ranking that wins flips between them, so whoever picks the endpoint picks the winner. Across the two, the uplift ranking's share moved by the uplift_share_spread above and the response ranking's by response_share_spread. Two endpoints is not evidence of a general stability property and none is claimed; what is claimed is that the answer flipped, and that only a holdout shows it.",
+ "reach": 0.1
+}

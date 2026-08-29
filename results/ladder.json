@@ -1,0 +1,979 @@
+{
+ "seed": 7,
+ "versions": {
+  "python": "3.12.3",
+  "numpy": "2.5.2",
+  "polars": "1.43.2",
+  "pyarrow": "25.0.1",
+  "lightgbm": "4.7.0",
+  "sklearn": "1.9.0",
+  "torch": "2.13.0+cu130"
+ },
+ "generated_by": "scripts/fm/ladder_eval.py --check-able",
+ "data_sources": [
+  {
+   "name": "IBM TabFormer card_transaction.v1.csv (synthetic)",
+   "url": "https://github.com/IBM/TabFormer (data/credit_card/transactions.tgz)",
+   "sha256": "e9f589a0958f40d60f81b1a2e8428db86e00c05755caf44fb055827976c0efa2"
+  }
+ ],
+ "labels": [
+  "synthetic"
+ ],
+ "what_this_is": "One frozen checkpoint, no new pretraining. The same two downstream tasks are evaluated under four progressively stricter EVALUATION protocols, one guard at a time, to measure how much of a transfer lift is protocol rather than model.",
+ "pretrain_guards_constant": {
+  "label_excluded": true,
+  "ids_hashed": true,
+  "time_truncated": true,
+  "note": "These are pretrain-side guards and they stay ON at every rung. Only the evaluation protocol varies."
+ },
+ "held_fixed": {
+  "checkpoint": "the full-corpus cardholder backbone (frozen, evaluation only)",
+  "row_caps": {
+   "train": 800000,
+   "test": 300000
+  },
+  "merchant_embedding": "pre-cut pooled at every rung; only the account-side embedding varies, so L0 is a lower bound on how much a fully permissive protocol inflates, not an upper bound",
+  "hyperparameters": "identical LightGBM settings and early stopping at every rung"
+ },
+ "bootstrap": {
+  "method": "entity-clustered paired bootstrap",
+  "B": 1000,
+  "ci": "percentile 95%"
+ },
+ "rungs": [
+  {
+   "rung": "L0",
+   "name": "permissive",
+   "guards": {
+    "entity_disjoint_split": false,
+    "as_of_embeddings": false,
+    "baseline_aggregates": false
+   },
+   "split": "temporal-only (the same accounts appear in train and test)",
+   "account_embedding": "full-history pooled (sees the scored transaction and after)",
+   "baseline": "raw fields only, no per-entity temporal aggregates",
+   "n_shared_accounts_train_test": 1530,
+   "tasks": {
+    "fraud": {
+     "baseline_auc": 0.9999826706149433,
+     "baseline_prauc": 0.9853558017368592,
+     "with_emb_auc": 0.9999661386005663,
+     "with_emb_prauc": 0.9851733096508549,
+     "delta_auc": -1.6532014377013127e-05,
+     "delta_prauc": -0.00018249208600429334,
+     "delta_auc_ci": [
+      -4.3732777044269695e-05,
+      4.573782975902931e-06
+     ],
+     "delta_prauc_ci": [
+      -0.01619652725114995,
+      0.016037838154566244
+     ],
+     "n_test_pos": 809,
+     "test_pos_rate": 0.0026966666666666667,
+     "n_train": 800000,
+     "n_test": 300000,
+     "n_test_users": 1943,
+     "n_features_baseline": 11,
+     "n_features_with_emb": 1037,
+     "baseline_features": "last_amount, freq_prev_mcc, freq_prev_city, prev_mcc, amount, hour, use_chip, freq_mcc, freq_city, freq_state, mcc"
+    },
+    "next_mcc": {
+     "baseline_top1": 0.2461,
+     "baseline_top5": 0.5284066666666667,
+     "with_emb_top1": 0.30514,
+     "with_emb_top5": 0.6348233333333333,
+     "n_classes": 31,
+     "features": "history-only (scored txn fields excluded)",
+     "delta_top1": 0.05904000000000001,
+     "delta_top5": 0.1064166666666666,
+     "delta_top1_ci": [
+      0.05473221054450571,
+      0.06340733390472708
+     ],
+     "delta_top5_ci": [
+      0.10102664401778098,
+      0.11222174495413814
+     ],
+     "n_train": 800000,
+     "n_test": 300000,
+     "n_test_users": 1943,
+     "n_features_baseline": 4,
+     "n_features_with_emb": 517,
+     "baseline_features": "last_amount, freq_prev_mcc, freq_prev_city, prev_mcc"
+    }
+   }
+  },
+  {
+   "rung": "L1",
+   "name": "entity-disjoint split",
+   "guards": {
+    "entity_disjoint_split": true,
+    "as_of_embeddings": false,
+    "baseline_aggregates": false
+   },
+   "split": "entity-disjoint by account",
+   "account_embedding": "full-history pooled (sees the scored transaction and after)",
+   "baseline": "raw fields only, no per-entity temporal aggregates",
+   "n_shared_accounts_train_test": 0,
+   "tasks": {
+    "fraud": {
+     "baseline_auc": 0.9999175268055573,
+     "baseline_prauc": 0.988121855693014,
+     "with_emb_auc": 0.9991289528505092,
+     "with_emb_prauc": 0.9933607040140462,
+     "delta_auc": -0.0007885739550481663,
+     "delta_prauc": 0.0052388483210321635,
+     "delta_auc_ci": [
+      -0.0026983050149673557,
+      0.00014905523119476682
+     ],
+     "delta_prauc_ci": [
+      -0.009848112171664668,
+      0.02178661020054091
+     ],
+     "n_test_pos": 945,
+     "test_pos_rate": 0.00315,
+     "n_train": 800000,
+     "n_test": 300000,
+     "n_test_users": 391,
+     "n_features_baseline": 11,
+     "n_features_with_emb": 1037,
+     "baseline_features": "last_amount, freq_prev_mcc, freq_prev_city, prev_mcc, amount, hour, use_chip, freq_mcc, freq_city, freq_state, mcc"
+    },
+    "next_mcc": {
+     "baseline_top1": 0.23151666666666668,
+     "baseline_top5": 0.4962433333333333,
+     "with_emb_top1": 0.20747666666666667,
+     "with_emb_top5": 0.49627,
+     "n_classes": 31,
+     "features": "history-only (scored txn fields excluded)",
+     "delta_top1": -0.024040000000000006,
+     "delta_top5": 2.6666666666674832e-05,
+     "delta_top1_ci": [
+      -0.037251180020212035,
+      -0.01117810457301728
+     ],
+     "delta_top5_ci": [
+      -0.015842054588559563,
+      0.014025660265326659
+     ],
+     "n_train": 800000,
+     "n_test": 300000,
+     "n_test_users": 391,
+     "n_features_baseline": 4,
+     "n_features_with_emb": 517,
+     "baseline_features": "last_amount, freq_prev_mcc, freq_prev_city, prev_mcc"
+    }
+   }
+  },
+  {
+   "rung": "L2",
+   "name": "as-of embeddings",
+   "guards": {
+    "entity_disjoint_split": true,
+    "as_of_embeddings": true,
+    "baseline_aggregates": false
+   },
+   "split": "entity-disjoint by account",
+   "account_embedding": "as-of prefix-only (strictly before the scored transaction)",
+   "baseline": "raw fields only, no per-entity temporal aggregates",
+   "n_shared_accounts_train_test": 0,
+   "tasks": {
+    "fraud": {
+     "baseline_auc": 0.9999175268055573,
+     "baseline_prauc": 0.988121855693014,
+     "with_emb_auc": 0.9999110319198599,
+     "with_emb_prauc": 0.9957425492520579,
+     "delta_auc": -6.494885697483355e-06,
+     "delta_prauc": 0.007620693559043823,
+     "delta_auc_ci": [
+      -0.0002213085231595746,
+      0.00015849805484284551
+     ],
+     "delta_prauc_ci": [
+      -0.0022331206680436667,
+      0.021165306401750985
+     ],
+     "n_test_pos": 945,
+     "test_pos_rate": 0.00315,
+     "n_train": 800000,
+     "n_test": 300000,
+     "n_test_users": 391,
+     "n_features_baseline": 11,
+     "n_features_with_emb": 1037,
+     "baseline_features": "last_amount, freq_prev_mcc, freq_prev_city, prev_mcc, amount, hour, use_chip, freq_mcc, freq_city, freq_state, mcc"
+    },
+    "next_mcc": {
+     "baseline_top1": 0.23151666666666668,
+     "baseline_top5": 0.4962433333333333,
+     "with_emb_top1": 0.24738333333333334,
+     "with_emb_top5": 0.55093,
+     "n_classes": 31,
+     "features": "history-only (scored txn fields excluded)",
+     "delta_top1": 0.015866666666666668,
+     "delta_top5": 0.05468666666666672,
+     "delta_top1_ci": [
+      0.0077454640111779115,
+      0.02461693741555913
+     ],
+     "delta_top5_ci": [
+      0.04213250560083348,
+      0.06735231505176711
+     ],
+     "n_train": 800000,
+     "n_test": 300000,
+     "n_test_users": 391,
+     "n_features_baseline": 4,
+     "n_features_with_emb": 517,
+     "baseline_features": "last_amount, freq_prev_mcc, freq_prev_city, prev_mcc"
+    }
+   }
+  },
+  {
+   "rung": "L3",
+   "name": "aggregate-equipped baseline (shipped)",
+   "guards": {
+    "entity_disjoint_split": true,
+    "as_of_embeddings": true,
+    "baseline_aggregates": true
+   },
+   "split": "entity-disjoint by account",
+   "account_embedding": "as-of prefix-only (strictly before the scored transaction)",
+   "baseline": "raw fields plus per-entity temporal aggregates",
+   "n_shared_accounts_train_test": 0,
+   "tasks": {
+    "fraud": {
+     "baseline_auc": 0.9999433807321989,
+     "baseline_prauc": 0.9938933080218925,
+     "with_emb_auc": 0.9996087251561997,
+     "with_emb_prauc": 0.9960029350088007,
+     "delta_auc": -0.0003346555759992098,
+     "delta_prauc": 0.0021096269869081974,
+     "delta_auc_ci": [
+      -0.0012132721190806662,
+      9.31760878176091e-05
+     ],
+     "delta_prauc_ci": [
+      -0.004071667756953756,
+      0.008618628263703259
+     ],
+     "n_test_pos": 945,
+     "test_pos_rate": 0.00315,
+     "n_train": 800000,
+     "n_test": 300000,
+     "n_test_users": 391,
+     "n_features_baseline": 18,
+     "n_features_with_emb": 1044,
+     "baseline_features": "hist_count, amt_mean, amt_std, amt_max, last_amount, recency_log, since_first_log, freq_prev_mcc, freq_prev_city, prev_mcc, amount, amount_z, hour, use_chip, freq_mcc, freq_city, freq_state, mcc"
+    },
+    "next_mcc": {
+     "baseline_top1": 0.23493333333333333,
+     "baseline_top5": 0.53084,
+     "with_emb_top1": 0.25677666666666665,
+     "with_emb_top5": 0.5526033333333333,
+     "n_classes": 31,
+     "features": "history-only (scored txn fields excluded)",
+     "delta_top1": 0.021843333333333326,
+     "delta_top5": 0.021763333333333357,
+     "delta_top1_ci": [
+      0.010300143042363553,
+      0.03427451719858911
+     ],
+     "delta_top5_ci": [
+      0.0105787640267239,
+      0.0336235282610014
+     ],
+     "n_train": 800000,
+     "n_test": 300000,
+     "n_test_users": 391,
+     "n_features_baseline": 10,
+     "n_features_with_emb": 523,
+     "baseline_features": "hist_count, amt_mean, amt_std, amt_max, last_amount, recency_log, since_first_log, freq_prev_mcc, freq_prev_city, prev_mcc"
+    }
+   }
+  }
+ ],
+ "rungs_by_id": {
+  "L0": {
+   "rung": "L0",
+   "name": "permissive",
+   "guards": {
+    "entity_disjoint_split": false,
+    "as_of_embeddings": false,
+    "baseline_aggregates": false
+   },
+   "split": "temporal-only (the same accounts appear in train and test)",
+   "account_embedding": "full-history pooled (sees the scored transaction and after)",
+   "baseline": "raw fields only, no per-entity temporal aggregates",
+   "n_shared_accounts_train_test": 1530,
+   "tasks": {
+    "fraud": {
+     "baseline_auc": 0.9999826706149433,
+     "baseline_prauc": 0.9853558017368592,
+     "with_emb_auc": 0.9999661386005663,
+     "with_emb_prauc": 0.9851733096508549,
+     "delta_auc": -1.6532014377013127e-05,
+     "delta_prauc": -0.00018249208600429334,
+     "delta_auc_ci": [
+      -4.3732777044269695e-05,
+      4.573782975902931e-06
+     ],
+     "delta_prauc_ci": [
+      -0.01619652725114995,
+      0.016037838154566244
+     ],
+     "n_test_pos": 809,
+     "test_pos_rate": 0.0026966666666666667,
+     "n_train": 800000,
+     "n_test": 300000,
+     "n_test_users": 1943,
+     "n_features_baseline": 11,
+     "n_features_with_emb": 1037,
+     "baseline_features": "last_amount, freq_prev_mcc, freq_prev_city, prev_mcc, amount, hour, use_chip, freq_mcc, freq_city, freq_state, mcc"
+    },
+    "next_mcc": {
+     "baseline_top1": 0.2461,
+     "baseline_top5": 0.5284066666666667,
+     "with_emb_top1": 0.30514,
+     "with_emb_top5": 0.6348233333333333,
+     "n_classes": 31,
+     "features": "history-only (scored txn fields excluded)",
+     "delta_top1": 0.05904000000000001,
+     "delta_top5": 0.1064166666666666,
+     "delta_top1_ci": [
+      0.05473221054450571,
+      0.06340733390472708
+     ],
+     "delta_top5_ci": [
+      0.10102664401778098,
+      0.11222174495413814
+     ],
+     "n_train": 800000,
+     "n_test": 300000,
+     "n_test_users": 1943,
+     "n_features_baseline": 4,
+     "n_features_with_emb": 517,
+     "baseline_features": "last_amount, freq_prev_mcc, freq_prev_city, prev_mcc"
+    }
+   }
+  },
+  "L1": {
+   "rung": "L1",
+   "name": "entity-disjoint split",
+   "guards": {
+    "entity_disjoint_split": true,
+    "as_of_embeddings": false,
+    "baseline_aggregates": false
+   },
+   "split": "entity-disjoint by account",
+   "account_embedding": "full-history pooled (sees the scored transaction and after)",
+   "baseline": "raw fields only, no per-entity temporal aggregates",
+   "n_shared_accounts_train_test": 0,
+   "tasks": {
+    "fraud": {
+     "baseline_auc": 0.9999175268055573,
+     "baseline_prauc": 0.988121855693014,
+     "with_emb_auc": 0.9991289528505092,
+     "with_emb_prauc": 0.9933607040140462,
+     "delta_auc": -0.0007885739550481663,
+     "delta_prauc": 0.0052388483210321635,
+     "delta_auc_ci": [
+      -0.0026983050149673557,
+      0.00014905523119476682
+     ],
+     "delta_prauc_ci": [
+      -0.009848112171664668,
+      0.02178661020054091
+     ],
+     "n_test_pos": 945,
+     "test_pos_rate": 0.00315,
+     "n_train": 800000,
+     "n_test": 300000,
+     "n_test_users": 391,
+     "n_features_baseline": 11,
+     "n_features_with_emb": 1037,
+     "baseline_features": "last_amount, freq_prev_mcc, freq_prev_city, prev_mcc, amount, hour, use_chip, freq_mcc, freq_city, freq_state, mcc"
+    },
+    "next_mcc": {
+     "baseline_top1": 0.23151666666666668,
+     "baseline_top5": 0.4962433333333333,
+     "with_emb_top1": 0.20747666666666667,
+     "with_emb_top5": 0.49627,
+     "n_classes": 31,
+     "features": "history-only (scored txn fields excluded)",
+     "delta_top1": -0.024040000000000006,
+     "delta_top5": 2.6666666666674832e-05,
+     "delta_top1_ci": [
+      -0.037251180020212035,
+      -0.01117810457301728
+     ],
+     "delta_top5_ci": [
+      -0.015842054588559563,
+      0.014025660265326659
+     ],
+     "n_train": 800000,
+     "n_test": 300000,
+     "n_test_users": 391,
+     "n_features_baseline": 4,
+     "n_features_with_emb": 517,
+     "baseline_features": "last_amount, freq_prev_mcc, freq_prev_city, prev_mcc"
+    }
+   }
+  },
+  "L2": {
+   "rung": "L2",
+   "name": "as-of embeddings",
+   "guards": {
+    "entity_disjoint_split": true,
+    "as_of_embeddings": true,
+    "baseline_aggregates": false
+   },
+   "split": "entity-disjoint by account",
+   "account_embedding": "as-of prefix-only (strictly before the scored transaction)",
+   "baseline": "raw fields only, no per-entity temporal aggregates",
+   "n_shared_accounts_train_test": 0,
+   "tasks": {
+    "fraud": {
+     "baseline_auc": 0.9999175268055573,
+     "baseline_prauc": 0.988121855693014,
+     "with_emb_auc": 0.9999110319198599,
+     "with_emb_prauc": 0.9957425492520579,
+     "delta_auc": -6.494885697483355e-06,
+     "delta_prauc": 0.007620693559043823,
+     "delta_auc_ci": [
+      -0.0002213085231595746,
+      0.00015849805484284551
+     ],
+     "delta_prauc_ci": [
+      -0.0022331206680436667,
+      0.021165306401750985
+     ],
+     "n_test_pos": 945,
+     "test_pos_rate": 0.00315,
+     "n_train": 800000,
+     "n_test": 300000,
+     "n_test_users": 391,
+     "n_features_baseline": 11,
+     "n_features_with_emb": 1037,
+     "baseline_features": "last_amount, freq_prev_mcc, freq_prev_city, prev_mcc, amount, hour, use_chip, freq_mcc, freq_city, freq_state, mcc"
+    },
+    "next_mcc": {
+     "baseline_top1": 0.23151666666666668,
+     "baseline_top5": 0.4962433333333333,
+     "with_emb_top1": 0.24738333333333334,
+     "with_emb_top5": 0.55093,
+     "n_classes": 31,
+     "features": "history-only (scored txn fields excluded)",
+     "delta_top1": 0.015866666666666668,
+     "delta_top5": 0.05468666666666672,
+     "delta_top1_ci": [
+      0.0077454640111779115,
+      0.02461693741555913
+     ],
+     "delta_top5_ci": [
+      0.04213250560083348,
+      0.06735231505176711
+     ],
+     "n_train": 800000,
+     "n_test": 300000,
+     "n_test_users": 391,
+     "n_features_baseline": 4,
+     "n_features_with_emb": 517,
+     "baseline_features": "last_amount, freq_prev_mcc, freq_prev_city, prev_mcc"
+    }
+   }
+  },
+  "L3": {
+   "rung": "L3",
+   "name": "aggregate-equipped baseline (shipped)",
+   "guards": {
+    "entity_disjoint_split": true,
+    "as_of_embeddings": true,
+    "baseline_aggregates": true
+   },
+   "split": "entity-disjoint by account",
+   "account_embedding": "as-of prefix-only (strictly before the scored transaction)",
+   "baseline": "raw fields plus per-entity temporal aggregates",
+   "n_shared_accounts_train_test": 0,
+   "tasks": {
+    "fraud": {
+     "baseline_auc": 0.9999433807321989,
+     "baseline_prauc": 0.9938933080218925,
+     "with_emb_auc": 0.9996087251561997,
+     "with_emb_prauc": 0.9960029350088007,
+     "delta_auc": -0.0003346555759992098,
+     "delta_prauc": 0.0021096269869081974,
+     "delta_auc_ci": [
+      -0.0012132721190806662,
+      9.31760878176091e-05
+     ],
+     "delta_prauc_ci": [
+      -0.004071667756953756,
+      0.008618628263703259
+     ],
+     "n_test_pos": 945,
+     "test_pos_rate": 0.00315,
+     "n_train": 800000,
+     "n_test": 300000,
+     "n_test_users": 391,
+     "n_features_baseline": 18,
+     "n_features_with_emb": 1044,
+     "baseline_features": "hist_count, amt_mean, amt_std, amt_max, last_amount, recency_log, since_first_log, freq_prev_mcc, freq_prev_city, prev_mcc, amount, amount_z, hour, use_chip, freq_mcc, freq_city, freq_state, mcc"
+    },
+    "next_mcc": {
+     "baseline_top1": 0.23493333333333333,
+     "baseline_top5": 0.53084,
+     "with_emb_top1": 0.25677666666666665,
+     "with_emb_top5": 0.5526033333333333,
+     "n_classes": 31,
+     "features": "history-only (scored txn fields excluded)",
+     "delta_top1": 0.021843333333333326,
+     "delta_top5": 0.021763333333333357,
+     "delta_top1_ci": [
+      0.010300143042363553,
+      0.03427451719858911
+     ],
+     "delta_top5_ci": [
+      0.0105787640267239,
+      0.0336235282610014
+     ],
+     "n_train": 800000,
+     "n_test": 300000,
+     "n_test_users": 391,
+     "n_features_baseline": 10,
+     "n_features_with_emb": 523,
+     "baseline_features": "hist_count, amt_mean, amt_std, amt_max, last_amount, recency_log, since_first_log, freq_prev_mcc, freq_prev_city, prev_mcc"
+    }
+   }
+  }
+ },
+ "deltas_by_rung": {
+  "next_mcc_top1": {
+   "L0": 0.05904000000000001,
+   "L1": -0.024040000000000006,
+   "L2": 0.015866666666666668,
+   "L3": 0.021843333333333326
+  },
+  "next_mcc_top5": {
+   "L0": 0.1064166666666666,
+   "L1": 2.6666666666674832e-05,
+   "L2": 0.05468666666666672,
+   "L3": 0.021763333333333357
+  },
+  "fraud_auc": {
+   "L0": -1.6532014377013127e-05,
+   "L1": -0.0007885739550481663,
+   "L2": -6.494885697483355e-06,
+   "L3": -0.0003346555759992098
+  },
+  "fraud_prauc": {
+   "L0": -0.00018249208600429334,
+   "L1": 0.0052388483210321635,
+   "L2": 0.007620693559043823,
+   "L3": 0.0021096269869081974
+  }
+ },
+ "guard_prices": [
+  {
+   "guard": "entity-disjoint split by account",
+   "from": "L0",
+   "to": "L1",
+   "metric": "next_mcc_top1",
+   "delta_before": 0.05904000000000001,
+   "delta_after": -0.024040000000000006,
+   "price": -0.08308000000000001,
+   "paired": false,
+   "note": "no interval: this step changes which rows are scored, so the two deltas are not paired and the difference is a difference of point estimates only"
+  },
+  {
+   "guard": "entity-disjoint split by account",
+   "from": "L0",
+   "to": "L1",
+   "metric": "next_mcc_top5",
+   "delta_before": 0.1064166666666666,
+   "delta_after": 2.6666666666674832e-05,
+   "price": -0.10638999999999993,
+   "paired": false,
+   "note": "no interval: this step changes which rows are scored, so the two deltas are not paired and the difference is a difference of point estimates only"
+  },
+  {
+   "guard": "entity-disjoint split by account",
+   "from": "L0",
+   "to": "L1",
+   "metric": "fraud_auc",
+   "delta_before": -1.6532014377013127e-05,
+   "delta_after": -0.0007885739550481663,
+   "price": -0.0007720419406711532,
+   "paired": false,
+   "note": "no interval: this step changes which rows are scored, so the two deltas are not paired and the difference is a difference of point estimates only"
+  },
+  {
+   "guard": "entity-disjoint split by account",
+   "from": "L0",
+   "to": "L1",
+   "metric": "fraud_prauc",
+   "delta_before": -0.00018249208600429334,
+   "delta_after": 0.0052388483210321635,
+   "price": 0.005421340407036457,
+   "paired": false,
+   "note": "no interval: this step changes which rows are scored, so the two deltas are not paired and the difference is a difference of point estimates only"
+  },
+  {
+   "guard": "as-of prefix-only embeddings",
+   "from": "L1",
+   "to": "L2",
+   "metric": "next_mcc_top1",
+   "delta_before": -0.024040000000000006,
+   "delta_after": 0.015866666666666668,
+   "price": 0.039906666666666674,
+   "price_ci": [
+    0.024916478690031836,
+    0.05609819433928705
+   ],
+   "paired": true
+  },
+  {
+   "guard": "as-of prefix-only embeddings",
+   "from": "L1",
+   "to": "L2",
+   "metric": "next_mcc_top5",
+   "delta_before": 2.6666666666674832e-05,
+   "delta_after": 0.05468666666666672,
+   "price": 0.05466000000000004,
+   "price_ci": [
+    0.03852798844184284,
+    0.07415061026341192
+   ],
+   "paired": true
+  },
+  {
+   "guard": "as-of prefix-only embeddings",
+   "from": "L1",
+   "to": "L2",
+   "metric": "fraud_auc",
+   "delta_before": -0.0007885739550481663,
+   "delta_after": -6.494885697483355e-06,
+   "price": 0.0007820790693506829,
+   "price_ci": [
+    -6.662617048017183e-06,
+    0.002527425248368342
+   ],
+   "paired": true
+  },
+  {
+   "guard": "as-of prefix-only embeddings",
+   "from": "L1",
+   "to": "L2",
+   "metric": "fraud_prauc",
+   "delta_before": 0.0052388483210321635,
+   "delta_after": 0.007620693559043823,
+   "price": 0.0023818452380116595,
+   "price_ci": [
+    -0.004588480189107852,
+    0.012471943042247658
+   ],
+   "paired": true
+  },
+  {
+   "guard": "baseline equipped with per-entity temporal aggregates",
+   "from": "L2",
+   "to": "L3",
+   "metric": "next_mcc_top1",
+   "delta_before": 0.015866666666666668,
+   "delta_after": 0.021843333333333326,
+   "price": 0.005976666666666658,
+   "price_ci": [
+    -0.0020176444020934916,
+    0.015180496036491168
+   ],
+   "paired": true
+  },
+  {
+   "guard": "baseline equipped with per-entity temporal aggregates",
+   "from": "L2",
+   "to": "L3",
+   "metric": "next_mcc_top5",
+   "delta_before": 0.05468666666666672,
+   "delta_after": 0.021763333333333357,
+   "price": -0.03292333333333336,
+   "price_ci": [
+    -0.04364658697453418,
+    -0.021913862046756286
+   ],
+   "paired": true
+  },
+  {
+   "guard": "baseline equipped with per-entity temporal aggregates",
+   "from": "L2",
+   "to": "L3",
+   "metric": "fraud_auc",
+   "delta_before": -6.494885697483355e-06,
+   "delta_after": -0.0003346555759992098,
+   "price": -0.00032816069030172645,
+   "price_ci": [
+    -0.001035348009164086,
+    -1.8324089253452448e-07
+   ],
+   "paired": true
+  },
+  {
+   "guard": "baseline equipped with per-entity temporal aggregates",
+   "from": "L2",
+   "to": "L3",
+   "metric": "fraud_prauc",
+   "delta_before": 0.007620693559043823,
+   "delta_after": 0.0021096269869081974,
+   "price": -0.0055110665721356256,
+   "price_ci": [
+    -0.016893210914506525,
+    0.00550496492638805
+   ],
+   "paired": true
+  }
+ ],
+ "guard_prices_by_key": {
+  "L0_L1_next_mcc_top1": {
+   "guard": "entity-disjoint split by account",
+   "from": "L0",
+   "to": "L1",
+   "metric": "next_mcc_top1",
+   "delta_before": 0.05904000000000001,
+   "delta_after": -0.024040000000000006,
+   "price": -0.08308000000000001,
+   "paired": false,
+   "note": "no interval: this step changes which rows are scored, so the two deltas are not paired and the difference is a difference of point estimates only"
+  },
+  "L0_L1_next_mcc_top5": {
+   "guard": "entity-disjoint split by account",
+   "from": "L0",
+   "to": "L1",
+   "metric": "next_mcc_top5",
+   "delta_before": 0.1064166666666666,
+   "delta_after": 2.6666666666674832e-05,
+   "price": -0.10638999999999993,
+   "paired": false,
+   "note": "no interval: this step changes which rows are scored, so the two deltas are not paired and the difference is a difference of point estimates only"
+  },
+  "L0_L1_fraud_auc": {
+   "guard": "entity-disjoint split by account",
+   "from": "L0",
+   "to": "L1",
+   "metric": "fraud_auc",
+   "delta_before": -1.6532014377013127e-05,
+   "delta_after": -0.0007885739550481663,
+   "price": -0.0007720419406711532,
+   "paired": false,
+   "note": "no interval: this step changes which rows are scored, so the two deltas are not paired and the difference is a difference of point estimates only"
+  },
+  "L0_L1_fraud_prauc": {
+   "guard": "entity-disjoint split by account",
+   "from": "L0",
+   "to": "L1",
+   "metric": "fraud_prauc",
+   "delta_before": -0.00018249208600429334,
+   "delta_after": 0.0052388483210321635,
+   "price": 0.005421340407036457,
+   "paired": false,
+   "note": "no interval: this step changes which rows are scored, so the two deltas are not paired and the difference is a difference of point estimates only"
+  },
+  "L1_L2_next_mcc_top1": {
+   "guard": "as-of prefix-only embeddings",
+   "from": "L1",
+   "to": "L2",
+   "metric": "next_mcc_top1",
+   "delta_before": -0.024040000000000006,
+   "delta_after": 0.015866666666666668,
+   "price": 0.039906666666666674,
+   "price_ci": [
+    0.024916478690031836,
+    0.05609819433928705
+   ],
+   "paired": true
+  },
+  "L1_L2_next_mcc_top5": {
+   "guard": "as-of prefix-only embeddings",
+   "from": "L1",
+   "to": "L2",
+   "metric": "next_mcc_top5",
+   "delta_before": 2.6666666666674832e-05,
+   "delta_after": 0.05468666666666672,
+   "price": 0.05466000000000004,
+   "price_ci": [
+    0.03852798844184284,
+    0.07415061026341192
+   ],
+   "paired": true
+  },
+  "L1_L2_fraud_auc": {
+   "guard": "as-of prefix-only embeddings",
+   "from": "L1",
+   "to": "L2",
+   "metric": "fraud_auc",
+   "delta_before": -0.0007885739550481663,
+   "delta_after": -6.494885697483355e-06,
+   "price": 0.0007820790693506829,
+   "price_ci": [
+    -6.662617048017183e-06,
+    0.002527425248368342
+   ],
+   "paired": true
+  },
+  "L1_L2_fraud_prauc": {
+   "guard": "as-of prefix-only embeddings",
+   "from": "L1",
+   "to": "L2",
+   "metric": "fraud_prauc",
+   "delta_before": 0.0052388483210321635,
+   "delta_after": 0.007620693559043823,
+   "price": 0.0023818452380116595,
+   "price_ci": [
+    -0.004588480189107852,
+    0.012471943042247658
+   ],
+   "paired": true
+  },
+  "L2_L3_next_mcc_top1": {
+   "guard": "baseline equipped with per-entity temporal aggregates",
+   "from": "L2",
+   "to": "L3",
+   "metric": "next_mcc_top1",
+   "delta_before": 0.015866666666666668,
+   "delta_after": 0.021843333333333326,
+   "price": 0.005976666666666658,
+   "price_ci": [
+    -0.0020176444020934916,
+    0.015180496036491168
+   ],
+   "paired": true
+  },
+  "L2_L3_next_mcc_top5": {
+   "guard": "baseline equipped with per-entity temporal aggregates",
+   "from": "L2",
+   "to": "L3",
+   "metric": "next_mcc_top5",
+   "delta_before": 0.05468666666666672,
+   "delta_after": 0.021763333333333357,
+   "price": -0.03292333333333336,
+   "price_ci": [
+    -0.04364658697453418,
+    -0.021913862046756286
+   ],
+   "paired": true
+  },
+  "L2_L3_fraud_auc": {
+   "guard": "baseline equipped with per-entity temporal aggregates",
+   "from": "L2",
+   "to": "L3",
+   "metric": "fraud_auc",
+   "delta_before": -6.494885697483355e-06,
+   "delta_after": -0.0003346555759992098,
+   "price": -0.00032816069030172645,
+   "price_ci": [
+    -0.001035348009164086,
+    -1.8324089253452448e-07
+   ],
+   "paired": true
+  },
+  "L2_L3_fraud_prauc": {
+   "guard": "baseline equipped with per-entity temporal aggregates",
+   "from": "L2",
+   "to": "L3",
+   "metric": "fraud_prauc",
+   "delta_before": 0.007620693559043823,
+   "delta_after": 0.0021096269869081974,
+   "price": -0.0055110665721356256,
+   "price_ci": [
+    -0.016893210914506525,
+    0.00550496492638805
+   ],
+   "paired": true
+  }
+ },
+ "l0_shared_accounts": 1530,
+ "l3_reproduces_shipped": {
+  "compared": [
+   {
+    "task": "fraud",
+    "metric": "baseline_auc",
+    "shipped": 0.9999433807321989,
+    "ladder_L3": 0.9999433807321989,
+    "abs_diff": 0.0
+   },
+   {
+    "task": "fraud",
+    "metric": "baseline_prauc",
+    "shipped": 0.9938933080218925,
+    "ladder_L3": 0.9938933080218925,
+    "abs_diff": 0.0
+   },
+   {
+    "task": "fraud",
+    "metric": "with_emb_auc",
+    "shipped": 0.9996087251561997,
+    "ladder_L3": 0.9996087251561997,
+    "abs_diff": 0.0
+   },
+   {
+    "task": "fraud",
+    "metric": "with_emb_prauc",
+    "shipped": 0.9960029350088007,
+    "ladder_L3": 0.9960029350088007,
+    "abs_diff": 0.0
+   },
+   {
+    "task": "next_mcc",
+    "metric": "baseline_top1",
+    "shipped": 0.23493333333333333,
+    "ladder_L3": 0.23493333333333333,
+    "abs_diff": 0.0
+   },
+   {
+    "task": "next_mcc",
+    "metric": "baseline_top5",
+    "shipped": 0.53084,
+    "ladder_L3": 0.53084,
+    "abs_diff": 0.0
+   },
+   {
+    "task": "next_mcc",
+    "metric": "with_emb_top1",
+    "shipped": 0.25677666666666665,
+    "ladder_L3": 0.25677666666666665,
+    "abs_diff": 0.0
+   },
+   {
+    "task": "next_mcc",
+    "metric": "with_emb_top5",
+    "shipped": 0.5526033333333333,
+    "ladder_L3": 0.5526033333333333,
+    "abs_diff": 0.0
+   }
+  ],
+  "tolerance": 1e-09,
+  "max_abs_diff": 0.0,
+  "ok": true,
+  "note": "L3 is the shipped protocol, so it must reproduce results/backbone_transfer.json; the largest absolute difference over the eight shipped point metrics is recorded either way."
+ },
+ "check": {
+  "command": "python scripts/fm/ladder_eval.py --stage run ... --check",
+  "tolerance": 1e-06,
+  "note": "recomputes every rung from the same frozen inputs and compares every numeric leaf against the committed results/ladder.json",
+  "verified": {
+   "date": "2026-08-23",
+   "tolerance": "1e-06",
+   "verdict": "CHECK OK, exit 0",
+   "job": "amex-ladder-readback-origin 751856 (SoC cluster, node xcnc20, the node that produced this file)",
+   "n_numeric_leaves_compared": "424",
+   "n_numeric_leaves_bit_identical": "409",
+   "max_abs_diff": "1.110e-16",
+   "max_abs_diff_leaf": "/deltas_by_rung/fraud_prauc/L0",
+   "cross_node_note": "Re-run on a different CPU (job amex-ladder-readback 751710, node xcnf27, AMD EPYC 7763, against the Intel Xeon E5-2620 v3 that produced this file) reproduces 398 of 424 leaves bit-identically and differs on 26, max abs diff 1.349e-05, every one of them inside rung L0's next-category task and the guard prices derived from it. LightGBM iteration counts match line for line on both nodes, so the difference is 3 top-1 and 4 top-5 argmax flips out of 300,000 scored rows in the one arm that is a 31-class model over 517 features. Every affected quantity is printed on the page at 4 decimals and both values round to the same figure, so no rendered numeral changes; L0 with_emb_top1 and with_emb_top5 are not printed at all.",
+   "note": "Values are strings on purpose. This block is metadata about the read-back, not a result, and the ladder's own --check compares every numeric leaf, so numeric values here would make a future --check fail on keys that run_ladder does not produce.",
+   "cross_node_leaves_reproduced": "398 of 424",
+   "cross_node_max_abs_diff": "1.349e-05",
+   "cross_node_rendered_numerals_that_move": "none"
+  }
+ }
+}

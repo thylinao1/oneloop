@@ -1,0 +1,3127 @@
+{
+ "seed": 7,
+ "versions": {
+  "python": "3.12.3",
+  "numpy": "2.5.2",
+  "polars": "1.43.2",
+  "pyarrow": "25.0.1",
+  "lightgbm": "4.7.0",
+  "sklearn": "1.9.0",
+  "torch": "2.13.0+cu130"
+ },
+ "generated_by": "scripts/safety/mia_eval.py --stage run --check-able",
+ "generated_at": "2026-08-23T17:39:21Z",
+ "data_sources": [
+  {
+   "name": "IBM TabFormer card_transaction.v1.csv (synthetic)",
+   "url": "https://github.com/IBM/TabFormer (data/credit_card/transactions.tgz)",
+   "sha256": "e9f589a0958f40d60f81b1a2e8428db86e00c05755caf44fb055827976c0efa2"
+  }
+ ],
+ "labels": [
+  "synthetic",
+  "mechanism-not-exposure",
+  "label-free"
+ ],
+ "what_this_is": "A membership-inference attack against the frozen pretrained backbone. Both arms are scored entirely on post-cut rows with a full prior window, so no scored row of either arm was ever inside a pretraining window and the only difference between the arms is whether the ACCOUNT was in the pretraining corpus. A no-model unigram rarity control built from marginal token counts runs on the identical rows, and two calibration arms plus a planted-shift probe show what this pipeline could have detected.",
+ "mechanism_not_exposure": "The pretraining corpus is the public IBM TabFormer benchmark and it is SYNTHETIC. This measures the mechanism, meaning how much a masked-field transaction model of this shape gives back under this protocol. It is not a measurement of American Express's exposure and must never be presented as one.",
+ "attack": {
+  "name": "masked-field pseudo-log-likelihood threshold",
+  "family": "loss-threshold (Yeom family), with a counts-based reference calibration",
+  "access": "score access only. No logits over the full vocabulary are exported, no gradients, no training data, no retraining.",
+  "reference_models": 0,
+  "shadow_models": 0,
+  "attempts_per_row": 1,
+  "attacker_knowledge": "the field set, the window length, and a marginal token distribution fitted on the pretraining corpus itself. The last item gives the CONTROL more knowledge than a real attacker would have, which makes it conservative.",
+  "weak_attack_note": "A score-only attack on a masked-field model is the WEAK attack and we say so before reporting the number. Mireshghallah et al. 2022 raise AUC from 0.66 to 0.90 on clinical notes by replacing the score threshold with a likelihood-ratio test against a trained reference masked language model, and report their attack as 51 times more powerful at a 1 percent false-positive rate. We did not train a reference model. Our model_minus_control arm is the cheapest possible stand in for one, built from marginal counts rather than a trained model.",
+  "citations": [
+   "Carlini et al. 2022, Membership Inference Attacks From First Principles",
+   "Mireshghallah et al. 2022, Quantifying Privacy Risks of Masked Language Models",
+   "Aerni, Zhang and Tramer 2024, Evaluations of Machine Learning Privacy Defenses are Misleading",
+   "Yeom et al. 2018, Privacy Risk in Machine Learning"
+  ]
+ },
+ "membership_rule": {
+  "definition": "a row is a pretraining MEMBER if and only if its timestamp is before cut_ts AND its account has at least two pre-cut rows. An account with at least two pre-cut rows is a MEMBER ACCOUNT.",
+  "source": "scripts/fm/pretrain.py:99-100 (hard truncation) and :37-38 (WindowDataset skips any account run shorter than two rows)",
+  "recomputed_not_persisted": "no list of member accounts was ever written to disk. The rule is a deterministic function of user.npy, ts.npy and meta['cut_ts'], so this script recomputes it and asserts the counts.",
+  "asserted_counts": {
+   "n_member_accounts": 1584,
+   "n_non_member_accounts": 416,
+   "n_non_member_eligible_rows": 90588,
+   "n_non_member_eligible_accounts": 415,
+   "n_member_post_cut_rows": 4292817,
+   "n_member_post_cut_accounts": 1542
+  },
+  "audit_correction": "SAFETY-FEASIBILITY.md reported the non-member full-window population as 90,588 rows across 416 accounts. The row count reproduces exactly. The account count recomputes to 415: one non-member account has post-cut rows but never reaches a full prior window, so it contributes no eligible row. The audit line carried down the post-cut account count from the line above it. The corrected 415 is used everywhere here, including for the account-level false-positive floor, which is 1/415 and not 1/416. The assert in this script is how the discrepancy was found, on the first run, before any score existed.",
+  "banned_design": "a pre-cut against post-cut ROW comparison is banned here by construction. That boundary is purely temporal and is confounded with a distribution shift results/protection.json already quantifies. This script asserts every scored row is post-cut."
+ },
+ "population": {
+  "stratum_primary": "clean",
+  "primary_substitution": null,
+  "m_chosen": 60,
+  "m_candidates_non_member_accounts_with_at_least_m_rows": {
+   "100": 234,
+   "60": 326,
+   "30": 393,
+   "15": 407
+  },
+  "m_rule": "pre-registered: the largest candidate in (100, 60, 30, 15) for which at least 300 non-member accounts hold that many eligible rows. Chosen before any score existed.",
+  "n_member_accounts_short_of_m": 9,
+  "n_scored_rows": 205203,
+  "n_member_rows_sampled": 92364,
+  "n_member_rows_contamination_gradient_only": 23130,
+  "n_non_member_rows": 90588,
+  "all_scored_rows_post_cut": true,
+  "full_window_required": 15,
+  "note": "both arms restricted to post-cut rows with a full prior window, which removes the history-length confound at row level and still leaves every non-member account in the population. THE THREE ROW COUNTS ABOVE ARE NOT A DISJOINT PARTITION AND MUST NOT BE ADDED UP. n_member_rows_sampled is the seeded draw of m rows per member account. n_member_rows_contamination_gradient_only counts EVERY eligible member row with at least one pretrained row inside its window, including rows the sample already drew, so the field name is a misnomer; it is kept because moving a published pointer is worse than documenting it. The scored member set is the UNION of the two and not their sum: 879 rows are in both. The disjoint decomposition of the 205203 scored rows is 91485 sampled-only member rows, plus 879 member rows in both sets, plus 22251 contamination-gradient-only member rows, plus 90588 non-member rows."
+ },
+ "strata": {
+  "clean": {
+   "note": "member rows whose entire window lies after the cut, so no row in the scored window was ever in a pretraining window. PRIMARY.",
+   "is_primary": true,
+   "n_member_rows": 91485,
+   "n_non_member_rows": 90588,
+   "n_member_accounts": 1542,
+   "n_non_member_accounts": 415,
+   "fpr_floor": {
+    "row_level": {
+     "smallest_measurable_fpr": 1.1038989711661589e-05,
+     "n_non_member_rows": 90588,
+     "note": "rows are clustered inside 415 non-member accounts, so the effective resolution is coarser than the row count suggests"
+    },
+    "account_level": {
+     "smallest_measurable_fpr": 0.0024096385542168677,
+     "n_non_member_accounts": 415,
+     "note": "a TPR at 0.1 percent FPR does not exist at this unit; the reported operating point is the floor"
+    }
+   },
+   "arms": {
+    "model_pll_behavioural": {
+     "row_auc": 0.6667021257333072,
+     "row_auc_ci": [
+      0.6483790710967542,
+      0.6847161202074084
+     ],
+     "row_tpr_at_fpr_0.0001": 0.00025140733453571623,
+     "row_tpr_at_fpr_0.0001_ci": [
+      8.748129062878994e-05,
+      0.0005140938486529005
+     ],
+     "row_achieved_fpr_0.0001": 9.935090740495429e-05,
+     "row_tpr_at_fpr_0.001": 0.0014756517461878996,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.000981685897028835,
+      0.0020658831587604767
+     ],
+     "row_achieved_fpr_0.001": 0.000993509074049543,
+     "row_tpr_at_fpr_0.01": 0.014046018472973711,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.011383893090590782,
+      0.017274228669957696
+     ],
+     "row_achieved_fpr_0.01": 0.009990285689053737,
+     "account_auc": 0.9486693857140623,
+     "account_auc_ci": [
+      0.9372059444001688,
+      0.9596935992999235
+     ],
+     "account_tpr_at_fpr_floor": 0.2723735408560311,
+     "account_tpr_at_fpr_floor_ci": [
+      0.15757133592736705,
+      0.5629215304798962
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "model_pll_all_fields": {
+     "row_auc": 0.6790251027699958,
+     "row_auc_ci": [
+      0.6574183655043873,
+      0.7023375873717002
+     ],
+     "row_tpr_at_fpr_0.0001": 0.0014865824998633655,
+     "row_tpr_at_fpr_0.0001_ci": [
+      0.00032767985551297675,
+      0.01139990382866406
+     ],
+     "row_achieved_fpr_0.0001": 9.935090740495429e-05,
+     "row_tpr_at_fpr_0.001": 0.017292452314587092,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.010525384206504059,
+      0.10473141745734178
+     ],
+     "row_achieved_fpr_0.001": 0.000993509074049543,
+     "row_tpr_at_fpr_0.01": 0.13391266327813303,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.10324370618135727,
+      0.16296453672211356
+     ],
+     "row_achieved_fpr_0.01": 0.009990285689053737,
+     "account_auc": 0.9809057240635694,
+     "account_auc_ci": [
+      0.9764623474442518,
+      0.9854495413560859
+     ],
+     "account_tpr_at_fpr_floor": 0.8138780804150454,
+     "account_tpr_at_fpr_floor_ci": [
+      0.7652399481193255,
+      0.8482490272373541
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "control_unigram_rarity": {
+     "row_auc": 0.3964149598549646,
+     "row_auc_ci": [
+      0.35309493360838984,
+      0.44121784060806146
+     ],
+     "row_tpr_at_fpr_0.0001": 1.0930753675465923e-05,
+     "row_tpr_at_fpr_0.0001_ci": [
+      0.0,
+      0.00014205950217052014
+     ],
+     "row_achieved_fpr_0.0001": 8.831191769329271e-05,
+     "row_tpr_at_fpr_0.001": 0.00025140733453571623,
+     "row_tpr_at_fpr_0.001_ci": [
+      7.651259945331242e-05,
+      0.0009503271228538884
+     ],
+     "row_achieved_fpr_0.001": 0.000993509074049543,
+     "row_tpr_at_fpr_0.01": 0.0038257637864130734,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.0020784769065023624,
+      0.008841367993498843
+     ],
+     "row_achieved_fpr_0.01": 0.009990285689053737,
+     "account_auc": 0.3167924616754958,
+     "account_auc_ci": [
+      0.2871958651727533,
+      0.35056404606753866
+     ],
+     "account_tpr_at_fpr_floor": 0.0019455252918287938,
+     "account_tpr_at_fpr_floor_ci": [
+      0.0,
+      0.004539559014267186
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "control_unigram_rarity_all_fields": {
+     "row_auc": 0.4774147851231482,
+     "row_auc_ci": [
+      0.44363184759355445,
+      0.5152054839889311
+     ],
+     "row_tpr_at_fpr_0.0001": 8.744602940372738e-05,
+     "row_tpr_at_fpr_0.0001_ci": [
+      1.0909738553406558e-05,
+      0.024295834813342996
+     ],
+     "row_achieved_fpr_0.0001": 9.935090740495429e-05,
+     "row_tpr_at_fpr_0.001": 0.009990708859375854,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.00038244282420814535,
+      0.09787215694186815
+     ],
+     "row_achieved_fpr_0.001": 0.000993509074049543,
+     "row_tpr_at_fpr_0.01": 0.1166639339782478,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.042713853692914534,
+      0.1413816703759592
+     ],
+     "row_achieved_fpr_0.01": 0.009990285689053737,
+     "account_auc": 0.5937836950916506,
+     "account_auc_ci": [
+      0.5605967058897067,
+      0.6273163861672371
+     ],
+     "account_tpr_at_fpr_floor": 0.04474708171206226,
+     "account_tpr_at_fpr_floor_ci": [
+      0.02594033722438392,
+      0.05708495460440984
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "model_minus_control": {
+     "row_auc": 0.7171965814913738,
+     "row_auc_ci": [
+      0.6906097489285805,
+      0.7402254823079859
+     ],
+     "row_tpr_at_fpr_0.0001": 0.00013116904410559108,
+     "row_tpr_at_fpr_0.0001_ci": [
+      5.4608224239860556e-05,
+      0.00020767994989992294
+     ],
+     "row_achieved_fpr_0.0001": 9.935090740495429e-05,
+     "row_tpr_at_fpr_0.001": 0.001300759687380445,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.0008743834215081184,
+      0.002133178262050777
+     ],
+     "row_achieved_fpr_0.001": 0.000993509074049543,
+     "row_tpr_at_fpr_0.01": 0.02810296769962289,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.020404498244294553,
+      0.04000411694458554
+     ],
+     "row_achieved_fpr_0.01": 0.009990285689053737,
+     "account_auc": 0.9225290266122858,
+     "account_auc_ci": [
+      0.9084412357601613,
+      0.9353664463300675
+     ],
+     "account_tpr_at_fpr_floor": 0.30544747081712065,
+     "account_tpr_at_fpr_floor_ci": [
+      0.07717250324254216,
+      0.4663261997405966
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "calibration_positive_tenure": {
+     "row_auc": 0.9947733767750551,
+     "row_auc_ci": [
+      0.9907543702492518,
+      0.9982990785929586
+     ],
+     "row_tpr_at_fpr_0.0001": 0.9604306716948133,
+     "row_tpr_at_fpr_0.0001_ci": [
+      0.9516714212785717,
+      0.9918945259011597
+     ],
+     "row_achieved_fpr_0.0001": 0.0,
+     "row_tpr_at_fpr_0.001": 0.9604306716948133,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.9516714212785717,
+      0.9918945259011597
+     ],
+     "row_achieved_fpr_0.001": 0.0,
+     "row_tpr_at_fpr_0.01": 0.9604306716948133,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.9516714212785717,
+      0.9918945259011597
+     ],
+     "row_achieved_fpr_0.01": 0.0,
+     "account_auc": 0.9990420827277984,
+     "account_auc_ci": [
+      0.9980997140312222,
+      0.999739073023612
+     ],
+     "account_tpr_at_fpr_floor": 0.9688715953307393,
+     "account_tpr_at_fpr_floor_ci": [
+      0.9513618677042801,
+      0.9941634241245136
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "calibration_negative_random": {
+     "row_auc": 0.5010362066820228,
+     "row_auc_ci": [
+      0.49815086468735464,
+      0.5038281368188816
+     ],
+     "row_tpr_at_fpr_0.0001": 0.00017489205880745476,
+     "row_tpr_at_fpr_0.0001_ci": [
+      6.56569179869895e-05,
+      0.0003274682853873465
+     ],
+     "row_achieved_fpr_0.0001": 9.935090740495429e-05,
+     "row_tpr_at_fpr_0.001": 0.001136798382248456,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.0008515874206689812,
+      0.0014335058492897868
+     ],
+     "row_achieved_fpr_0.001": 0.000993509074049543,
+     "row_tpr_at_fpr_0.01": 0.010908892168114992,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.010178139317107366,
+      0.011849192727841141
+     ],
+     "row_achieved_fpr_0.01": 0.009990285689053737,
+     "account_auc": 0.49557764130451765,
+     "account_auc_ci": [
+      0.46601182941884267,
+      0.5251390777116247
+     ],
+     "account_tpr_at_fpr_floor": 0.0025940337224383916,
+     "account_tpr_at_fpr_floor_ci": [
+      0.0,
+      0.04085603112840467
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    }
+   },
+   "minimum_detectable_effect": {
+    "arm": "model_pll_behavioural",
+    "unit": "planted shift added to every member row, in pooled standard deviations of the arm's own score",
+    "pooled_sd": 4.256009309487428,
+    "what_this_is": "SYNTHETIC probe, not a measurement of the model. A known shift is planted on the member arm and the account-level AUC is recomputed, so a reader can see how large a real membership signal this pipeline would have caught at this sample size.",
+    "by_delta": {
+     "0": {
+      "account_auc": 0.9486693857140623,
+      "account_auc_ci": [
+       0.9372059444001688,
+       0.9596935992999235
+      ]
+     },
+     "0.02": {
+      "account_auc": 0.9540449736689951,
+      "account_auc_ci": [
+       0.9435995343240667,
+       0.9643338724547998
+      ]
+     },
+     "0.05": {
+      "account_auc": 0.9610473020486616,
+      "account_auc_ci": [
+       0.9516454924757395,
+       0.9702028737518167
+      ]
+     },
+     "0.1": {
+      "account_auc": 0.970862438079165,
+      "account_auc_ci": [
+       0.9632373072054756,
+       0.9783305205256826
+      ]
+     },
+     "0.2": {
+      "account_auc": 0.9840185645304955,
+      "account_auc_ci": [
+       0.9789029659494007,
+       0.9887536136764958
+      ]
+     },
+     "0.5": {
+      "account_auc": 0.9975684840529433,
+      "account_auc_ci": [
+       0.996184934289688,
+       0.9988642117106558
+      ]
+     },
+     "1": {
+      "account_auc": 0.9998781116684636,
+      "account_auc_ci": [
+       0.9996811760661322,
+       1.0
+      ]
+     }
+    }
+   }
+  },
+  "any_window": {
+   "note": "all sampled member rows, including those whose window still contains pre-cut rows. SECONDARY.",
+   "is_primary": false,
+   "n_member_rows": 92364,
+   "n_non_member_rows": 90588,
+   "n_member_accounts": 1542,
+   "n_non_member_accounts": 415,
+   "fpr_floor": {
+    "row_level": {
+     "smallest_measurable_fpr": 1.1038989711661589e-05,
+     "n_non_member_rows": 90588,
+     "note": "rows are clustered inside 415 non-member accounts, so the effective resolution is coarser than the row count suggests"
+    },
+    "account_level": {
+     "smallest_measurable_fpr": 0.0024096385542168677,
+     "n_non_member_accounts": 415,
+     "note": "a TPR at 0.1 percent FPR does not exist at this unit; the reported operating point is the floor"
+    }
+   },
+   "arms": {
+    "model_pll_behavioural": {
+     "row_auc": 0.6666395607623139,
+     "row_auc_ci": [
+      0.6489910916807761,
+      0.6851484234891886
+     ],
+     "row_tpr_at_fpr_0.0001": 0.0002598414966870209,
+     "row_tpr_at_fpr_0.0001_ci": [
+      0.00010818743582954591,
+      0.000540878817526106
+     ],
+     "row_achieved_fpr_0.0001": 9.935090740495429e-05,
+     "row_tpr_at_fpr_0.001": 0.0014832618769217445,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.0009956666943347688,
+      0.002109722932648331
+     ],
+     "row_achieved_fpr_0.001": 0.000993509074049543,
+     "row_tpr_at_fpr_0.01": 0.014009787363041877,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.011339876690316065,
+      0.01679874810355193
+     ],
+     "row_achieved_fpr_0.01": 0.009990285689053737,
+     "account_auc": 0.9487318925507477,
+     "account_auc_ci": [
+      0.9376004406731988,
+      0.9589242964074196
+     ],
+     "account_tpr_at_fpr_floor": 0.27431906614785995,
+     "account_tpr_at_fpr_floor_ci": [
+      0.15953307392996108,
+      0.5622568093385214
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "model_pll_all_fields": {
+     "row_auc": 0.6806371266428525,
+     "row_auc_ci": [
+      0.6581554080200235,
+      0.7024207411370141
+     ],
+     "row_tpr_at_fpr_0.0001": 0.0015265687930362478,
+     "row_tpr_at_fpr_0.0001_ci": [
+      0.0003031524342664976,
+      0.011369702747160022
+     ],
+     "row_achieved_fpr_0.0001": 9.935090740495429e-05,
+     "row_tpr_at_fpr_0.001": 0.017896583084318567,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.01063737307101061,
+      0.10906050909604217
+     ],
+     "row_achieved_fpr_0.001": 0.000993509074049543,
+     "row_tpr_at_fpr_0.01": 0.1393183491403577,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.10726717224350678,
+      0.16779225766377776
+     ],
+     "row_achieved_fpr_0.01": 0.009990285689053737,
+     "account_auc": 0.9817698810807431,
+     "account_auc_ci": [
+      0.9767214382823122,
+      0.9861316862781867
+     ],
+     "account_tpr_at_fpr_floor": 0.8287937743190662,
+     "account_tpr_at_fpr_floor_ci": [
+      0.7769130998702983,
+      0.8612191958495461
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "control_unigram_rarity": {
+     "row_auc": 0.39666590578382765,
+     "row_auc_ci": [
+      0.3564342259234355,
+      0.44031319930244034
+     ],
+     "row_tpr_at_fpr_0.0001": 1.0826729028625872e-05,
+     "row_tpr_at_fpr_0.0001_ci": [
+      0.0,
+      0.0001299521939095125
+     ],
+     "row_achieved_fpr_0.0001": 8.831191769329271e-05,
+     "row_tpr_at_fpr_0.001": 0.00024901476765839506,
+     "row_tpr_at_fpr_0.001_ci": [
+      7.579262166862457e-05,
+      0.000973974593012578
+     ],
+     "row_achieved_fpr_0.001": 0.000993509074049543,
+     "row_tpr_at_fpr_0.01": 0.0038326620761335584,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.002133165318857364,
+      0.008818150182830149
+     ],
+     "row_achieved_fpr_0.01": 0.009990285689053737,
+     "account_auc": 0.31676120825715315,
+     "account_auc_ci": [
+      0.2845836263341303,
+      0.3472020377228759
+     ],
+     "account_tpr_at_fpr_floor": 0.0019455252918287938,
+     "account_tpr_at_fpr_floor_ci": [
+      0.0,
+      0.004539559014267186
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "control_unigram_rarity_all_fields": {
+     "row_auc": 0.4809748060084123,
+     "row_auc_ci": [
+      0.4469544335396153,
+      0.5172586322393783
+     ],
+     "row_tpr_at_fpr_0.0001": 8.661383222900697e-05,
+     "row_tpr_at_fpr_0.0001_ci": [
+      1.082227364609006e-05,
+      0.026385747843485807
+     ],
+     "row_achieved_fpr_0.0001": 9.935090740495429e-05,
+     "row_tpr_at_fpr_0.001": 0.010664328093196484,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.00043323345437434223,
+      0.10735660501261392
+     ],
+     "row_achieved_fpr_0.001": 0.000993509074049543,
+     "row_tpr_at_fpr_0.01": 0.1214867264302109,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.04539205011245833,
+      0.14813122181322796
+     ],
+     "row_achieved_fpr_0.01": 0.009990285689053737,
+     "account_auc": 0.6048395918303564,
+     "account_auc_ci": [
+      0.5700070320191271,
+      0.6359587376744332
+     ],
+     "account_tpr_at_fpr_floor": 0.051232166018158234,
+     "account_tpr_at_fpr_floor_ci": [
+      0.0304798962386511,
+      0.06486705577172502
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "model_minus_control": {
+     "row_auc": 0.7169539247379877,
+     "row_auc_ci": [
+      0.6914489021288401,
+      0.7384552529840809
+     ],
+     "row_tpr_at_fpr_0.0001": 0.00012992074834351045,
+     "row_tpr_at_fpr_0.0001_ci": [
+      5.41170785298592e-05,
+      0.00020558854605490232
+     ],
+     "row_achieved_fpr_0.0001": 9.935090740495429e-05,
+     "row_tpr_at_fpr_0.001": 0.0013316876705209823,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.0009097008221525204,
+      0.0021110293258958966
+     ],
+     "row_achieved_fpr_0.001": 0.000993509074049543,
+     "row_tpr_at_fpr_0.01": 0.02810618855831276,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.02046846104804764,
+      0.040340626839714275
+     ],
+     "row_achieved_fpr_0.01": 0.009990285689053737,
+     "account_auc": 0.9228321847702092,
+     "account_auc_ci": [
+      0.9100096494929133,
+      0.9363497179378993
+     ],
+     "account_tpr_at_fpr_floor": 0.30739299610894943,
+     "account_tpr_at_fpr_floor_ci": [
+      0.07652399481193256,
+      0.4903858625162126
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "calibration_positive_tenure": {
+     "row_auc": 0.9942788577940755,
+     "row_auc_ci": [
+      0.9899554523488834,
+      0.9980829090072866
+     ],
+     "row_tpr_at_fpr_0.0001": 0.958880083149279,
+     "row_tpr_at_fpr_0.0001_ci": [
+      0.9501379962548193,
+      0.9920010135810332
+     ],
+     "row_achieved_fpr_0.0001": 0.0,
+     "row_tpr_at_fpr_0.001": 0.958880083149279,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.9501379962548193,
+      0.9920010135810332
+     ],
+     "row_achieved_fpr_0.001": 0.0,
+     "row_tpr_at_fpr_0.01": 0.958880083149279,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.9501379962548193,
+      0.9920010135810332
+     ],
+     "row_achieved_fpr_0.01": 0.0,
+     "account_auc": 0.9990413013923398,
+     "account_auc_ci": [
+      0.9981361437969778,
+      0.9997134256871846
+     ],
+     "account_tpr_at_fpr_floor": 0.9688715953307393,
+     "account_tpr_at_fpr_floor_ci": [
+      0.9520103761348897,
+      0.9941634241245136
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "calibration_negative_random": {
+     "row_auc": 0.5009688017393183,
+     "row_auc_ci": [
+      0.49809385625148606,
+      0.5036603329612492
+     ],
+     "row_tpr_at_fpr_0.0001": 0.00017322766445801395,
+     "row_tpr_at_fpr_0.0001_ci": [
+      6.495613701541318e-05,
+      0.000324679014213285
+     ],
+     "row_achieved_fpr_0.0001": 9.935090740495429e-05,
+     "row_tpr_at_fpr_0.001": 0.0011259798189770906,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.0008653525189804279,
+      0.0014287403747404123
+     ],
+     "row_achieved_fpr_0.001": 0.000993509074049543,
+     "row_tpr_at_fpr_0.01": 0.010913342860854878,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.010185134588276232,
+      0.011923229077843302
+     ],
+     "row_achieved_fpr_0.01": 0.009990285689053737,
+     "account_auc": 0.49543075023830735,
+     "account_auc_ci": [
+      0.4668584454549716,
+      0.5247506367883987
+     ],
+     "account_tpr_at_fpr_floor": 0.0025940337224383916,
+     "account_tpr_at_fpr_floor_ci": [
+      0.0,
+      0.0389267185473411
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    }
+   },
+   "minimum_detectable_effect": {
+    "arm": "model_pll_behavioural",
+    "unit": "planted shift added to every member row, in pooled standard deviations of the arm's own score",
+    "pooled_sd": 4.256009309487428,
+    "what_this_is": "SYNTHETIC probe, not a measurement of the model. A known shift is planted on the member arm and the account-level AUC is recomputed, so a reader can see how large a real membership signal this pipeline would have caught at this sample size.",
+    "by_delta": {
+     "0": {
+      "account_auc": 0.9487318925507477,
+      "account_auc_ci": [
+       0.9376004406731988,
+       0.9589242964074196
+      ]
+     },
+     "0.02": {
+      "account_auc": 0.9540465363399123,
+      "account_auc_ci": [
+       0.9434835060084698,
+       0.9634132248839717
+      ]
+     },
+     "0.05": {
+      "account_auc": 0.9611379369618553,
+      "account_auc_ci": [
+       0.9518286765740003,
+       0.9694060678511713
+      ]
+     },
+     "0.1": {
+      "account_auc": 0.9709155688903474,
+      "account_auc_ci": [
+       0.9631180754144985,
+       0.9775445361211382
+      ]
+     },
+     "0.2": {
+      "account_auc": 0.9840373165815011,
+      "account_auc_ci": [
+       0.978880424421421,
+       0.9884457284390481
+      ]
+     },
+     "0.5": {
+      "account_auc": 0.9976903723844797,
+      "account_auc_ci": [
+       0.9962286890753677,
+       0.998856554623162
+      ]
+     },
+     "1": {
+      "account_auc": 0.9999156157704748,
+      "account_auc_ci": [
+       0.9997013735877361,
+       1.0
+      ]
+     }
+    }
+   }
+  },
+  "clean_symmetric": {
+   "note": "the clean stratum with the non-member arm also capped at m rows per account, so both arms weight every account equally at row level. A CROSS-CHECK, not the headline.",
+   "is_primary": false,
+   "n_member_rows": 91485,
+   "n_non_member_rows": 23002,
+   "n_member_accounts": 1542,
+   "n_non_member_accounts": 415,
+   "fpr_floor": {
+    "row_level": {
+     "smallest_measurable_fpr": 4.347448047995827e-05,
+     "n_non_member_rows": 23002,
+     "note": "rows are clustered inside 415 non-member accounts, so the effective resolution is coarser than the row count suggests"
+    },
+    "account_level": {
+     "smallest_measurable_fpr": 0.0024096385542168677,
+     "n_non_member_accounts": 415,
+     "note": "a TPR at 0.1 percent FPR does not exist at this unit; the reported operating point is the floor"
+    }
+   },
+   "arms": {
+    "model_pll_behavioural": {
+     "row_auc": 0.6747885269589086,
+     "row_auc_ci": [
+      0.6650528538105023,
+      0.6846576905720472
+     ],
+     "row_tpr_at_fpr_0.0001": 0.000284199595562114,
+     "row_tpr_at_fpr_0.0001_ci": [
+      0.00012018163816641173,
+      0.0007421607916836996
+     ],
+     "row_achieved_fpr_0.0001": 8.694896095991653e-05,
+     "row_tpr_at_fpr_0.001": 0.0014756517461878996,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.0008071172997994798,
+      0.001993757953239146
+     ],
+     "row_achieved_fpr_0.001": 0.00099991305103904,
+     "row_tpr_at_fpr_0.01": 0.013575996064928677,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.010958765368244706,
+      0.0159428689777613
+     ],
+     "row_achieved_fpr_0.01": 0.0099991305103904,
+     "account_auc": 0.9452111949744502,
+     "account_auc_ci": [
+      0.9328039004266092,
+      0.9564891863172534
+     ],
+     "account_tpr_at_fpr_floor": 0.22957198443579765,
+     "account_tpr_at_fpr_floor_ci": [
+      0.20233463035019456,
+      0.4708333333333333
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "model_pll_all_fields": {
+     "row_auc": 0.6933920833068463,
+     "row_auc_ci": [
+      0.6833708765843142,
+      0.7030405650871023
+     ],
+     "row_tpr_at_fpr_0.0001": 0.014537902388369679,
+     "row_tpr_at_fpr_0.0001_ci": [
+      0.005011404427732845,
+      0.13085230855642974
+     ],
+     "row_achieved_fpr_0.0001": 8.694896095991653e-05,
+     "row_tpr_at_fpr_0.001": 0.13365032518992184,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.070487211449842,
+      0.14169639409828685
+     ],
+     "row_achieved_fpr_0.001": 0.00099991305103904,
+     "row_tpr_at_fpr_0.01": 0.16316336011367985,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.15783403952769673,
+      0.16913827410574056
+     ],
+     "row_achieved_fpr_0.01": 0.0099991305103904,
+     "account_auc": 0.9786882940321597,
+     "account_auc_ci": [
+      0.9732841873329895,
+      0.9842129998593596
+     ],
+     "account_tpr_at_fpr_floor": 0.7632944228274967,
+     "account_tpr_at_fpr_floor_ci": [
+      0.6731517509727627,
+      0.8132295719844358
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "control_unigram_rarity": {
+     "row_auc": 0.3850546894328005,
+     "row_auc_ci": [
+      0.36526129006992203,
+      0.40515835161916913
+     ],
+     "row_tpr_at_fpr_0.0001": 0.0,
+     "row_tpr_at_fpr_0.0001_ci": [
+      0.0,
+      0.00018603246759410768
+     ],
+     "row_achieved_fpr_0.0001": 0.0,
+     "row_tpr_at_fpr_0.001": 0.00033885336393944365,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.0001205559520382941,
+      0.0011477444228214994
+     ],
+     "row_achieved_fpr_0.001": 0.00099991305103904,
+     "row_tpr_at_fpr_0.01": 0.004175547904027983,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.002493064830295017,
+      0.006539384352539785
+     ],
+     "row_achieved_fpr_0.01": 0.0099991305103904,
+     "account_auc": 0.3172737643179723,
+     "account_auc_ci": [
+      0.2861116059569015,
+      0.3493438344818965
+     ],
+     "account_tpr_at_fpr_floor": 0.0006485084306095979,
+     "account_tpr_at_fpr_floor_ci": [
+      0.0,
+      0.0038910505836575876
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "control_unigram_rarity_all_fields": {
+     "row_auc": 0.47504497103191085,
+     "row_auc_ci": [
+      0.45820552351904975,
+      0.4920952208727407
+     ],
+     "row_tpr_at_fpr_0.0001": 0.018560419740941136,
+     "row_tpr_at_fpr_0.0001_ci": [
+      0.0036657231838022357,
+      0.08867673548952613
+     ],
+     "row_achieved_fpr_0.0001": 8.694896095991653e-05,
+     "row_tpr_at_fpr_0.001": 0.13031644531890474,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.04471822481811391,
+      0.13881881919186284
+     ],
+     "row_achieved_fpr_0.001": 0.00099991305103904,
+     "row_tpr_at_fpr_0.01": 0.1406569382958955,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.13685761598513346,
+      0.14477397844591372
+     ],
+     "row_achieved_fpr_0.01": 0.0099991305103904,
+     "account_auc": 0.5931805041176379,
+     "account_auc_ci": [
+      0.5582693419592767,
+      0.6267427296735582
+     ],
+     "account_tpr_at_fpr_floor": 0.035667963683527884,
+     "account_tpr_at_fpr_floor_ci": [
+      0.023346303501945526,
+      0.061608300907911806
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "model_minus_control": {
+     "row_auc": 0.7305019630473141,
+     "row_auc_ci": [
+      0.7188612981891918,
+      0.7420104868614823
+     ],
+     "row_tpr_at_fpr_0.0001": 0.00013116904410559108,
+     "row_tpr_at_fpr_0.0001_ci": [
+      3.2442906228233614e-05,
+      0.00024021695960777399
+     ],
+     "row_achieved_fpr_0.0001": 8.694896095991653e-05,
+     "row_tpr_at_fpr_0.001": 0.001278898180029513,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.0004145764471552435,
+      0.002291791790312173
+     ],
+     "row_achieved_fpr_0.001": 0.00099991305103904,
+     "row_tpr_at_fpr_0.01": 0.026966169317374434,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.021431687133916667,
+      0.03507630392652392
+     ],
+     "row_achieved_fpr_0.01": 0.0099991305103904,
+     "account_auc": 0.9213367087025143,
+     "account_auc_ci": [
+      0.9073801040738831,
+      0.9344147016079883
+     ],
+     "account_tpr_at_fpr_floor": 0.23411154345006485,
+     "account_tpr_at_fpr_floor_ci": [
+      0.08171206225680934,
+      0.4572632944228274
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "calibration_positive_tenure": {
+     "row_auc": 0.9992378030416853,
+     "row_auc_ci": [
+      0.9985829754588332,
+      0.9997597722378508
+     ],
+     "row_tpr_at_fpr_0.0001": 0.9604306716948133,
+     "row_tpr_at_fpr_0.0001_ci": [
+      0.9510195439675744,
+      0.9921952910254972
+     ],
+     "row_achieved_fpr_0.0001": 0.0,
+     "row_tpr_at_fpr_0.001": 0.9604306716948133,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.9510195439675744,
+      0.9921952910254972
+     ],
+     "row_achieved_fpr_0.001": 0.0,
+     "row_tpr_at_fpr_0.01": 0.9904027982729409,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.9636206750563997,
+      0.9964271124084553
+     ],
+     "row_achieved_fpr_0.01": 0.007825406486392487,
+     "account_auc": 0.9990420827277984,
+     "account_auc_ci": [
+      0.9981540949791384,
+      0.999742276498992
+     ],
+     "account_tpr_at_fpr_floor": 0.9688715953307393,
+     "account_tpr_at_fpr_floor_ci": [
+      0.9507133592736705,
+      0.9935311284046693
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    },
+    "calibration_negative_random": {
+     "row_auc": 0.49936191856101897,
+     "row_auc_ci": [
+      0.4951087305222635,
+      0.5037448472338697
+     ],
+     "row_tpr_at_fpr_0.0001": 0.00016396130513198886,
+     "row_tpr_at_fpr_0.0001_ci": [
+      6.556056886955223e-05,
+      0.0005350340865911134
+     ],
+     "row_achieved_fpr_0.0001": 8.694896095991653e-05,
+     "row_tpr_at_fpr_0.001": 0.001136798382248456,
+     "row_tpr_at_fpr_0.001_ci": [
+      0.0007317664654556756,
+      0.0016515857531700351
+     ],
+     "row_achieved_fpr_0.001": 0.00099991305103904,
+     "row_tpr_at_fpr_0.01": 0.010373285238017161,
+     "row_tpr_at_fpr_0.01_ci": [
+      0.009012714513773718,
+      0.012148756979651433
+     ],
+     "row_achieved_fpr_0.01": 0.0099991305103904,
+     "account_auc": 0.4920069382588721,
+     "account_auc_ci": [
+      0.4603291766286938,
+      0.5237905317769131
+     ],
+     "account_tpr_at_fpr_floor": 0.0,
+     "account_tpr_at_fpr_floor_ci": [
+      0.0,
+      0.008446822308689999
+     ],
+     "account_achieved_fpr": 0.0024096385542168677
+    }
+   },
+   "minimum_detectable_effect": {
+    "arm": "model_pll_behavioural",
+    "unit": "planted shift added to every member row, in pooled standard deviations of the arm's own score",
+    "pooled_sd": 4.256009309487428,
+    "what_this_is": "SYNTHETIC probe, not a measurement of the model. A known shift is planted on the member arm and the account-level AUC is recomputed, so a reader can see how large a real membership signal this pipeline would have caught at this sample size.",
+    "by_delta": {
+     "0": {
+      "account_auc": 0.9452111949744502,
+      "account_auc_ci": [
+       0.9328039004266092,
+       0.9564891863172534
+      ]
+     },
+     "0.02": {
+      "account_auc": 0.9506555404497365,
+      "account_auc_ci": [
+       0.9388669854515338,
+       0.9611177785070243
+      ]
+     },
+     "0.05": {
+      "account_auc": 0.9577797571609394,
+      "account_auc_ci": [
+       0.9471403122216493,
+       0.9669745519041146
+      ]
+     },
+     "0.1": {
+      "account_auc": 0.967762098979576,
+      "account_auc_ci": [
+       0.9588727282671543,
+       0.9754432125388713
+      ]
+     },
+     "0.2": {
+      "account_auc": 0.9819464628943791,
+      "account_auc_ci": [
+       0.9760781647992749,
+       0.9869722860312847
+      ]
+     },
+     "0.5": {
+      "account_auc": 0.9972403231603457,
+      "account_auc_ci": [
+       0.9956526104417672,
+       0.9985420671010892
+      ]
+     },
+     "1": {
+      "account_auc": 0.9998656103011265,
+      "account_auc_ci": [
+       0.9996623458815808,
+       0.9999984763958558
+      ]
+     }
+    }
+   }
+  }
+ },
+ "calibration": {
+  "what_this_is": "the two arms below are NOT attacks. They exist so a reader can tell a real near-chance result from a broken experiment.",
+  "positive_control": {
+   "arm": "calibration_positive_tenure",
+   "definition": "log of the account's total row count, constant within an account",
+   "expectation": "far above 0.5, because non-member accounts are short by construction. If this arm does not separate, the metric and interval machinery is broken and no other number here means anything.",
+   "it_is_also_a_no_model_attack": "counting an account's transactions needs no checkpoint, no score access and no model. So this arm is both the pipeline's positive calibration AND the cheapest attack an adversary would actually try. It is compared against the model arms in comparisons_by_key, and the direction of that comparison is reported in those words whichever way it lands."
+  },
+  "negative_control": {
+   "arm": "calibration_negative_random",
+   "definition": "seeded uniform random score, one draw per row",
+   "expectation": "0.5 with an interval covering it. If this arm separates, the evaluation is leaking."
+  },
+  "power_probe": "see strata.<name>.minimum_detectable_effect"
+ },
+ "diagnostics_not_attacks": {
+  "account_tenure": {
+   "median_total_rows_member_accounts": 13233.0,
+   "median_total_rows_non_member_accounts": 124.5,
+   "note": "Non-member accounts are small and new BY CONSTRUCTION, because an account with fewer than two pre-cut rows is exactly an account that arrived late. Any attack score reported without the no-model control on identical rows could be reading account size and be published as memorization. That is why the control ships whichever way it lands, and why account tenure also runs as a labelled positive calibration arm.",
+   "overlap_curve_pairs_by_caliper_log10": {
+    "0.05": 20,
+    "0.1": 21,
+    "0.2": 24,
+    "0.3": 27,
+    "0.5": 32,
+    "1": 77,
+    "2": 415
+   },
+   "overlap_curve_note": "how many member accounts can be matched one to one to a non-member account at each caliper, in log10 units of total account rows, out of 415 non-member accounts available. A caliper of 0.3 admits a pairing that differs by a factor of two in account size, and 1.0 admits a factor of ten. This is a DIAGNOSTIC. The matched analysis runs at one caliper only, 0.2 dex, and only above a pair floor of 30, and no stratum is chosen from this curve. See matching_parameters for where those two numbers came from.",
+   "matching_parameters": {
+    "caliper_log10_dex": "0.2",
+    "pair_floor": "30",
+    "recorded_as_strings_because": "this file's numeric leaf count is fixed and both values already appear inside the prose of matching.reason; promoting them would add leaves rather than correct one.",
+    "provenance": "NOT PRE-DECLARED. SAFETY-DESIGN.md at commit 1b32639, the pre-registration, contains no caliper, no pair floor and no matched analysis of any kind; the matched stratum was added after run 1 returned a non-null, which deviations_from_preregistration records in those words. What is claimed for these two numbers is narrower and is the whole of it: both were fixed before the pair count at this caliper was computed, and neither was chosen from the overlap curve above. Git carries no separate receipt for that ordering, because the producer and the result landed in one commit, so it rests on this record and not on a timestamp. The rule is deterministic and takes these two parameters and nothing else."
+   },
+   "matching": {
+    "run": false,
+    "reason": "NOT RUN. Greedy 1:1 caliper matching on log10 of account total rows at a caliper of 0.2 dex produced 24 usable pairs, below the floor of 30. The two populations barely overlap on tenure, which is itself the finding: no tenure-matched comparison is available at useful size on this corpus, so the headline separation CANNOT be attributed to membership alone."
+   }
+  },
+  "contamination_gradient_by_window": {
+   "0": {
+    "n_member_rows": 91485,
+    "n_member_accounts": 1542,
+    "row_auc": 0.6667021257333072,
+    "control_row_auc": 0.3964149598549646
+   },
+   "1": {
+    "n_member_rows": 1542,
+    "n_member_accounts": 1542,
+    "row_auc": 0.7227469107007871,
+    "control_row_auc": 0.3961498165866848
+   },
+   "2": {
+    "n_member_rows": 1542,
+    "n_member_accounts": 1542,
+    "row_auc": 0.7284108931891409,
+    "control_row_auc": 0.39115042852756715
+   },
+   "3": {
+    "n_member_rows": 1542,
+    "n_member_accounts": 1542,
+    "row_auc": 0.7232020220451059,
+    "control_row_auc": 0.3943971156709154
+   },
+   "4": {
+    "n_member_rows": 1542,
+    "n_member_accounts": 1542,
+    "row_auc": 0.7244329767811245,
+    "control_row_auc": 0.39297986545547614
+   },
+   "5": {
+    "n_member_rows": 1542,
+    "n_member_accounts": 1542,
+    "row_auc": 0.7144201621033401,
+    "control_row_auc": 0.3876761678148648
+   },
+   "6": {
+    "n_member_rows": 1542,
+    "n_member_accounts": 1542,
+    "row_auc": 0.7096525498749,
+    "control_row_auc": 0.40106073523279556
+   },
+   "7": {
+    "n_member_rows": 1542,
+    "n_member_accounts": 1542,
+    "row_auc": 0.7236065559171074,
+    "control_row_auc": 0.39858006592123846
+   },
+   "8": {
+    "n_member_rows": 1542,
+    "n_member_accounts": 1542,
+    "row_auc": 0.7133542051850091,
+    "control_row_auc": 0.38985715218004724
+   },
+   "9": {
+    "n_member_rows": 1542,
+    "n_member_accounts": 1542,
+    "row_auc": 0.7067511998422527,
+    "control_row_auc": 0.3950637145859617
+   },
+   "10": {
+    "n_member_rows": 1542,
+    "n_member_accounts": 1542,
+    "row_auc": 0.7144015848152068,
+    "control_row_auc": 0.39577009896490073
+   },
+   "11": {
+    "n_member_rows": 1542,
+    "n_member_accounts": 1542,
+    "row_auc": 0.7148857683626506,
+    "control_row_auc": 0.3906463934117247
+   },
+   "12": {
+    "n_member_rows": 1542,
+    "n_member_accounts": 1542,
+    "row_auc": 0.7212113457104032,
+    "control_row_auc": 0.4072055115399107
+   },
+   "13": {
+    "n_member_rows": 1542,
+    "n_member_accounts": 1542,
+    "row_auc": 0.7243188714263813,
+    "control_row_auc": 0.3941092965646492
+   },
+   "14": {
+    "n_member_rows": 1542,
+    "n_member_accounts": 1542,
+    "row_auc": 0.6999169913790502,
+    "control_row_auc": 0.4095698455062607
+   },
+   "15": {
+    "n_member_rows": 1542,
+    "n_member_accounts": 1542,
+    "row_auc": 0.6910867231049691,
+    "control_row_auc": 0.41089442404736953
+   }
+  },
+  "contamination_gradient_note": "for a member account, a post-cut row near the cut still has pre-cut rows inside its window, and those rows WERE literally inside pretraining windows. The key is the number of pretrained rows in the scored row's window, 0 to 15. Level 0 is the clean stratum. This turns the remaining contamination gradient into a measurement instead of a caveat, and the level 15 row is the most leakage-favourable case in the corpus.",
+  "field_mean_nll": {
+   "pll_field_mean_nll": {
+    "year": 13.20213003834518,
+    "month": 0.004831116105881191,
+    "day": 0.3192349416032068,
+    "hour": 1.310980868842093,
+    "amount_q": 3.261591921658123,
+    "use_chip": 0.5054796715703999,
+    "mcc": 1.442812035634055,
+    "city": 0.3196892193481481,
+    "state": 0.054391845021370615,
+    "errors": 0.07840859222089484
+   },
+   "rarity_field_mean_nll": {
+    "year": 14.334084958425334,
+    "month": 2.4961562551306646,
+    "day": 3.432914057139774,
+    "hour": 2.9851675639309976,
+    "amount_q": 4.582269788452967,
+    "use_chip": 1.628992676090766,
+    "mcc": 3.273327704983231,
+    "city": 4.880805509001185,
+    "state": 3.4838882740708015,
+    "errors": 0.09896033413984265
+   },
+   "window": 16,
+   "mask_prob_pretrain": 0.15,
+   "d_model": 512,
+   "layers": 6
+  }
+ },
+ "comparisons": [
+  {
+   "a": "model_pll_behavioural",
+   "b": "control_unigram_rarity",
+   "note": "the model attack minus the no-model counts control, behavioural field set",
+   "stratum": "clean",
+   "row_auc": {
+    "a_value": 0.6667021257333072,
+    "b_value": 0.3964149598549646,
+    "difference": 0.2702871658783426,
+    "ci": [
+     0.23204242569240077,
+     0.30755129668315373
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "account_auc": {
+    "a_value": 0.9486693857140623,
+    "b_value": 0.3167924616754958,
+    "difference": 0.6318769240385665,
+    "ci": [
+     0.5995591705342771,
+     0.6619496663697592
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "a": "model_pll_all_fields",
+   "b": "control_unigram_rarity_all_fields",
+   "note": "the model attack minus the no-model counts control, all ten fields",
+   "stratum": "clean",
+   "row_auc": {
+    "a_value": 0.6790251027699958,
+    "b_value": 0.4774147851231482,
+    "difference": 0.20161031764684761,
+    "ci": [
+     0.1736494014596621,
+     0.22861699745916964
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "account_auc": {
+    "a_value": 0.9809057240635694,
+    "b_value": 0.5937836950916506,
+    "difference": 0.3871220289719187,
+    "ci": [
+     0.353988834716297,
+     0.4196564858656415
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "a": "model_minus_control",
+   "b": "control_unigram_rarity",
+   "note": "the control-calibrated model attack minus the no-model counts control",
+   "stratum": "clean",
+   "row_auc": {
+    "a_value": 0.7171965814913738,
+    "b_value": 0.3964149598549646,
+    "difference": 0.32078162163640916,
+    "ci": [
+     0.25128879293343614,
+     0.3845413478190329
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "account_auc": {
+    "a_value": 0.9225290266122858,
+    "b_value": 0.3167924616754958,
+    "difference": 0.60573656493679,
+    "ci": [
+     0.5613104948978794,
+     0.6461076992796088
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "a": "calibration_positive_tenure",
+   "b": "calibration_negative_random",
+   "note": "the positive calibration control minus the negative one. This pair is not an attack. It is the proof that the metric and interval machinery can separate a real effect from chance on these exact units.",
+   "stratum": "clean",
+   "row_auc": {
+    "a_value": 0.9947733767750551,
+    "b_value": 0.5010362066820228,
+    "difference": 0.4937371700930323,
+    "ci": [
+     0.4889747644602365,
+     0.4986421647718398
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "account_auc": {
+    "a_value": 0.9990420827277984,
+    "b_value": 0.49557764130451765,
+    "difference": 0.5034644414232807,
+    "ci": [
+     0.4737082180863532,
+     0.5330590455206038
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  {
+   "a": "model_pll_behavioural",
+   "b": "calibration_positive_tenure",
+   "note": "the model attack minus COUNTING HOW MANY TRANSACTIONS THE ACCOUNT HAS. Account size needs no model, no checkpoint and no score access, and it is the cheapest thing an adversary who can see the population at all would try first. If it wins, the model score is not adding attack power over the difference between the two account populations, and that is the honest reading whichever way it lands.",
+   "stratum": "clean",
+   "row_auc": {
+    "a_value": 0.6667021257333072,
+    "b_value": 0.9947733767750551,
+    "difference": -0.32807125104174784,
+    "ci": [
+     -0.34546187124705274,
+     -0.3113498614275954
+    ],
+    "excludes_zero": true,
+    "direction": "b_wins"
+   },
+   "account_auc": {
+    "a_value": 0.9486693857140623,
+    "b_value": 0.9990420827277984,
+    "difference": -0.050372697013736034,
+    "ci": [
+     -0.06173421311705946,
+     -0.03946587908052445
+    ],
+    "excludes_zero": true,
+    "direction": "b_wins"
+   }
+  },
+  {
+   "a": "model_pll_all_fields",
+   "b": "calibration_positive_tenure",
+   "note": "the same, for the ten-field model arm",
+   "stratum": "clean",
+   "row_auc": {
+    "a_value": 0.6790251027699958,
+    "b_value": 0.9947733767750551,
+    "difference": -0.3157482740050592,
+    "ci": [
+     -0.33605853740543185,
+     -0.2943414070118152
+    ],
+    "excludes_zero": true,
+    "direction": "b_wins"
+   },
+   "account_auc": {
+    "a_value": 0.9809057240635694,
+    "b_value": 0.9990420827277984,
+    "difference": -0.018136358664229024,
+    "ci": [
+     -0.022669393527417054,
+     -0.01373087681465135
+    ],
+    "excludes_zero": true,
+    "direction": "b_wins"
+   }
+  }
+ ],
+ "comparisons_by_key": {
+  "model_pll_behavioural_vs_control_unigram_rarity": {
+   "a": "model_pll_behavioural",
+   "b": "control_unigram_rarity",
+   "note": "the model attack minus the no-model counts control, behavioural field set",
+   "stratum": "clean",
+   "row_auc": {
+    "a_value": 0.6667021257333072,
+    "b_value": 0.3964149598549646,
+    "difference": 0.2702871658783426,
+    "ci": [
+     0.23204242569240077,
+     0.30755129668315373
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "account_auc": {
+    "a_value": 0.9486693857140623,
+    "b_value": 0.3167924616754958,
+    "difference": 0.6318769240385665,
+    "ci": [
+     0.5995591705342771,
+     0.6619496663697592
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "model_pll_all_fields_vs_control_unigram_rarity_all_fields": {
+   "a": "model_pll_all_fields",
+   "b": "control_unigram_rarity_all_fields",
+   "note": "the model attack minus the no-model counts control, all ten fields",
+   "stratum": "clean",
+   "row_auc": {
+    "a_value": 0.6790251027699958,
+    "b_value": 0.4774147851231482,
+    "difference": 0.20161031764684761,
+    "ci": [
+     0.1736494014596621,
+     0.22861699745916964
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "account_auc": {
+    "a_value": 0.9809057240635694,
+    "b_value": 0.5937836950916506,
+    "difference": 0.3871220289719187,
+    "ci": [
+     0.353988834716297,
+     0.4196564858656415
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "model_minus_control_vs_control_unigram_rarity": {
+   "a": "model_minus_control",
+   "b": "control_unigram_rarity",
+   "note": "the control-calibrated model attack minus the no-model counts control",
+   "stratum": "clean",
+   "row_auc": {
+    "a_value": 0.7171965814913738,
+    "b_value": 0.3964149598549646,
+    "difference": 0.32078162163640916,
+    "ci": [
+     0.25128879293343614,
+     0.3845413478190329
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "account_auc": {
+    "a_value": 0.9225290266122858,
+    "b_value": 0.3167924616754958,
+    "difference": 0.60573656493679,
+    "ci": [
+     0.5613104948978794,
+     0.6461076992796088
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "calibration_positive_tenure_vs_calibration_negative_random": {
+   "a": "calibration_positive_tenure",
+   "b": "calibration_negative_random",
+   "note": "the positive calibration control minus the negative one. This pair is not an attack. It is the proof that the metric and interval machinery can separate a real effect from chance on these exact units.",
+   "stratum": "clean",
+   "row_auc": {
+    "a_value": 0.9947733767750551,
+    "b_value": 0.5010362066820228,
+    "difference": 0.4937371700930323,
+    "ci": [
+     0.4889747644602365,
+     0.4986421647718398
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   },
+   "account_auc": {
+    "a_value": 0.9990420827277984,
+    "b_value": 0.49557764130451765,
+    "difference": 0.5034644414232807,
+    "ci": [
+     0.4737082180863532,
+     0.5330590455206038
+    ],
+    "excludes_zero": true,
+    "direction": "a_wins"
+   }
+  },
+  "model_pll_behavioural_vs_calibration_positive_tenure": {
+   "a": "model_pll_behavioural",
+   "b": "calibration_positive_tenure",
+   "note": "the model attack minus COUNTING HOW MANY TRANSACTIONS THE ACCOUNT HAS. Account size needs no model, no checkpoint and no score access, and it is the cheapest thing an adversary who can see the population at all would try first. If it wins, the model score is not adding attack power over the difference between the two account populations, and that is the honest reading whichever way it lands.",
+   "stratum": "clean",
+   "row_auc": {
+    "a_value": 0.6667021257333072,
+    "b_value": 0.9947733767750551,
+    "difference": -0.32807125104174784,
+    "ci": [
+     -0.34546187124705274,
+     -0.3113498614275954
+    ],
+    "excludes_zero": true,
+    "direction": "b_wins"
+   },
+   "account_auc": {
+    "a_value": 0.9486693857140623,
+    "b_value": 0.9990420827277984,
+    "difference": -0.050372697013736034,
+    "ci": [
+     -0.06173421311705946,
+     -0.03946587908052445
+    ],
+    "excludes_zero": true,
+    "direction": "b_wins"
+   }
+  },
+  "model_pll_all_fields_vs_calibration_positive_tenure": {
+   "a": "model_pll_all_fields",
+   "b": "calibration_positive_tenure",
+   "note": "the same, for the ten-field model arm",
+   "stratum": "clean",
+   "row_auc": {
+    "a_value": 0.6790251027699958,
+    "b_value": 0.9947733767750551,
+    "difference": -0.3157482740050592,
+    "ci": [
+     -0.33605853740543185,
+     -0.2943414070118152
+    ],
+    "excludes_zero": true,
+    "direction": "b_wins"
+   },
+   "account_auc": {
+    "a_value": 0.9809057240635694,
+    "b_value": 0.9990420827277984,
+    "difference": -0.018136358664229024,
+    "ci": [
+     -0.022669393527417054,
+     -0.01373087681465135
+    ],
+    "excludes_zero": true,
+    "direction": "b_wins"
+   }
+  }
+ },
+ "bootstrap": {
+  "method": "entity-clustered bootstrap over accounts, stratified by arm",
+  "B": 1000,
+  "ci": "percentile 95%",
+  "paired": "every arm is measured on the same resampled accounts inside one replicate, so every difference above is paired",
+  "why_stratified": "member accounts are resampled among member accounts and non-member accounts among non-member accounts, so the number of negatives is constant across replicates and the low-FPR operating points are read at a constant resolution. This is a recorded deviation from protection_pll.cluster_bootstrap, which resamples one undifferentiated pool."
+ },
+ "headline_reading": {
+  "primary_stratum": "clean",
+  "primary_arm": "model_pll_behavioural",
+  "account_auc": 0.9486693857140623,
+  "account_auc_ci": [
+   0.9372059444001688,
+   0.9596935992999235
+  ],
+  "row_auc": 0.6667021257333072,
+  "row_tpr_at_fpr_0.001": 0.0014756517461878996,
+  "row_achieved_fpr_0.001": 0.000993509074049543,
+  "vs_counts_only_control": "a_wins",
+  "vs_account_size_no_model_attack": "b_wins",
+  "tenure_matched_account_auc": null,
+  "tenure_matched_account_auc_ci": null,
+  "tenure_matched_positive_control_account_auc": null,
+  "the_confound_stated_before_the_number_is_read": "The two arms differ on more than membership. A non-member account is, by the membership rule itself, an account that arrived after the cut date, so the arms differ in tenure, in calendar position of their first transaction, and in whatever else distinguishes a new account from an established one. A model trained on established accounts fits established-account behaviour better whether or not it memorised any particular account. So a separation here is an UPPER BOUND on what membership alone could explain, and it should be read as 'these two account populations are distinguishable through the model's loss', never as 'the model memorised its training accounts'.",
+  "what_the_evidence_bearing_on_that_confound_is": "three things were planned and all three ship whichever way they land. First, the counts only unigram control on the identical rows, which tells you whether marginal token rarity explains it. Second, the account-size arm, which is a no-model attack an adversary could run without any access to us at all; if it beats the model, the model score is buying the attacker nothing. Third, the tenure-matched stratum, which would repeat the whole measurement on member and non-member accounts matched one to one on total account size. THE THIRD ONE DID NOT RUN and its absence is the honest half of this block. The two populations do not overlap enough on tenure to build it at usable size, so no tenure-matched number exists, the three tenure_matched fields above are null on purpose, and nothing here has separated membership from tenure. Read diagnostics_not_attacks.account_tenure.matching for the pair count and the floor it missed. The direct test of the confound is unavailable on this corpus, which is a limit on the reading and not a detail."
+ },
+ "interpretation_guard": {
+  "required_sentence": "At the account operating point this attack DOES separate: the model arm recovers far more member accounts than the false positive rate it pays, while the counts-only control and the random negative control both sit at that floor, which is what tells you the pipeline is measuring something rather than nothing. What it separates is not established to be membership. By the membership rule itself a non-member account is an account that arrived after the corpus cut, so the two arms differ in tenure and in calendar position as well as in membership, and a no-model attack that uses only account size is reported beside the model for exactly that reason. Read this as a measurement of an attack against a confound, not as a measurement of what the model memorized, and not as evidence that no record is identifiable.",
+  "why_auc_does_not_lead": "Carlini et al. 2022: the AUC 'is not an appropriate measure of an attack's efficacy, since the AUC averages over all false-positive rates, including high error rates that are irrelevant for a practical attack'. Their worked case is a loss-threshold attack scoring 59.5 percent accuracy and 0 percent TPR at 0.1 percent FPR. So TPR at low FPR leads and AUC is reported beside it.",
+  "worst_case_caveat": "Aerni, Zhang and Tramer 2024 built a defence that fully leaks one training sample and still passes existing evaluations including TPR at low FPR, and measured their most vulnerable CIFAR-10 sample at 99.9 percent TPR at 0.1 percent FPR against a population figure of 4 percent. A population-average result says nothing about the most exposed record. This caveat belongs in the SAME paragraph as the number, never in a footnote.",
+  "forbidden_phrasings": [
+   "the model does not leak",
+   "membership inference fails",
+   "no leakage detected",
+   "proven private"
+  ],
+  "required_sentence_was_corrected": "The earlier literal claimed no separation at the reported operating point. On this run that was false and false in our favour, so the sentence now branches on the measured outcome in the producer and a re-run cannot reproduce the old claim. Found by the wave verifier."
+ },
+ "zero_labels": {
+  "fraud_labels_opened": false,
+  "note": "label-free by construction: prep/fraud.npy is never opened by any code path in this script. There is no hash-ordering argument to make because there is no label in memory at any point."
+ },
+ "guards_constant": {
+  "checkpoint_frozen": true,
+  "retraining": "none. The checkpoint is read for inference only.",
+  "label_excluded_from_pretraining": true,
+  "ids_excluded_from_vocab": true
+ },
+ "check": {
+  "command": "python scripts/safety/mia_eval.py --stage run ... --check",
+  "tolerance": 1e-06,
+  "nodelist": "pin the check job to the producing node with --nodelist; cross-node non-reproducibility is a measured effect in this repo, not a hypothesis."
+ },
+ "roc_curves_primary_stratum": {
+  "model_pll_behavioural": {
+   "row_level": {
+    "fpr": [
+     1.1038989711661589e-05,
+     1.1038989711661589e-05,
+     1.1038989711661589e-05,
+     2.2077979423323178e-05,
+     2.2077979423323178e-05,
+     3.3116969134984766e-05,
+     4.4155958846646355e-05,
+     5.5194948558307944e-05,
+     6.623393826996953e-05,
+     8.831191769329271e-05,
+     0.00012142888682827747,
+     0.00015454585596326223,
+     0.00019870181480990858,
+     0.00025389676336821655,
+     0.0003201307016381861,
+     0.0004194816090431404,
+     0.0005298715061597563,
+     0.0006844173621230185,
+     0.0008720801872212655,
+     0.0011038989711661589,
+     0.0014129906830926834,
+     0.0018103943127125005,
+     0.002307148849737272,
+     0.0029363712633019828,
+     0.003742217512253279,
+     0.004779882545149468,
+     0.006093522320837197,
+     0.007771448757009758,
+     0.009901973771360446,
+     0.012628604230140858,
+     0.01610588598931426,
+     0.020532520863690555,
+     0.026173444606349627,
+     0.03337086589835298,
+     0.04254426634874376,
+     0.054245595443105046,
+     0.0691482315538482,
+     0.08815737183732945,
+     0.1123989932441383,
+     0.1432971254470791,
+     0.18268424073828762,
+     0.2329006049366362,
+     0.29692674526427343,
+     0.37853799620258755,
+     0.48260255221442133,
+     0.6152580915794587,
+     0.7843864529518259,
+     1.0
+    ],
+    "tpr": [
+     6.558452205279554e-05,
+     6.558452205279554e-05,
+     6.558452205279554e-05,
+     6.558452205279554e-05,
+     6.558452205279554e-05,
+     0.00010930753675465924,
+     0.000142099797781057,
+     0.000142099797781057,
+     0.00015303055145652293,
+     0.00021861507350931847,
+     0.0002732688418866481,
+     0.00033885336393944365,
+     0.00044816090069410287,
+     0.0006230529595015577,
+     0.0007214297425807509,
+     0.0007870142646335465,
+     0.000863529540361808,
+     0.0010165600918183308,
+     0.001410067224135104,
+     0.0016724053123462863,
+     0.002000327922610264,
+     0.002437558069628901,
+     0.003257364595288845,
+     0.004164617150352517,
+     0.005126523473793518,
+     0.006088429797234519,
+     0.0076952505875280105,
+     0.010253046947587037,
+     0.013849264906815324,
+     0.018309012406405423,
+     0.02434278843526261,
+     0.0348035197026835,
+     0.04977865223807181,
+     0.06514729190577691,
+     0.07756462808110619,
+     0.09780838388806909,
+     0.13912663278133028,
+     0.19030442148986174,
+     0.23771110018035743,
+     0.28883423512051154,
+     0.351412799912554,
+     0.4248237415969831,
+     0.5158550582062633,
+     0.6209761163032191,
+     0.7346340930207138,
+     0.8444772367054708,
+     0.9374979504836859,
+     1.0
+    ],
+    "note": "log-spaced grid from the smallest measurable FPR to 1.0; each point is the largest TPR reachable at a false-positive rate at or below the grid value, so the printed FPR is the achieved one."
+   },
+   "account_level": {
+    "fpr": [
+     0.0,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.004819277108433735,
+     0.004819277108433735,
+     0.004819277108433735,
+     0.007228915662650603,
+     0.007228915662650603,
+     0.00963855421686747,
+     0.00963855421686747,
+     0.012048192771084338,
+     0.014457831325301205,
+     0.014457831325301205,
+     0.016867469879518072,
+     0.01927710843373494,
+     0.024096385542168676,
+     0.02650602409638554,
+     0.03132530120481928,
+     0.033734939759036145,
+     0.03855421686746988,
+     0.04578313253012048,
+     0.05060240963855422,
+     0.05783132530120482,
+     0.06746987951807229,
+     0.0746987951807229,
+     0.08674698795180723,
+     0.09879518072289156,
+     0.1108433734939759,
+     0.12771084337349398,
+     0.14457831325301204,
+     0.163855421686747,
+     0.18795180722891566,
+     0.21445783132530122,
+     0.2433734939759036,
+     0.27710843373493976,
+     0.3132530120481928,
+     0.3566265060240964,
+     0.4072289156626506,
+     0.46265060240963857,
+     0.5253012048192771,
+     0.5975903614457831,
+     0.6795180722891566,
+     0.7734939759036145,
+     0.8795180722891566,
+     1.0
+    ],
+    "tpr": [
+     0.17055771725032426,
+     0.2723735408560311,
+     0.2723735408560311,
+     0.2723735408560311,
+     0.2723735408560311,
+     0.2723735408560311,
+     0.5252918287937743,
+     0.5252918287937743,
+     0.5252918287937743,
+     0.5304798962386511,
+     0.5304798962386511,
+     0.543450064850843,
+     0.543450064850843,
+     0.5570687418936446,
+     0.5680933852140078,
+     0.5680933852140078,
+     0.5836575875486382,
+     0.6037613488975356,
+     0.619325551232166,
+     0.6264591439688716,
+     0.6569390402075227,
+     0.6647211413748378,
+     0.6971465629053177,
+     0.7101167315175098,
+     0.7243839169909209,
+     0.7555123216601816,
+     0.7989623865110247,
+     0.8106355382619974,
+     0.8261997405966277,
+     0.8424124513618677,
+     0.8534370946822308,
+     0.8865110246433203,
+     0.8942931258106356,
+     0.9137483787289234,
+     0.9280155642023347,
+     0.940337224383917,
+     0.9507133592736705,
+     0.9584954604409858,
+     0.9688715953307393,
+     0.9760051880674449,
+     0.9811932555123216,
+     0.9870298313878081,
+     0.9909208819714657,
+     0.9961089494163424,
+     0.996757457846952,
+     0.9980544747081712,
+     0.9987029831387808,
+     1.0
+    ],
+    "note": "log-spaced grid from the smallest measurable FPR to 1.0; each point is the largest TPR reachable at a false-positive rate at or below the grid value, so the printed FPR is the achieved one."
+   }
+  },
+  "model_pll_all_fields": {
+   "row_level": {
+    "fpr": [
+     1.1038989711661589e-05,
+     1.1038989711661589e-05,
+     1.1038989711661589e-05,
+     2.2077979423323178e-05,
+     2.2077979423323178e-05,
+     3.3116969134984766e-05,
+     4.4155958846646355e-05,
+     5.5194948558307944e-05,
+     6.623393826996953e-05,
+     8.831191769329271e-05,
+     0.00012142888682827747,
+     0.00015454585596326223,
+     0.00019870181480990858,
+     0.00025389676336821655,
+     0.0003201307016381861,
+     0.0004194816090431404,
+     0.0005298715061597563,
+     0.0006844173621230185,
+     0.0008720801872212655,
+     0.0011038989711661589,
+     0.0014129906830926834,
+     0.0018103943127125005,
+     0.002307148849737272,
+     0.0029363712633019828,
+     0.003742217512253279,
+     0.004779882545149468,
+     0.006093522320837197,
+     0.007771448757009758,
+     0.009901973771360446,
+     0.012628604230140858,
+     0.01610588598931426,
+     0.020532520863690555,
+     0.026173444606349627,
+     0.03337086589835298,
+     0.04254426634874376,
+     0.054245595443105046,
+     0.0691482315538482,
+     0.08815737183732945,
+     0.1123989932441383,
+     0.1432971254470791,
+     0.18268424073828762,
+     0.2329006049366362,
+     0.29692674526427343,
+     0.37853799620258755,
+     0.48260255221442133,
+     0.6152580915794587,
+     0.7843864529518259,
+     1.0
+    ],
+    "tpr": [
+     0.00021861507350931847,
+     0.00021861507350931847,
+     0.00021861507350931847,
+     0.00029513034923757994,
+     0.00029513034923757994,
+     0.0003825763786413073,
+     0.000426299393343171,
+     0.0005356069300978302,
+     0.000568399191124228,
+     0.0014647209925124337,
+     0.0019347434005574685,
+     0.002153358474066787,
+     0.00284199595562114,
+     0.005213969503197246,
+     0.008055965458818386,
+     0.00965185549543641,
+     0.010712138601956606,
+     0.011761490954801333,
+     0.015062578564792043,
+     0.021653823031097995,
+     0.03067169481335738,
+     0.04306716948133574,
+     0.05364813903918675,
+     0.06692900475487785,
+     0.08383888069082364,
+     0.0990872820680986,
+     0.1119199868830956,
+     0.12440290758047767,
+     0.133442640870088,
+     0.14478876318522163,
+     0.15522763294529157,
+     0.16507624200688636,
+     0.17455320544351532,
+     0.18752801005629338,
+     0.20242662731595343,
+     0.2202109635459365,
+     0.24001748920588076,
+     0.2658468601410067,
+     0.296562277969066,
+     0.33496201563097777,
+     0.38257637864130734,
+     0.443777668470241,
+     0.5211564737388643,
+     0.614920478767011,
+     0.7234300705033612,
+     0.8344100125703667,
+     0.9330928567524731,
+     1.0
+    ],
+    "note": "log-spaced grid from the smallest measurable FPR to 1.0; each point is the largest TPR reachable at a false-positive rate at or below the grid value, so the printed FPR is the achieved one."
+   },
+   "account_level": {
+    "fpr": [
+     0.0,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.004819277108433735,
+     0.004819277108433735,
+     0.004819277108433735,
+     0.007228915662650603,
+     0.007228915662650603,
+     0.00963855421686747,
+     0.00963855421686747,
+     0.012048192771084338,
+     0.014457831325301205,
+     0.014457831325301205,
+     0.016867469879518072,
+     0.01927710843373494,
+     0.024096385542168676,
+     0.02650602409638554,
+     0.03132530120481928,
+     0.033734939759036145,
+     0.03855421686746988,
+     0.04578313253012048,
+     0.05060240963855422,
+     0.05783132530120482,
+     0.06746987951807229,
+     0.0746987951807229,
+     0.08674698795180723,
+     0.09879518072289156,
+     0.1108433734939759,
+     0.12771084337349398,
+     0.14457831325301204,
+     0.163855421686747,
+     0.18795180722891566,
+     0.21445783132530122,
+     0.2433734939759036,
+     0.27710843373493976,
+     0.3132530120481928,
+     0.3566265060240964,
+     0.4072289156626506,
+     0.46265060240963857,
+     0.5253012048192771,
+     0.5975903614457831,
+     0.6795180722891566,
+     0.7734939759036145,
+     0.8795180722891566,
+     1.0
+    ],
+    "tpr": [
+     0.7788586251621271,
+     0.8138780804150454,
+     0.8138780804150454,
+     0.8138780804150454,
+     0.8138780804150454,
+     0.8138780804150454,
+     0.8184176394293126,
+     0.8184176394293126,
+     0.8184176394293126,
+     0.8326848249027238,
+     0.8326848249027238,
+     0.8385214007782101,
+     0.8385214007782101,
+     0.8417639429312581,
+     0.8443579766536965,
+     0.8443579766536965,
+     0.8651102464332037,
+     0.867704280155642,
+     0.87094682230869,
+     0.8735408560311284,
+     0.8780804150453956,
+     0.8800259403372244,
+     0.8884565499351491,
+     0.8994811932555123,
+     0.9014267185473411,
+     0.9053177691309987,
+     0.914396887159533,
+     0.9228274967574579,
+     0.9293125810635539,
+     0.937094682230869,
+     0.9468223086900129,
+     0.9526588845654993,
+     0.9591439688715954,
+     0.9682230869001297,
+     0.9714656290531777,
+     0.9785992217898832,
+     0.9818417639429312,
+     0.9844357976653697,
+     0.9857328145265889,
+     0.9870298313878081,
+     0.9922178988326849,
+     0.996757457846952,
+     0.9980544747081712,
+     0.9987029831387808,
+     0.9987029831387808,
+     0.9987029831387808,
+     0.9987029831387808,
+     1.0
+    ],
+    "note": "log-spaced grid from the smallest measurable FPR to 1.0; each point is the largest TPR reachable at a false-positive rate at or below the grid value, so the printed FPR is the achieved one."
+   }
+  },
+  "control_unigram_rarity": {
+   "row_level": {
+    "fpr": [
+     1.1038989711661589e-05,
+     1.1038989711661589e-05,
+     1.1038989711661589e-05,
+     1.1038989711661589e-05,
+     1.1038989711661589e-05,
+     1.1038989711661589e-05,
+     1.1038989711661589e-05,
+     5.5194948558307944e-05,
+     5.5194948558307944e-05,
+     8.831191769329271e-05,
+     8.831191769329271e-05,
+     0.00015454585596326223,
+     0.000187662825098247,
+     0.00025389676336821655,
+     0.0003201307016381861,
+     0.0004194816090431404,
+     0.0004967545370247715,
+     0.0006733783724113569,
+     0.0008720801872212655,
+     0.0011038989711661589,
+     0.0013798737139576985,
+     0.0017772773435775157,
+     0.002307148849737272,
+     0.002925332273590321,
+     0.003742217512253279,
+     0.004779882545149468,
+     0.006093522320837197,
+     0.007771448757009758,
+     0.009890934781648783,
+     0.012628604230140858,
+     0.01610588598931426,
+     0.020532520863690555,
+     0.02612928864750298,
+     0.03337086589835298,
+     0.04254426634874376,
+     0.054245595443105046,
+     0.06912615357442486,
+     0.08815737183732945,
+     0.1123989932441383,
+     0.14325296948823243,
+     0.18259592882059433,
+     0.2329006049366362,
+     0.29671700445975185,
+     0.3785159182231642,
+     0.48260255221442133,
+     0.6152580915794587,
+     0.7843864529518259,
+     1.0
+    ],
+    "tpr": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0930753675465923e-05,
+     1.0930753675465923e-05,
+     1.0930753675465923e-05,
+     1.0930753675465923e-05,
+     2.1861507350931845e-05,
+     3.279226102639777e-05,
+     4.372301470186369e-05,
+     8.744602940372738e-05,
+     0.00010930753675465924,
+     0.00012023829043012516,
+     0.00017489205880745476,
+     0.0002295458271847844,
+     0.00029513034923757994,
+     0.00033885336393944365,
+     0.0004590916543695688,
+     0.0006886374815543532,
+     0.000863529540361808,
+     0.0011805213969503198,
+     0.0018472973711537411,
+     0.002710826911515549,
+     0.0030934032901568562,
+     0.0037929715253866756,
+     0.005913537738427064,
+     0.008372957315406897,
+     0.010668415587254742,
+     0.013215281193638302,
+     0.017172214024156966,
+     0.02077936273706072,
+     0.026692900475487787,
+     0.03613707165109034,
+     0.04577799639285129,
+     0.05795485598732032,
+     0.07309394982784063,
+     0.09814723725200852,
+     0.12482920697382084,
+     0.16329452915778542,
+     0.2165491610646554,
+     0.30093457943925234,
+     0.43431163578728754,
+     0.7045198666448051,
+     1.0
+    ],
+    "note": "log-spaced grid from the smallest measurable FPR to 1.0; each point is the largest TPR reachable at a false-positive rate at or below the grid value, so the printed FPR is the achieved one."
+   },
+   "account_level": {
+    "fpr": [
+     0.0,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.004819277108433735,
+     0.004819277108433735,
+     0.004819277108433735,
+     0.007228915662650603,
+     0.007228915662650603,
+     0.00963855421686747,
+     0.00963855421686747,
+     0.012048192771084338,
+     0.014457831325301205,
+     0.014457831325301205,
+     0.016867469879518072,
+     0.01927710843373494,
+     0.024096385542168676,
+     0.02650602409638554,
+     0.03132530120481928,
+     0.033734939759036145,
+     0.03855421686746988,
+     0.04578313253012048,
+     0.05060240963855422,
+     0.05783132530120482,
+     0.06746987951807229,
+     0.0746987951807229,
+     0.08674698795180723,
+     0.09879518072289156,
+     0.1108433734939759,
+     0.12771084337349398,
+     0.14457831325301204,
+     0.163855421686747,
+     0.18795180722891566,
+     0.21445783132530122,
+     0.2433734939759036,
+     0.27710843373493976,
+     0.3132530120481928,
+     0.3566265060240964,
+     0.4072289156626506,
+     0.46265060240963857,
+     0.5253012048192771,
+     0.5975903614457831,
+     0.6795180722891566,
+     0.7734939759036145,
+     0.8795180722891566,
+     1.0
+    ],
+    "tpr": [
+     0.0006485084306095979,
+     0.0019455252918287938,
+     0.0019455252918287938,
+     0.0019455252918287938,
+     0.0019455252918287938,
+     0.0019455252918287938,
+     0.0019455252918287938,
+     0.0019455252918287938,
+     0.0019455252918287938,
+     0.0019455252918287938,
+     0.0019455252918287938,
+     0.0019455252918287938,
+     0.0019455252918287938,
+     0.0019455252918287938,
+     0.0019455252918287938,
+     0.0019455252918287938,
+     0.0019455252918287938,
+     0.0019455252918287938,
+     0.0025940337224383916,
+     0.0025940337224383916,
+     0.0025940337224383916,
+     0.005188067444876783,
+     0.005188067444876783,
+     0.005836575875486381,
+     0.00648508430609598,
+     0.007782101167315175,
+     0.011673151750972763,
+     0.011673151750972763,
+     0.01297016861219196,
+     0.013618677042801557,
+     0.018158236057068743,
+     0.02204928664072633,
+     0.023346303501945526,
+     0.029831387808041506,
+     0.03372243839169909,
+     0.035667963683527884,
+     0.03955901426718547,
+     0.05252918287937743,
+     0.06744487678339818,
+     0.08949416342412451,
+     0.12062256809338522,
+     0.17639429312581065,
+     0.24254215304798962,
+     0.30479896238651105,
+     0.41893644617380027,
+     0.5642023346303502,
+     0.7944228274967574,
+     1.0
+    ],
+    "note": "log-spaced grid from the smallest measurable FPR to 1.0; each point is the largest TPR reachable at a false-positive rate at or below the grid value, so the printed FPR is the achieved one."
+   }
+  },
+  "control_unigram_rarity_all_fields": {
+   "row_level": {
+    "fpr": [
+     1.1038989711661589e-05,
+     1.1038989711661589e-05,
+     1.1038989711661589e-05,
+     2.2077979423323178e-05,
+     2.2077979423323178e-05,
+     3.3116969134984766e-05,
+     4.4155958846646355e-05,
+     5.5194948558307944e-05,
+     6.623393826996953e-05,
+     8.831191769329271e-05,
+     0.00012142888682827747,
+     0.00015454585596326223,
+     0.00019870181480990858,
+     0.00025389676336821655,
+     0.0003201307016381861,
+     0.0004194816090431404,
+     0.0005298715061597563,
+     0.0006844173621230185,
+     0.0008720801872212655,
+     0.0011038989711661589,
+     0.0014129906830926834,
+     0.0018103943127125005,
+     0.002307148849737272,
+     0.0029363712633019828,
+     0.003742217512253279,
+     0.004779882545149468,
+     0.006093522320837197,
+     0.007771448757009758,
+     0.009901973771360446,
+     0.012628604230140858,
+     0.01610588598931426,
+     0.020532520863690555,
+     0.026173444606349627,
+     0.03337086589835298,
+     0.04254426634874376,
+     0.054245595443105046,
+     0.0691482315538482,
+     0.08815737183732945,
+     0.1123989932441383,
+     0.1432971254470791,
+     0.18268424073828762,
+     0.2329006049366362,
+     0.29692674526427343,
+     0.37853799620258755,
+     0.48260255221442133,
+     0.6152580915794587,
+     0.7843864529518259,
+     1.0
+    ],
+    "tpr": [
+     0.0,
+     0.0,
+     0.0,
+     2.1861507350931845e-05,
+     2.1861507350931845e-05,
+     2.1861507350931845e-05,
+     4.372301470186369e-05,
+     4.372301470186369e-05,
+     5.465376837732962e-05,
+     8.744602940372738e-05,
+     8.744602940372738e-05,
+     0.00013116904410559108,
+     0.000284199595562114,
+     0.00036071487129037545,
+     0.0005137454227468984,
+     0.0012461059190031153,
+     0.0020331201836366617,
+     0.003705525495982948,
+     0.00562933814286495,
+     0.012297097884899164,
+     0.013051319888506312,
+     0.014778378969229929,
+     0.023479258894900802,
+     0.03138219380226267,
+     0.03498934251516642,
+     0.04538448926053451,
+     0.05360441602448489,
+     0.08726020659124446,
+     0.11635787287533475,
+     0.13618626004262993,
+     0.13838334153139858,
+     0.14023063890255233,
+     0.14462480188008964,
+     0.14853801169590644,
+     0.15240749849702137,
+     0.1574028529267093,
+     0.1639831666393398,
+     0.17410504454282122,
+     0.18542930535060392,
+     0.20200032792261027,
+     0.22117286986937748,
+     0.24309996174236215,
+     0.2766355140186916,
+     0.32223861835273543,
+     0.394862545772531,
+     0.5135814614417664,
+     0.7490845493796797,
+     1.0
+    ],
+    "note": "log-spaced grid from the smallest measurable FPR to 1.0; each point is the largest TPR reachable at a false-positive rate at or below the grid value, so the printed FPR is the achieved one."
+   },
+   "account_level": {
+    "fpr": [
+     0.0,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.004819277108433735,
+     0.004819277108433735,
+     0.004819277108433735,
+     0.007228915662650603,
+     0.007228915662650603,
+     0.00963855421686747,
+     0.00963855421686747,
+     0.012048192771084338,
+     0.014457831325301205,
+     0.014457831325301205,
+     0.016867469879518072,
+     0.01927710843373494,
+     0.024096385542168676,
+     0.02650602409638554,
+     0.03132530120481928,
+     0.033734939759036145,
+     0.03855421686746988,
+     0.04578313253012048,
+     0.05060240963855422,
+     0.05783132530120482,
+     0.06746987951807229,
+     0.0746987951807229,
+     0.08674698795180723,
+     0.09879518072289156,
+     0.1108433734939759,
+     0.12771084337349398,
+     0.14457831325301204,
+     0.163855421686747,
+     0.18795180722891566,
+     0.21445783132530122,
+     0.2433734939759036,
+     0.27710843373493976,
+     0.3132530120481928,
+     0.3566265060240964,
+     0.4072289156626506,
+     0.46265060240963857,
+     0.5253012048192771,
+     0.5975903614457831,
+     0.6795180722891566,
+     0.7734939759036145,
+     0.8795180722891566,
+     1.0
+    ],
+    "tpr": [
+     0.0324254215304799,
+     0.04474708171206226,
+     0.04474708171206226,
+     0.04474708171206226,
+     0.04474708171206226,
+     0.04474708171206226,
+     0.04669260700389105,
+     0.04669260700389105,
+     0.04669260700389105,
+     0.04734111543450065,
+     0.04734111543450065,
+     0.04993514915693904,
+     0.04993514915693904,
+     0.051232166018158234,
+     0.051232166018158234,
+     0.051232166018158234,
+     0.05317769130998703,
+     0.058365758754863814,
+     0.061608300907911806,
+     0.07198443579766536,
+     0.08625162127107652,
+     0.08754863813229571,
+     0.09792477302204929,
+     0.10505836575875487,
+     0.11089494163424124,
+     0.11608300907911803,
+     0.11997405966277562,
+     0.1219195849546044,
+     0.13164721141374838,
+     0.14072632944228275,
+     0.14850843060959792,
+     0.1621271076523995,
+     0.16990920881971466,
+     0.1926070038910506,
+     0.2140077821011673,
+     0.24708171206225682,
+     0.2788586251621271,
+     0.32684824902723736,
+     0.3748378728923476,
+     0.43190661478599224,
+     0.49286640726329445,
+     0.579118028534371,
+     0.6828793774319066,
+     0.7639429312581063,
+     0.8411154345006485,
+     0.920881971465629,
+     0.98378728923476,
+     1.0
+    ],
+    "note": "log-spaced grid from the smallest measurable FPR to 1.0; each point is the largest TPR reachable at a false-positive rate at or below the grid value, so the printed FPR is the achieved one."
+   }
+  },
+  "model_minus_control": {
+   "row_level": {
+    "fpr": [
+     1.1038989711661589e-05,
+     1.1038989711661589e-05,
+     1.1038989711661589e-05,
+     2.2077979423323178e-05,
+     2.2077979423323178e-05,
+     3.3116969134984766e-05,
+     4.4155958846646355e-05,
+     5.5194948558307944e-05,
+     6.623393826996953e-05,
+     8.831191769329271e-05,
+     0.00012142888682827747,
+     0.00015454585596326223,
+     0.00019870181480990858,
+     0.00025389676336821655,
+     0.0003201307016381861,
+     0.0004194816090431404,
+     0.0005298715061597563,
+     0.0006844173621230185,
+     0.0008720801872212655,
+     0.0011038989711661589,
+     0.0014129906830926834,
+     0.0018103943127125005,
+     0.002307148849737272,
+     0.0029363712633019828,
+     0.003742217512253279,
+     0.004779882545149468,
+     0.006093522320837197,
+     0.007771448757009758,
+     0.009901973771360446,
+     0.012628604230140858,
+     0.01610588598931426,
+     0.020532520863690555,
+     0.026173444606349627,
+     0.03337086589835298,
+     0.04254426634874376,
+     0.054245595443105046,
+     0.0691482315538482,
+     0.08815737183732945,
+     0.1123989932441383,
+     0.1432971254470791,
+     0.18268424073828762,
+     0.2329006049366362,
+     0.29692674526427343,
+     0.37853799620258755,
+     0.48260255221442133,
+     0.6152580915794587,
+     0.7843864529518259,
+     1.0
+    ],
+    "tpr": [
+     5.465376837732962e-05,
+     5.465376837732962e-05,
+     5.465376837732962e-05,
+     7.651527572826147e-05,
+     7.651527572826147e-05,
+     8.744602940372738e-05,
+     9.837678307919331e-05,
+     9.837678307919331e-05,
+     0.00012023829043012516,
+     0.00013116904410559108,
+     0.00013116904410559108,
+     0.00013116904410559108,
+     0.000142099797781057,
+     0.00017489205880745476,
+     0.00036071487129037545,
+     0.00044816090069410287,
+     0.000568399191124228,
+     0.0008853910477127398,
+     0.0012461059190031153,
+     0.0015303055145652292,
+     0.002153358474066787,
+     0.002962234246051265,
+     0.004055309613597857,
+     0.00544351533038203,
+     0.00740012023829043,
+     0.011050991965896048,
+     0.015029786303765644,
+     0.02131496966715855,
+     0.027840629611411708,
+     0.0377876154560857,
+     0.047920424113242606,
+     0.061922719571514455,
+     0.07907307208832048,
+     0.10200579329944799,
+     0.1312892823960212,
+     0.16518554954364104,
+     0.21184893698420507,
+     0.268317210471662,
+     0.3370935125976936,
+     0.4049079084002842,
+     0.4780127889818003,
+     0.5505383396185167,
+     0.6332732141881182,
+     0.7088593758539651,
+     0.7819096026671039,
+     0.8628409028802536,
+     0.9416516368803629,
+     1.0
+    ],
+    "note": "log-spaced grid from the smallest measurable FPR to 1.0; each point is the largest TPR reachable at a false-positive rate at or below the grid value, so the printed FPR is the achieved one."
+   },
+   "account_level": {
+    "fpr": [
+     0.0,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.004819277108433735,
+     0.004819277108433735,
+     0.004819277108433735,
+     0.007228915662650603,
+     0.007228915662650603,
+     0.00963855421686747,
+     0.00963855421686747,
+     0.012048192771084338,
+     0.014457831325301205,
+     0.014457831325301205,
+     0.016867469879518072,
+     0.01927710843373494,
+     0.024096385542168676,
+     0.02650602409638554,
+     0.03132530120481928,
+     0.033734939759036145,
+     0.03855421686746988,
+     0.04578313253012048,
+     0.05060240963855422,
+     0.05783132530120482,
+     0.06746987951807229,
+     0.0746987951807229,
+     0.08674698795180723,
+     0.09879518072289156,
+     0.1108433734939759,
+     0.12771084337349398,
+     0.14457831325301204,
+     0.163855421686747,
+     0.18795180722891566,
+     0.21445783132530122,
+     0.2433734939759036,
+     0.27710843373493976,
+     0.3132530120481928,
+     0.3566265060240964,
+     0.4072289156626506,
+     0.46265060240963857,
+     0.5253012048192771,
+     0.5975903614457831,
+     0.6795180722891566,
+     0.7734939759036145,
+     0.8795180722891566,
+     1.0
+    ],
+    "tpr": [
+     0.08625162127107652,
+     0.30544747081712065,
+     0.30544747081712065,
+     0.30544747081712065,
+     0.30544747081712065,
+     0.30544747081712065,
+     0.39234760051880674,
+     0.39234760051880674,
+     0.39234760051880674,
+     0.42282749675745784,
+     0.42282749675745784,
+     0.4351491569390402,
+     0.4351491569390402,
+     0.4727626459143969,
+     0.5110246433203631,
+     0.5110246433203631,
+     0.5343709468223087,
+     0.5544747081712063,
+     0.5577172503242542,
+     0.5635538261997406,
+     0.5992217898832685,
+     0.5992217898832685,
+     0.6251621271076524,
+     0.6530479896238651,
+     0.6712062256809338,
+     0.685473411154345,
+     0.7276264591439688,
+     0.75810635538262,
+     0.7769130998702983,
+     0.8035019455252919,
+     0.8210116731517509,
+     0.8430609597924773,
+     0.8683527885862516,
+     0.8793774319066148,
+     0.8988326848249028,
+     0.9059662775616083,
+     0.9118028534370947,
+     0.9163424124513618,
+     0.9267185473411155,
+     0.9351491569390402,
+     0.9474708171206225,
+     0.9552529182879378,
+     0.9669260700389105,
+     0.9740596627756161,
+     0.9844357976653697,
+     0.9902723735408561,
+     0.9961089494163424,
+     1.0
+    ],
+    "note": "log-spaced grid from the smallest measurable FPR to 1.0; each point is the largest TPR reachable at a false-positive rate at or below the grid value, so the printed FPR is the achieved one."
+   }
+  },
+  "calibration_positive_tenure": {
+   "row_level": {
+    "fpr": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.044089724908376385,
+     0.044089724908376385,
+     0.08309047555967677,
+     0.11096392458162228,
+     0.13732503201307017,
+     0.1624608115865236,
+     0.2115511988342827,
+     0.278999425972535,
+     0.37604318452775204,
+     0.4824369673687464,
+     0.6151256237029187,
+     0.781836446328432,
+     1.0
+    ],
+    "tpr": [
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9604306716948133,
+     0.9708804722085588,
+     0.9708804722085588,
+     0.9880308247253649,
+     0.9904027982729409,
+     0.9928840793572716,
+     0.9935289938241242,
+     0.9941848390446522,
+     0.9941848390446522,
+     0.997770126250205,
+     0.9986992403126196,
+     0.9991583319669891,
+     0.9997048696507624,
+     1.0
+    ],
+    "note": "log-spaced grid from the smallest measurable FPR to 1.0; each point is the largest TPR reachable at a false-positive rate at or below the grid value, so the printed FPR is the achieved one."
+   },
+   "account_level": {
+    "fpr": [
+     0.0,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.004819277108433735,
+     0.004819277108433735,
+     0.004819277108433735,
+     0.007228915662650603,
+     0.007228915662650603,
+     0.00963855421686747,
+     0.00963855421686747,
+     0.012048192771084338,
+     0.014457831325301205,
+     0.014457831325301205,
+     0.016867469879518072,
+     0.01927710843373494,
+     0.024096385542168676,
+     0.02650602409638554,
+     0.03132530120481928,
+     0.033734939759036145,
+     0.03855421686746988,
+     0.04578313253012048,
+     0.05060240963855422,
+     0.05783132530120482,
+     0.06746987951807229,
+     0.0746987951807229,
+     0.08674698795180723,
+     0.09879518072289156,
+     0.1108433734939759,
+     0.12771084337349398,
+     0.14457831325301204,
+     0.1614457831325301,
+     0.18313253012048192,
+     0.21445783132530122,
+     0.24096385542168675,
+     0.27710843373493976,
+     0.3108433734939759,
+     0.3566265060240964,
+     0.4072289156626506,
+     0.4602409638554217,
+     0.5253012048192771,
+     0.5975903614457831,
+     0.6698795180722892,
+     0.7662650602409639,
+     0.8771084337349397,
+     1.0
+    ],
+    "tpr": [
+     0.9578469520103762,
+     0.9688715953307393,
+     0.9688715953307393,
+     0.9688715953307393,
+     0.9688715953307393,
+     0.9688715953307393,
+     0.9863813229571985,
+     0.9863813229571985,
+     0.9863813229571985,
+     0.9889753566796369,
+     0.9889753566796369,
+     0.9915693904020753,
+     0.9915693904020753,
+     0.9922178988326849,
+     0.9922178988326849,
+     0.9922178988326849,
+     0.9928664072632944,
+     0.9928664072632944,
+     0.9928664072632944,
+     0.9948119325551232,
+     0.9954604409857328,
+     0.996757457846952,
+     0.996757457846952,
+     0.996757457846952,
+     0.996757457846952,
+     0.996757457846952,
+     0.9980544747081712,
+     0.9980544747081712,
+     0.9987029831387808,
+     0.9987029831387808,
+     0.9987029831387808,
+     0.9987029831387808,
+     0.9987029831387808,
+     0.9987029831387808,
+     0.9987029831387808,
+     0.9987029831387808,
+     0.9987029831387808,
+     0.9987029831387808,
+     0.9987029831387808,
+     0.9993514915693904,
+     0.9993514915693904,
+     0.9993514915693904,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "note": "log-spaced grid from the smallest measurable FPR to 1.0; each point is the largest TPR reachable at a false-positive rate at or below the grid value, so the printed FPR is the achieved one."
+   }
+  },
+  "calibration_negative_random": {
+   "row_level": {
+    "fpr": [
+     1.1038989711661589e-05,
+     1.1038989711661589e-05,
+     1.1038989711661589e-05,
+     2.2077979423323178e-05,
+     2.2077979423323178e-05,
+     3.3116969134984766e-05,
+     4.4155958846646355e-05,
+     5.5194948558307944e-05,
+     6.623393826996953e-05,
+     8.831191769329271e-05,
+     0.00012142888682827747,
+     0.00015454585596326223,
+     0.00019870181480990858,
+     0.00025389676336821655,
+     0.0003201307016381861,
+     0.0004194816090431404,
+     0.0005298715061597563,
+     0.0006844173621230185,
+     0.0008720801872212655,
+     0.0011038989711661589,
+     0.0014129906830926834,
+     0.0018103943127125005,
+     0.002307148849737272,
+     0.0029363712633019828,
+     0.003742217512253279,
+     0.004779882545149468,
+     0.006093522320837197,
+     0.007771448757009758,
+     0.009901973771360446,
+     0.012628604230140858,
+     0.01610588598931426,
+     0.020532520863690555,
+     0.026173444606349627,
+     0.03337086589835298,
+     0.04254426634874376,
+     0.054245595443105046,
+     0.0691482315538482,
+     0.08815737183732945,
+     0.1123989932441383,
+     0.1432971254470791,
+     0.18268424073828762,
+     0.2329006049366362,
+     0.29692674526427343,
+     0.37853799620258755,
+     0.48260255221442133,
+     0.6152580915794587,
+     0.7843864529518259,
+     1.0
+    ],
+    "tpr": [
+     8.744602940372738e-05,
+     8.744602940372738e-05,
+     8.744602940372738e-05,
+     8.744602940372738e-05,
+     8.744602940372738e-05,
+     9.837678307919331e-05,
+     0.00012023829043012516,
+     0.00012023829043012516,
+     0.00012023829043012516,
+     0.00016396130513198886,
+     0.00021861507350931847,
+     0.00024047658086025033,
+     0.0003497841176149095,
+     0.00039350713231677323,
+     0.0004700224080450347,
+     0.0005465376837732962,
+     0.0006230529595015577,
+     0.0007870142646335465,
+     0.000994698584467399,
+     0.0012570366726785812,
+     0.001563097775591627,
+     0.001989397168934798,
+     0.0025359348527080943,
+     0.0035197026835000274,
+     0.004361370716510903,
+     0.005509099852434826,
+     0.006766136525113407,
+     0.008897633491829262,
+     0.01083237689238673,
+     0.01337924249877029,
+     0.016844291413892987,
+     0.020626332185604196,
+     0.02589495545717877,
+     0.03338252172487293,
+     0.042159916926272065,
+     0.053691862053888616,
+     0.06892933267748812,
+     0.08687763021260315,
+     0.11056457342733782,
+     0.14259168169645298,
+     0.18294802426627316,
+     0.23234410012570367,
+     0.29807072197628026,
+     0.37998579002022187,
+     0.48469147947750996,
+     0.6181013280865716,
+     0.7856151281630869,
+     1.0
+    ],
+    "note": "log-spaced grid from the smallest measurable FPR to 1.0; each point is the largest TPR reachable at a false-positive rate at or below the grid value, so the printed FPR is the achieved one."
+   },
+   "account_level": {
+    "fpr": [
+     0.0,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.0024096385542168677,
+     0.004819277108433735,
+     0.004819277108433735,
+     0.004819277108433735,
+     0.007228915662650603,
+     0.007228915662650603,
+     0.00963855421686747,
+     0.00963855421686747,
+     0.012048192771084338,
+     0.014457831325301205,
+     0.014457831325301205,
+     0.016867469879518072,
+     0.01927710843373494,
+     0.024096385542168676,
+     0.02650602409638554,
+     0.03132530120481928,
+     0.033734939759036145,
+     0.03855421686746988,
+     0.04578313253012048,
+     0.05060240963855422,
+     0.05783132530120482,
+     0.06746987951807229,
+     0.0746987951807229,
+     0.08674698795180723,
+     0.09879518072289156,
+     0.1108433734939759,
+     0.12771084337349398,
+     0.14457831325301204,
+     0.163855421686747,
+     0.18795180722891566,
+     0.21445783132530122,
+     0.2433734939759036,
+     0.27710843373493976,
+     0.3132530120481928,
+     0.3566265060240964,
+     0.4072289156626506,
+     0.46265060240963857,
+     0.5253012048192771,
+     0.5975903614457831,
+     0.6795180722891566,
+     0.7734939759036145,
+     0.8795180722891566,
+     1.0
+    ],
+    "tpr": [
+     0.0,
+     0.0025940337224383916,
+     0.0025940337224383916,
+     0.0025940337224383916,
+     0.0025940337224383916,
+     0.0025940337224383916,
+     0.008430609597924773,
+     0.008430609597924773,
+     0.008430609597924773,
+     0.028534370946822308,
+     0.028534370946822308,
+     0.035667963683527884,
+     0.035667963683527884,
+     0.03826199740596628,
+     0.03826199740596628,
+     0.03826199740596628,
+     0.03955901426718547,
+     0.03955901426718547,
+     0.04539559014267185,
+     0.054474708171206226,
+     0.05966277561608301,
+     0.0609597924773022,
+     0.07328145265888457,
+     0.07976653696498054,
+     0.08949416342412451,
+     0.0940337224383917,
+     0.09792477302204929,
+     0.10635538261997406,
+     0.11867704280155641,
+     0.122568093385214,
+     0.13942931258106356,
+     0.1608300907911803,
+     0.185473411154345,
+     0.20687418936446172,
+     0.261348897535668,
+     0.2814526588845655,
+     0.3125810635538262,
+     0.33657587548638135,
+     0.36835278858625164,
+     0.40012970168612194,
+     0.4390402075226978,
+     0.4792477302204929,
+     0.5207522697795072,
+     0.5726329442282749,
+     0.6141374837872893,
+     0.688715953307393,
+     0.808041504539559,
+     1.0
+    ],
+    "note": "log-spaced grid from the smallest measurable FPR to 1.0; each point is the largest TPR reachable at a false-positive rate at or below the grid value, so the printed FPR is the achieved one."
+   }
+  }
+ },
+ "designed_not_run_how_to_read": "the register of the two exhibits SAFETY-DESIGN.md pre-registered and the safety wave had not produced when its verifier read the tree. Read `run` first. An entry with run false has NO result of any kind and nothing may be quoted from it in either direction. An entry with run true landed after this register was opened and names the file that now holds it, and the claim belongs to that file and its own status field, never to this one. A renderer showing 'designed, not built' rows must filter on run being false.",
+ "designed_not_run": [
+  {
+   "exhibit": "SAFE-B1, unicity on the pretraining corpus",
+   "pre_registered_at": "SAFETY-DESIGN.md commit 1b32639, Part 3",
+   "planned_output": "results/safety_unicity.json",
+   "planned_producer": "scripts/safety/unicity.py",
+   "run": false,
+   "why_not": "NOT RUN. The producer was never written, so no unicity number of any kind exists and none may be quoted. The pre-registration scheduled it as a CPU stage of the SAFE-A cluster job; the job that ran carries no unicity stage, which is checkable in scripts/safety/job_safe_a.sbatch. Its own scope paragraph is why it fell below the line: it measures the corpus, not anything the product releases, so it was the cheapest exhibit to lose against the three-page cap on the band.",
+   "what_this_costs_the_page": "the de Montjoye reference stays a citation and never becomes a comparison. No claim about how many spatiotemporal points single out an account in this corpus may appear anywhere, in either direction."
+  },
+  {
+   "exhibit": "SAFE-E, control-plane conformance",
+   "pre_registered_at": "SAFETY-DESIGN.md commit 1b32639, Part 3",
+   "planned_output": "results/safety_control_plane.json",
+   "planned_producer": "scripts/safety/control_plane_conformance.py",
+   "run": true,
+   "why_not": "IT RAN, AND THIS ENTRY IS KEPT RATHER THAN DELETED. It was pre-registered as conditional, 'SAFE-E if the band has room', and it had produced nothing when the wave verifier read the tree, which is why it is in this register at all. It landed at commit 1f8eeb3, after this register was opened and while it was being written, as results/safety_control_plane.json with the pre-registered producer scripts/safety/control_plane_conformance.py.",
+   "what_this_costs_the_page": "nothing now, but read the scope from that file and not from this one. Its own status field is DESIGNED-AND-CHECKED, which is a property of a reference implementation of a written rule and is not a deployed system. The control plane itself is still DESIGNED AND NOT BUILT, in the caption and not only in the prose, exactly as the pre-registration requires, and no wording on the page may promote a conformance check of a specification into a measurement of anything running.",
+   "landed": "results/safety_control_plane.json, committed 1f8eeb3. Its --check was re-run from this session on the laptop and returned exit 0 at 206 numeric leaves reproducing within 1e-06. That is a reproduction receipt and nothing more; every claim about what it measured belongs to that file."
+  }
+ ],
+ "deviations_from_preregistration": [
+  "OUTPUT PATH. The pre-registration named results/safety_mia.json; the implementing brief named results/safety_membership.json. The brief wins and this is the record.",
+  "CALIBRATION ARMS AND THE PLANTED-SHIFT PROBE were added on the implementing brief's instruction that a near-chance result must ship with evidence the pipeline could have detected an effect. They are labelled as calibration, not as attacks.",
+  "BOOTSTRAP STRATIFIED BY ARM rather than resampling one undifferentiated pool, so the false-positive resolution is constant across replicates. See bootstrap.why_stratified.",
+  "A THIRD STRATUM, clean_symmetric, caps the non-member arm at m rows per account too. It is a cross-check row and never the headline.",
+  "THE CONTAMINATION GRADIENT SET is scored in addition to the pre-registered m rows per member account, because a uniform sample would have held too few contaminated rows to measure the gradient the pre-registration asked for.",
+  "A TENURE-MATCHED STRATUM was added after the first full run returned a non-null, and the order matters so it is stated plainly. The confound itself was named before any result existed: SAFETY-FEASIBILITY.md calls account tenure 'the single biggest thing that could make its result meaningless'. What the first run added was the knowledge that the separation is real and therefore that the confound had to be tested rather than only reported. The matching rule is deterministic and takes two parameters, the caliper and the pair floor. NEITHER IS PRE-DECLARED: the pre-registration contains no caliper, no pair floor and no matched analysis, so nothing in this file may call them pre-declared. Both were fixed before the pair count at that caliper was computed and neither was selected from among alternatives by its answer. See diagnostics_not_attacks.account_tenure.matching_parameters.",
+  "THE NON-MEMBER ELIGIBLE ACCOUNT COUNT was corrected from the audit's 416 to a recomputed 415. See membership_rule.audit_correction."
+ ]
+}

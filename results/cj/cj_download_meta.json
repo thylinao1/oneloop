@@ -1,0 +1,84 @@
+{
+ "generated_by": "scripts/fm/cj_download.py",
+ "source": {
+  "name": "dunnhumby The Complete Journey",
+  "url": "https://www.dunnhumby.com/source-files/",
+  "ref": "pre-staged /home/e/e1506804/amex-oneloop/cj/source.zip",
+  "terms": "dunnhumby terms: data may be used solely for research, personal or non-commercial purposes",
+  "zip_sha256": "5e0a3d72fe8562fe0ab995f70fb58b74359e8ec4bbccd1521e2b137da0558f9a",
+  "user_guide_pdf_present": true,
+  "schema_reference": "'dunnhumby - The Complete Journey User Guide.pdf' (copied from the archive)"
+ },
+ "retrieved_utc": "2026-08-24T01:54:55Z",
+ "files": {
+  "transaction_data.csv": {
+   "rows_observed": 2595732,
+   "rows_expected": 2595732,
+   "status": "verified",
+   "bytes": 141742346,
+   "sha256_csv": "3a685c0729cef664d634486189f774518b84f53cde7cbf701a5963238692b476",
+   "parquet": "transaction_data.parquet",
+   "sha256_parquet": "72dfa233611220d94ac064ddb972d5a752aeec6d0963aa7ec9cf4beb7572b009"
+  },
+  "product.csv": {
+   "rows_observed": 92353,
+   "rows_expected": 92353,
+   "status": "verified",
+   "bytes": 6429896,
+   "sha256_csv": "7ecbcec41e0f1e5a51b43a359965cc50dc5586a2b900a378b64032750fedc949",
+   "parquet": "product.parquet",
+   "sha256_parquet": "b9a3d8946c081ead4d173746edbe0e8f7674661e6e10eaccd43ab31c63bcae94"
+  },
+  "hh_demographic.csv": {
+   "rows_observed": 801,
+   "rows_expected": 801,
+   "status": "verified",
+   "bytes": 43233,
+   "sha256_csv": "3764c70d5e38b5da1206ab6d60788236d2b2e31ae3168f6382ed5880a0101123",
+   "parquet": "hh_demographic.parquet",
+   "sha256_parquet": "05e0b2c195ab7fa222b833bbba9fc595444f39c80a160f9d7263e3d8f8ef8533"
+  },
+  "coupon_redempt.csv": {
+   "rows_observed": 2318,
+   "rows_expected": 2318,
+   "status": "verified",
+   "bytes": 54108,
+   "sha256_csv": "70a98f3bfb28be0dd850f19c8d806d2a23e44014546651367b21538db6fba1f8",
+   "parquet": "coupon_redempt.parquet",
+   "sha256_parquet": "d705da6bc6baa74b94935d67510fcab7b0e4d0dcbecb1ce39656bf6ca295f960"
+  },
+  "campaign_table.csv": {
+   "rows_observed": 7208,
+   "rows_expected": null,
+   "status": "observed at download",
+   "bytes": 95874,
+   "sha256_csv": "a716f88953c9ddf8847e191d862e8d022afd19cf7419f52cbe6dde950a121f21"
+  },
+  "campaign_desc.csv": {
+   "rows_observed": 30,
+   "rows_expected": null,
+   "status": "observed at download",
+   "bytes": 540,
+   "sha256_csv": "632535c6bcdd97b5681e84c2c0652ddc4eaca8a0f899a3bb37dae8dbdc089684"
+  },
+  "coupon.csv": {
+   "rows_observed": 124548,
+   "rows_expected": null,
+   "status": "observed at download",
+   "bytes": 2822804,
+   "sha256_csv": "718f4d466df8a54bbff45f340e0b601049721b0715503394a601bac3093c727d"
+  },
+  "causal_data.csv": {
+   "rows_observed": 36786524,
+   "rows_expected": null,
+   "status": "observed at download",
+   "bytes": 695858427,
+   "sha256_csv": "60ed7021fefc209c0caf36fcf95d1e93693775acfdac01fc9ee38273da88937a"
+  }
+ },
+ "versions": {
+  "python": "3.12.3",
+  "numpy": "2.5.2",
+  "polars": "1.43.2"
+ }
+}

@@ -1,0 +1,23 @@
+{
+ "what_this_is": "The corridor comparison totalled in arrivals rather than averaged scale-free. Every value here is a sum or a ratio of the per-corridor mae columns already stored in results/corridor_combination.json under /corridors, so this file adds no measurement and no assumption. It exists because this is the view that reverses the macro-MASE result, and the column was in the cited file without being printed.",
+ "derived_from": {
+  "file": "results/corridor_combination.json",
+  "pointer": "/corridors"
+ },
+ "generated_by": "scripts/corridor_totals.py",
+ "labels": [
+  "real",
+  "proxy: tourism arrivals stand in for cross-border card spend"
+ ],
+ "holdout": "2025-01 to 2026-01, 13 months across 12 corridors, the same holdout as the source",
+ "n_corridors": 12,
+ "total_absolute_error_arrivals": {
+  "seasonal_naive": 113211.69,
+  "model_alone": 148059.69,
+  "combination": 114180.52
+ },
+ "combination_minus_naive": 968.8300000000017,
+ "combination_worse_by_fraction_of_naive": 0.008557685164844741,
+ "corridors_where_combination_beats_naive": 6,
+ "how_to_read_it": "Macro MASE weights each corridor equally and the blend wins on it. Total absolute error weights each arrival equally and the naive wins on it, by 968.83 arrivals over the holdout. The blend beats the naive in 6 of 12 corridors. Neither view is the single right one, and the entry does not claim the corridor lane on the strength of the one that flatters it."
+}

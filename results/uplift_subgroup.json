@@ -1,0 +1,143 @@
+{
+ "what_this_is": "The fairness-adjacent measurement the Section 4 obligation map owes, measured on the randomized Hillstrom arms rather than asserted. Two things per group: the effect itself as a direct arm contrast with no model in it, and the rate at which each targeting rule selects that group into the top decile. A rule may legitimately select a group less often because the measured effect there is smaller; it is when selection and measured effect DISAGREE that there is something to answer for, so both are reported side by side.",
+ "generated_by": "scripts/uplift_subgroup.py",
+ "labels": [
+  "real",
+  "randomized-experiment",
+  "proxy: geography is not a protected attribute"
+ ],
+ "the_group_variable_is_a_proxy": "zip_code is a three-level geographic class (Rural, Suburban, Urban), NOT a protected attribute. It is measured because it is the only group variable in this project sitting behind a randomized assignment. None of the four corpora carries a readable protected attribute: TabFormer is synthetic, Criteo ships anonymized f0 to f11, and Complete Journey's demographic file was anonymized into opaque classifications in its 2023 re-release. A protected-attribute fairness number computed here would be manufactured, and this file exists so that none is.",
+ "models_are_in_sample": "The uplift and response scores come from the same in-sample X-learner the shipped Hillstrom exhibit uses and flags as illustrative. The selection rates therefore describe the mechanism, not an out-of-sample guarantee. The measured effect column has no model in it at all and is not affected.",
+ "domain_caveat": "Hillstrom is a retail e-commerce e-mail experiment. The outcome is a site visit, not billed business on a card, and the geography is that retailer's customer base.",
+ "top_fraction": 0.1,
+ "bootstrap_draws": 2000,
+ "seed": 7,
+ "n_groups": 3,
+ "by_group": {
+  "Rural": {
+   "group": "Rural",
+   "n_total": 6320,
+   "share_of_population": 0.14803363549059564,
+   "n_treated": 3181,
+   "n_control": 3139,
+   "measured_visit_uplift_pp": 2.9094879710979074,
+   "measured_visit_uplift_ci_pp": [
+    1.078107018626343,
+    4.712008591951315
+   ],
+   "interval_clears_zero": true,
+   "selection_rate_uplift_ranking": 0.0935126582278481,
+   "selection_rate_response_ranking": 0.1560126582278481,
+   "uplift_selection_vs_highest_group": 0.8728602844270084,
+   "response_selection_vs_highest_group": 1.0
+  },
+  "Surburban": {
+   "group": "Surburban",
+   "n_total": 19275,
+   "share_of_population": 0.45147916520272646,
+   "n_treated": 9650,
+   "n_control": 9625,
+   "measured_visit_uplift_pp": 4.886266065540677,
+   "measured_visit_uplift_ci_pp": [
+    3.973480250319628,
+    5.810589462351118
+   ],
+   "interval_clears_zero": true,
+   "selection_rate_uplift_ranking": 0.10713359273670557,
+   "selection_rate_response_ranking": 0.09878080415045395,
+   "uplift_selection_vs_highest_group": 1.0,
+   "response_selection_vs_highest_group": 0.633158906927859
+  },
+  "Urban": {
+   "group": "Urban",
+   "n_total": 17098,
+   "share_of_population": 0.4004871993066779,
+   "n_treated": 8556,
+   "n_control": 8542,
+   "measured_visit_uplift_pp": 4.6943031758265334,
+   "measured_visit_uplift_ci_pp": [
+    3.675761731297403,
+    5.654079972139971
+   ],
+   "interval_clears_zero": true,
+   "selection_rate_uplift_ranking": 0.09433851912504386,
+   "selection_rate_response_ranking": 0.08065270791905486,
+   "uplift_selection_vs_highest_group": 0.8805689860218986,
+   "response_selection_vs_highest_group": 0.516962590312806
+  }
+ },
+ "lowest_effect_group": "Rural",
+ "lowest_effect_pp": 2.9094879710979074,
+ "most_selected_group_response_ranking": "Rural",
+ "response_ranking_over_selects_the_lowest_effect_group": true,
+ "groups": [
+  {
+   "group": "Rural",
+   "n_total": 6320,
+   "share_of_population": 0.14803363549059564,
+   "n_treated": 3181,
+   "n_control": 3139,
+   "measured_visit_uplift_pp": 2.9094879710979074,
+   "measured_visit_uplift_ci_pp": [
+    1.078107018626343,
+    4.712008591951315
+   ],
+   "interval_clears_zero": true,
+   "selection_rate_uplift_ranking": 0.0935126582278481,
+   "selection_rate_response_ranking": 0.1560126582278481,
+   "uplift_selection_vs_highest_group": 0.8728602844270084,
+   "response_selection_vs_highest_group": 1.0
+  },
+  {
+   "group": "Surburban",
+   "n_total": 19275,
+   "share_of_population": 0.45147916520272646,
+   "n_treated": 9650,
+   "n_control": 9625,
+   "measured_visit_uplift_pp": 4.886266065540677,
+   "measured_visit_uplift_ci_pp": [
+    3.973480250319628,
+    5.810589462351118
+   ],
+   "interval_clears_zero": true,
+   "selection_rate_uplift_ranking": 0.10713359273670557,
+   "selection_rate_response_ranking": 0.09878080415045395,
+   "uplift_selection_vs_highest_group": 1.0,
+   "response_selection_vs_highest_group": 0.633158906927859
+  },
+  {
+   "group": "Urban",
+   "n_total": 17098,
+   "share_of_population": 0.4004871993066779,
+   "n_treated": 8556,
+   "n_control": 8542,
+   "measured_visit_uplift_pp": 4.6943031758265334,
+   "measured_visit_uplift_ci_pp": [
+    3.675761731297403,
+    5.654079972139971
+   ],
+   "interval_clears_zero": true,
+   "selection_rate_uplift_ranking": 0.09433851912504386,
+   "selection_rate_response_ranking": 0.08065270791905486,
+   "uplift_selection_vs_highest_group": 0.8805689860218986,
+   "response_selection_vs_highest_group": 0.516962590312806
+  }
+ ],
+ "group_order_by_measured_effect": [
+  "Surburban",
+  "Urban",
+  "Rural"
+ ],
+ "group_order_by_uplift_selection": [
+  "Surburban",
+  "Urban",
+  "Rural"
+ ],
+ "selection_and_effect_agree_on_order": true,
+ "min_selection_rate_uplift": 0.0935126582278481,
+ "max_selection_rate_uplift": 0.10713359273670557,
+ "selection_parity_ratio_uplift": 0.8728602844270084,
+ "selection_parity_ratio_response": 0.516962590312806,
+ "spread_in_measured_effect_pp": 1.9767780944427695,
+ "what_phase_1_owes": "Subgroup lift and selection rates on the partner's own protected attributes, pre-registered before the first campaign opens and held to the same paired-interval standard as every comparison in this document, reported whichever way they move."
+}

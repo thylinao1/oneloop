@@ -1,0 +1,263 @@
+{
+ "seed": 42,
+ "versions": {
+  "python": "3.13.1",
+  "numpy": "2.5.2",
+  "lightgbm": "4.7.0"
+ },
+ "generated_by": "scripts/corridor_combination.py --check-able",
+ "data_sources": [
+  {
+   "name": "SingStat International Visitor Arrivals by place of residence, monthly (data.gov.sg, Open Data Licence)",
+   "url": "https://data.gov.sg/datasets/d_7e7b2ee60c6ffc962f80fef129cf306e/view",
+   "sha256": "ae8de641daef06d98c275a715ddad342eb1d9cfac1ba273ba5b41e5a18932bdf"
+  },
+  {
+   "name": "KNOMAD bilateral remittance matrix 2021 (static gravity covariates only)",
+   "url": "https://web.archive.org/web/20230424090916/https://knomad.org/sites/default/files/2022-12/bilateral_remittance_matrix_2021_0.xlsx",
+   "sha256": "66ae02420627ce210d9e650c7a21d5ec7d9e77197be9f94d1fa27140402c268a"
+  }
+ ],
+ "labels": [
+  "real",
+  "proxy: tourism arrivals stand in for cross-border card spend"
+ ],
+ "what_this_is": "the pre-registered test of whether ADDING the corridor model to the seasonal naive helps, at weights fixed before the run; the shipped exhibit already reports the model losing to the naive alone and that loss stays printed",
+ "pre_registration": {
+  "file": "CORRIDOR-COMBINATION-PREREG.md",
+  "commit": "418aef3",
+  "committed_before_any_combination_number_was_computed": true,
+  "weights": {
+   "seasonal_naive": 0.5,
+   "model": 0.5,
+   "fixed_a_priori": true,
+   "note": "the equal-weights convention (Bates and Granger 1969); no other weight computed, reported or tried"
+  },
+  "decision_rule": {
+   "combination_beats_naive": "combination macro MASE < naive macro MASE: the model adds value as a complement, margin stated",
+   "combination_does_not_beat_naive": "combination macro MASE >= naive macro MASE: the model does not add value even as a complement at equal weights, shipped at the same prominence"
+  },
+  "sentence_authorship": "written by this script from the numbers, never by hand"
+ },
+ "shipped_reference": {
+  "file": "results/corridor.json",
+  "sha256": "963e54075ca3ba335a054b1fe2a7272a7d81366c17b3350c08ba3c7a8fb38dce",
+  "producer": "scripts/corridor_exhibit.py (imported here, not edited)",
+  "mase_seasonal_naive": 0.530169,
+  "mase_model": 0.622977,
+  "mase_definition": "macro mean of per-corridor MASE over the 12 corridors"
+ },
+ "design": {
+  "forecasts": "the shipped one-month-ahead rolling holdout forecasts, recomputed deterministically by importing scripts/corridor_exhibit.py (verify_checksums, parse_singstat, build_series, load_knomad_sg_row, make_features, month_leq and its constants); only the fit-predict-and-score block is reimplemented, because compute() returns the finished JSON and exposes no forecast matrices",
+  "combination": "0.5 * seasonal naive + 0.5 * model, per corridor per month",
+  "holdout": "2025-01..2026-01 (13 months, 12 corridors)",
+  "mase_scale": "the shipped in-sample mean |y_t - y_{t-12}| over 2009-01..2024-12, identical for naive, model and combination",
+  "interval": "none claimed; point comparison"
+ },
+ "reproduction_gate": {
+  "what": "recomputed per-corridor and macro MASE against the committed results/corridor.json, before any combination math",
+  "n_corridors_compared": 12,
+  "n_values_compared": 26,
+  "max_abs_diff_mase_model": 4.68813e-07,
+  "max_abs_diff_mase_seasonal_naive": 4.92862e-07,
+  "max_abs_diff_macro_model": 8.4804e-08,
+  "max_abs_diff_macro_seasonal_naive": 1.94252e-07,
+  "max_abs_diff": 4.92862e-07,
+  "tolerance": 1e-06,
+  "ok": true,
+  "note": "the committed values are stored rounded to 6 decimals, so a perfect recomputation still shows a diff up to 5e-7"
+ },
+ "holdout_months": 13,
+ "holdout_month_labels": [
+  "2025-01",
+  "2025-02",
+  "2025-03",
+  "2025-04",
+  "2025-05",
+  "2025-06",
+  "2025-07",
+  "2025-08",
+  "2025-09",
+  "2025-10",
+  "2025-11",
+  "2025-12",
+  "2026-01"
+ ],
+ "n_corridors": 12,
+ "macro": {
+  "mase_seasonal_naive": 0.530169,
+  "mase_model": 0.622977,
+  "mase_combination": 0.506081,
+  "combination_minus_naive": -0.024088,
+  "naive_minus_combination": 0.024088,
+  "margin_percent_of_naive": 4.5435
+ },
+ "corridors_beating_naive": 6,
+ "corridors_total": 12,
+ "corridors": [
+  {
+   "origin": "China",
+   "region": "Greater China",
+   "mase_seasonal_naive": 0.662448,
+   "mase_model": 0.904513,
+   "mase_combination": 0.671478,
+   "combination_minus_naive": 0.00903,
+   "combination_beats_naive": false,
+   "mae_seasonal_naive": 39784.38,
+   "mae_model": 54322.01,
+   "mae_combination": 40326.74
+  },
+  {
+   "origin": "Indonesia",
+   "region": "Southeast Asia",
+   "mase_seasonal_naive": 0.239812,
+   "mase_model": 0.594087,
+   "mase_combination": 0.345909,
+   "combination_minus_naive": 0.106097,
+   "combination_beats_naive": false,
+   "mae_seasonal_naive": 10942.77,
+   "mae_model": 27108.55,
+   "mae_combination": 15784.02
+  },
+  {
+   "origin": "Malaysia",
+   "region": "Southeast Asia",
+   "mase_seasonal_naive": 0.575763,
+   "mase_model": 0.448559,
+   "mase_combination": 0.479626,
+   "combination_minus_naive": -0.096137,
+   "combination_beats_naive": true,
+   "mae_seasonal_naive": 10522.23,
+   "mae_model": 8197.54,
+   "mae_combination": 8765.3
+  },
+  {
+   "origin": "Australia",
+   "region": "Oceania",
+   "mase_seasonal_naive": 0.558485,
+   "mase_model": 0.496249,
+   "mase_combination": 0.507625,
+   "combination_minus_naive": -0.05086,
+   "combination_beats_naive": true,
+   "mae_seasonal_naive": 9133.69,
+   "mae_model": 8115.86,
+   "mae_combination": 8301.9
+  },
+  {
+   "origin": "India",
+   "region": "South Asia",
+   "mase_seasonal_naive": 0.292646,
+   "mase_model": 0.430026,
+   "mase_combination": 0.342042,
+   "combination_minus_naive": 0.049396,
+   "combination_beats_naive": false,
+   "mae_seasonal_naive": 5459.23,
+   "mae_model": 8022.01,
+   "mae_combination": 6380.71
+  },
+  {
+   "origin": "Philippines",
+   "region": "Southeast Asia",
+   "mase_seasonal_naive": 0.916163,
+   "mase_model": 0.637233,
+   "mase_combination": 0.744081,
+   "combination_minus_naive": -0.172082,
+   "combination_beats_naive": true,
+   "mae_seasonal_naive": 10604.31,
+   "mae_model": 7375.78,
+   "mae_combination": 8612.5
+  },
+  {
+   "origin": "USA",
+   "region": "Americas",
+   "mase_seasonal_naive": 0.375929,
+   "mase_model": 0.516833,
+   "mase_combination": 0.434426,
+   "combination_minus_naive": 0.058497,
+   "combination_beats_naive": false,
+   "mae_seasonal_naive": 3671.92,
+   "mae_model": 5048.21,
+   "mae_combination": 4243.3
+  },
+  {
+   "origin": "Japan",
+   "region": "North Asia",
+   "mase_seasonal_naive": 0.408834,
+   "mase_model": 0.605795,
+   "mase_combination": 0.411133,
+   "combination_minus_naive": 0.002299,
+   "combination_beats_naive": false,
+   "mae_seasonal_naive": 4566.62,
+   "mae_model": 6766.65,
+   "mae_combination": 4592.3
+  },
+  {
+   "origin": "United Kingdom",
+   "region": "Europe",
+   "mase_seasonal_naive": 0.553109,
+   "mase_model": 0.428636,
+   "mase_combination": 0.429037,
+   "combination_minus_naive": -0.124072,
+   "combination_beats_naive": true,
+   "mae_seasonal_naive": 4407.15,
+   "mae_model": 3415.36,
+   "mae_combination": 3418.56
+  },
+  {
+   "origin": "South Korea",
+   "region": "North Asia",
+   "mase_seasonal_naive": 0.43616,
+   "mase_model": 0.829143,
+   "mase_combination": 0.500697,
+   "combination_minus_naive": 0.064537,
+   "combination_beats_naive": false,
+   "mae_seasonal_naive": 4507.54,
+   "mae_model": 8568.86,
+   "mae_combination": 5174.51
+  },
+  {
+   "origin": "Taiwan",
+   "region": "Greater China",
+   "mase_seasonal_naive": 0.840431,
+   "mase_model": 1.137818,
+   "mase_combination": 0.793901,
+   "combination_minus_naive": -0.04653,
+   "combination_beats_naive": true,
+   "mae_seasonal_naive": 5531.23,
+   "mae_model": 7488.46,
+   "mae_combination": 5225.0
+  },
+  {
+   "origin": "Thailand",
+   "region": "Southeast Asia",
+   "mase_seasonal_naive": 0.502246,
+   "mase_model": 0.446833,
+   "mase_combination": 0.41302,
+   "combination_minus_naive": -0.089226,
+   "combination_beats_naive": true,
+   "mae_seasonal_naive": 4080.62,
+   "mae_model": 3630.4,
+   "mae_combination": 3355.68
+  }
+ ],
+ "decision": {
+  "rule_restated": {
+   "combination_beats_naive": "combination macro MASE < naive macro MASE",
+   "combination_does_not_beat_naive": "combination macro MASE >= naive macro MASE"
+  },
+  "call": "combination_beats_naive"
+ },
+ "required_sentence": "Averaging the model with the seasonal naive at fixed equal weights beats the naive on the same 2025-01 to 2026-01 holdout: macro MASE 0.5061 against the naive's 0.5302, a margin of 0.0241 (4.5 percent lower error), with the model alone at 0.6230. The model does not replace the cheap baseline, but adding it to the baseline at equal weights improves the baseline, and the combination beats the naive in 6 of the 12 corridors. The weights were fixed at 0.5 and 0.5 before the run in CORRIDOR-COMBINATION-PREREG.md (commit 418aef3), no other weight was computed, and with 13 holdout months across 12 corridors this is a point comparison with no interval claimed.",
+ "caveats": [
+  "13 holdout months and 12 corridors: this is a point comparison and no interval is claimed for it, which is the corridor exhibit's own convention",
+  "the weights are fixed a priori at 0.5 and 0.5 by the pre-registration; no weight was fitted, searched or reported, so no in-sample weight-selection advantage enters this number",
+  "the target is SingStat international visitor arrivals by place of residence, a stated proxy for cross-border card-spend corridors, so the combination is validated on the proxy and not on card spend",
+  "the MASE scale is the shipped in-sample mean |y_t - y_{t-12}| over 2009-01..2024-12, which spans the COVID break; it is identical for the naive, the model and the combination, so the comparison between them is unaffected",
+  "the combination reuses the shipped base forecasts, not the MinT-reconciled ones; reconciliation is a separate axis reported in results/corridor.json and is untouched here",
+  "no other combination rule was computed: this file holds one weighting and the numbers it produced on the first and only run"
+ ],
+ "check": {
+  "command": "./.venv/bin/python scripts/corridor_combination.py --check",
+  "tolerance": 1e-06
+ }
+}

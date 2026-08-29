@@ -1,0 +1,375 @@
+{
+ "seed": 42,
+ "versions": {
+  "python": "3.13.1",
+  "numpy": "2.5.2",
+  "polars": "1.43.2",
+  "pyarrow": "25.0.1",
+  "lightgbm": "4.7.0",
+  "sklearn": "1.9.0",
+  "torch": "2.13.0"
+ },
+ "generated_by": "scripts/safety/whitespace_control.py --check-able",
+ "data_sources": [
+  {
+   "name": "Foursquare OS Places \u2014 SG slice (fsq-os-places dt=2026-08-11)",
+   "url": "https://huggingface.co/datasets/foursquare/fsq-os-places",
+   "sha256": "54effd7b8ead5076090cf65ffa3b2770f006913d854e032536fed8d69c56920e"
+  },
+  {
+   "name": "One Loop whitespace ranking under control (frozen, not modified)",
+   "url": "results/whitespace.json produced by scripts/whitespace_exhibit.py",
+   "sha256": "4e854e7002a5320853401186b81782af6fe4d5c7ef79f670a094c3909bde3ce8"
+  }
+ ],
+ "labels": [
+  "real-signals base",
+  "control arms",
+  "no outcome label",
+  "pseudonymized"
+ ],
+ "what_this_is": "the control the whitespace signing head did not have: the composite ranking measured against seven simpler rankings of the same bucket set, plus three sanity rungs",
+ "no_ground_truth": "There is no observed merchant-acceptance label in this corpus. Foursquare venue records say what a venue is and where it is, never whether it was approached, signed, or would sign. So no arm here is shown to predict a real signing, no proxy outcome is constructed, and rank agreement between two rankings is not evidence that either one is correct. This exhibit now has a control and a stated formula. It still has no outcome label, and the acceptance-gap signal in results/whitespace.json#simulation_params is simulated.",
+ "not_a_page_exhibit": "this file is in neither inline_results.EXHIBITS nor inline_results.SAFETY_FILES, so writing it cannot change the built page by itself",
+ "universe": "FSQ OS Places SG slice (gated HF)",
+ "n_pois": 364635,
+ "n_pois_card_accepting_universe": 146048,
+ "n_buckets": 1536,
+ "n_released_rows": 400,
+ "reproduces_shipped": {
+  "n_committed_released_rows": 400,
+  "n_rebuilt_released_rows": 400,
+  "n_bucket_label_mismatches": 0,
+  "max_abs_score_diff": 4.990386962555604e-07,
+  "tolerance": 1e-06,
+  "n_buckets_rebuilt": 1536,
+  "n_buckets_committed": 1536,
+  "ok": true,
+  "note": "the control is measured against the artifact the page ships, and this is the assertion that says so rather than the claim that says so"
+ },
+ "formula": {
+  "stated": "score_real_signals(bucket) = 0.30*mean(mdr_sensitivity_prior) + 0.30*mean(tourist_zone_score) + 0.25*mean(density_norm) + 0.15*mean(independent_share)",
+  "weights": {
+   "mdr_sensitivity_prior": 0.3,
+   "tourist_zone_proximity": 0.3,
+   "local_density": 0.25,
+   "independent_share": 0.15
+  },
+  "weights_sum": 1.0,
+  "weights_are": "The four weights are a hand-set judgement call and not a fitted quantity. WEIGHTS at scripts/whitespace_exhibit.py:70 is a literal constant. Nothing in this repository fits it, tunes it, cross-validates it or selects it against an outcome, because there is no outcome to select it against. The four numbers were chosen by hand to sum to one.",
+  "why_the_bucket_form_is_exact": "the per-venue score at scripts/whitespace_exhibit.py:361-364 is linear in the four channels and the bucket score at :396 is an unweighted mean over the venues in the bucket, so the weighted sum of the channel means equals the mean of the weighted sums",
+  "channels": {
+   "mdr_sensitivity_prior": "per category group constant from MDR_PRIORS, six distinct values",
+   "tourist_zone_score": "max over ten documented zones of exp(-d_km / 1.5) to the zone centroid",
+   "density_norm": "min(log1p(venues within 250 m) / log1p(p99), 1.0), self excluded",
+   "independent_share": "1 when the normalized venue name occurs fewer than 3 times in the slice, else 0"
+  },
+  "simulated_signal_is_not_in_the_formula": "the demand-weighted acceptance-gap signal is simulated and enters only the separate sensitivity analysis at sensitivity(); it never enters score_real_signals or the published ranking order",
+  "worked_example": {
+   "bucket_label": "F&B cluster \u2014 Chinatown area",
+   "rank": 1,
+   "published_signals": {
+    "mdr_sensitivity_prior": 0.85,
+    "tourist_zone_score": 0.8363,
+    "density_norm": 0.9296,
+    "independent_share": 0.7655
+   },
+   "recomputed_by_hand_from_published_signals": 0.853115,
+   "published_score_real_signals": 0.853121,
+   "abs_difference": 6.000000000172534e-06,
+   "why_not_exactly_zero": "the four signals are published rounded to four decimals, so a hand recomputation from the shipped file lands within about 1e-5"
+  }
+ },
+ "metrics_note": "spearman is computed on the SCORES, so ties take average ranks, which matters for the two arms carrying six distinct values across more than a thousand buckets. Top-k overlaps are set intersections on orderings whose ties are broken by the shipped stable order, so a cut here is the cut the page would make.",
+ "arms": {
+  "raw_venue_count": {
+   "what": "bucket venue count, descending. No normalization, no KD-tree, no weights.",
+   "is_single_signal": true,
+   "n_distinct_scores": 308,
+   "agreement_with_composite": {
+    "spearman_full": 0.5735852850356732,
+    "n_buckets_compared_full": 1536,
+    "spearman_released": 0.22556640311731113,
+    "n_buckets_compared_released": 400,
+    "top20_overlap": 8,
+    "top100_overlap": 44,
+    "top400_overlap": 220,
+    "top20_left": 12,
+    "top20_entered": 12,
+    "top20_churn": 24
+   },
+   "verdict": "materially different from the composite at the pre-registered thresholds"
+  },
+  "density_channel": {
+   "what": "the composite's own local-density channel alone.",
+   "is_single_signal": true,
+   "n_distinct_scores": 1535,
+   "agreement_with_composite": {
+    "spearman_full": 0.5112349840200169,
+    "n_buckets_compared_full": 1536,
+    "spearman_released": 0.5256983481146756,
+    "n_buckets_compared_released": 400,
+    "top20_overlap": 9,
+    "top100_overlap": 59,
+    "top400_overlap": 243,
+    "top20_left": 11,
+    "top20_entered": 11,
+    "top20_churn": 22
+   },
+   "verdict": "materially different from the composite at the pre-registered thresholds"
+  },
+  "tourist_zone_channel": {
+   "what": "the composite's own tourist-zone proximity channel alone.",
+   "is_single_signal": true,
+   "n_distinct_scores": 1536,
+   "agreement_with_composite": {
+    "spearman_full": 0.651989577394942,
+    "n_buckets_compared_full": 1536,
+    "spearman_released": 0.8685217407608797,
+    "n_buckets_compared_released": 400,
+    "top20_overlap": 6,
+    "top100_overlap": 79,
+    "top400_overlap": 311,
+    "top20_left": 14,
+    "top20_entered": 14,
+    "top20_churn": 28
+   },
+   "verdict": "materially different from the composite at the pre-registered thresholds"
+  },
+  "mdr_prior_channel": {
+   "what": "the composite's own category prior alone. Six distinct values, mostly ties.",
+   "is_single_signal": true,
+   "n_distinct_scores": 6,
+   "agreement_with_composite": {
+    "spearman_full": 0.3973903084284881,
+    "n_buckets_compared_full": 1536,
+    "spearman_released": -0.15477091273102572,
+    "n_buckets_compared_released": 400,
+    "top20_overlap": 0,
+    "top100_overlap": 0,
+    "top400_overlap": 137,
+    "top20_left": 20,
+    "top20_entered": 20,
+    "top20_churn": 40
+   },
+   "verdict": "materially different from the composite at the pre-registered thresholds"
+  },
+  "independent_channel": {
+   "what": "the composite's own independent-share channel alone.",
+   "is_single_signal": true,
+   "n_distinct_scores": 637,
+   "agreement_with_composite": {
+    "spearman_full": 0.0036374583565528056,
+    "n_buckets_compared_full": 1536,
+    "spearman_released": 0.010256854611618873,
+    "n_buckets_compared_released": 400,
+    "top20_overlap": 0,
+    "top100_overlap": 1,
+    "top400_overlap": 102,
+    "top20_left": 20,
+    "top20_entered": 20,
+    "top20_churn": 40
+   },
+   "verdict": "materially different from the composite at the pre-registered thresholds"
+  },
+  "equal_weights": {
+   "what": "the same four channels at 0.25 each. This arm prices the hand-set weights.",
+   "is_single_signal": false,
+   "n_distinct_scores": 1536,
+   "agreement_with_composite": {
+    "spearman_full": 0.9630849138725763,
+    "n_buckets_compared_full": 1536,
+    "spearman_released": 0.9695306845667785,
+    "n_buckets_compared_released": 400,
+    "top20_overlap": 17,
+    "top100_overlap": 94,
+    "top400_overlap": 368,
+    "top20_left": 3,
+    "top20_entered": 3,
+    "top20_churn": 6
+   },
+   "verdict": "between the two pre-registered thresholds; reported as obtained with no verdict word"
+  },
+  "embedding_wire": {
+   "what": "the category-level backbone column already published at results/whitespace.json#ranking[].score_with_embeddings. Six distinct values, read from the committed file rather than recomputed.",
+   "is_single_signal": false,
+   "n_distinct_scores": 6,
+   "agreement_with_composite": {
+    "spearman_full": -0.12759418281988527,
+    "n_buckets_compared_full": 1536,
+    "spearman_released": 0.04515522634642428,
+    "n_buckets_compared_released": 400,
+    "top20_overlap": 0,
+    "top100_overlap": 2,
+    "top400_overlap": 90,
+    "top20_left": 20,
+    "top20_entered": 20,
+    "top20_churn": 40
+   },
+   "verdict": "materially different from the composite at the pre-registered thresholds"
+  }
+ },
+ "sanity": {
+  "why": "a pipeline that cannot report both no difference and total difference reports nothing, so neither a null nor a positive above means anything without these",
+  "identity": {
+   "what": "the composite scored against itself; must agree perfectly",
+   "agreement_with_composite": {
+    "spearman_full": 0.9999999999999999,
+    "n_buckets_compared_full": 1536,
+    "spearman_released": 0.9999999999999999,
+    "n_buckets_compared_released": 400,
+    "top20_overlap": 20,
+    "top100_overlap": 100,
+    "top400_overlap": 400,
+    "top20_left": 0,
+    "top20_entered": 0,
+    "top20_churn": 0
+   },
+   "passes": true
+  },
+  "reversed": {
+   "what": "the composite negated; must disagree totally",
+   "agreement_with_composite": {
+    "spearman_full": -0.9999999999999999,
+    "n_buckets_compared_full": 1536,
+    "spearman_released": -0.9999999999999999,
+    "n_buckets_compared_released": 400,
+    "top20_overlap": 0,
+    "top100_overlap": 0,
+    "top400_overlap": 0,
+    "top20_left": 20,
+    "top20_entered": 20,
+    "top20_churn": 40
+   },
+   "passes": true
+  },
+  "random_uniform": {
+   "what": "a seeded uniform random score per bucket, 20 seeds; must be close to independent of the composite",
+   "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61
+   ],
+   "agreement_with_composite": {
+    "spearman_full": {
+     "mean": -0.007729100980112704,
+     "spread": [
+      -0.04570598221608574,
+      0.03693172940698385
+     ],
+     "n_seeds": 20
+    },
+    "spearman_released": {
+     "mean": -0.03316059475371721,
+     "spread": [
+      -0.09784285995537471,
+      0.03759728967056039
+     ],
+     "n_seeds": 20
+    },
+    "top20_overlap": {
+     "mean": 0.45,
+     "spread": [
+      0.0,
+      1.5249999999999986
+     ],
+     "n_seeds": 20
+    },
+    "top100_overlap": {
+     "mean": 6.75,
+     "spread": [
+      2.475,
+      13.049999999999997
+     ],
+     "n_seeds": 20
+    },
+    "top400_overlap": {
+     "mean": 104.6,
+     "spread": [
+      90.85,
+      117.625
+     ],
+     "n_seeds": 20
+    },
+    "top20_churn": {
+     "mean": 39.1,
+     "spread": [
+      36.95,
+      40.0
+     ],
+     "n_seeds": 20
+    }
+   },
+   "max_abs_spearman_full_across_seeds": 0.04974428603142041,
+   "passes": true,
+   "spread_is": "across seeds, so it is mechanism randomness and not sampling uncertainty"
+  },
+  "deviation_from_the_pre_registration": "section 5 asks for identity at spearman exactly 1.0 and reversed at exactly -1.0. Both land at magnitude 0.9999999999999999, which is the nearest double to 1 that scipy's rank correlation returns on a set this size. The gate is therefore applied at the same 1e-6 tolerance every other numeric comparison in this project uses, and the raw values are stored above rather than rounded to hide the difference. Recorded here rather than smoothed over, because a pre-registration that gets quietly reinterpreted is worth nothing.",
+  "thresholds": {
+   "identity_tolerance": 1e-06,
+   "reversed_tolerance": 1e-06,
+   "random_mean_abs_spearman_full_max": 0.1,
+   "random_per_seed_abs_spearman_full_max": 0.15,
+   "random_mean_top20_overlap_max": 2.0
+  }
+ },
+ "cross_check_against_published": {
+  "what": "the embedding_wire arm recomputes two correlations this project already published, so the agreement code above is checked against a number it did not produce",
+  "published_spearman_ranked": 0.0451,
+  "recomputed_spearman_released": 0.04515522634642428,
+  "abs_difference_released": 5.522634642427665e-05,
+  "published_spearman_all_buckets": -0.1276,
+  "recomputed_spearman_full": -0.12759418281988527,
+  "abs_difference_full": 5.817180114719989e-06,
+  "tolerance": 0.0001,
+  "why_this_tolerance": "the published values are stored rounded to four decimals",
+  "ok": true
+ },
+ "decision": {
+  "pre_registration": "WHITESPACE-CONTROL-PREREG.md, committed before this producer was written",
+  "pre_registered_thresholds": {
+   "density_arms": [
+    "raw_venue_count",
+    "density_channel"
+   ],
+   "null_spearman_full_min": 0.95,
+   "null_top400_overlap_min": 380,
+   "null_top20_churn_max": 4,
+   "material_spearman_full_max": 0.8,
+   "material_top400_overlap_max": 320
+  },
+  "strongest_density_arm": "raw_venue_count",
+  "null_threshold_hits": [],
+  "call": "material_difference",
+  "headline": "The composite is not a density sort. Its strongest density control, raw_venue_count, agrees at Spearman 0.5736 over all 1536 buckets and keeps 220 of the 400 released rows. That says the four signals do something one column does not. It does not say the composite is right, because nothing here can say that.",
+  "what_the_other_arms_showed": [
+   "The hand-set weights are close to not load bearing. Scoring the same four channels at 0.25 each agrees with the shipped composite at Spearman 0.9631 over all 1536 buckets and keeps 368 of the 400 released rows, with a top-20 churn of 6. So the particular numbers 0.30, 0.30, 0.25 and 0.15 are doing very little work. That is an argument that the weighting is not load bearing, and it is not an argument that the weights are right.",
+   "On the released list the closest single signal is tourist_zone_channel, not density. It agrees with the composite at Spearman 0.8685 across the 400 released rows and keeps 311 of them, so much of what a partner would receive is ordered by that one channel.",
+   "The independent-share channel is close to independent of the composite at Spearman 0.0036 over all buckets, which is what a 0.15 weight on a binary channel buys.",
+   "None of this says any ranking here is accurate. There is still no outcome label."
+  ],
+  "what_the_other_arms_showed_is": "a restatement of arms already registered in section 2 of the pre-registration. It adds no arm, no metric and no threshold, and it exists so the results least flattering to the composite sit in the summary and not only in the table.",
+  "what_the_call_is_not": "a statement that any ranking here is accurate. The comparison is agreement between rankings, and agreement is not accuracy."
+ },
+ "check": {
+  "command": "python3 scripts/safety/whitespace_control.py --check",
+  "tolerance": 1e-06
+ }
+}

@@ -1,0 +1,46 @@
+{
+ "what_this_is": "The regression test for the numeral-pool injection this project's own red team found and published in results/safety_injection.json. The document reports the attack against the gate as it shipped; this file reports the state of the gate after the fix, measured by replaying the same frozen corpus of probes.",
+ "fix_commit": "cb923ef",
+ "fix_summary": "layer one now builds its allowed pool from typed numeric leaves plus a format-pinned string allowlist rather than scanning every fact string, so an attacker-written string can no longer put digits into it",
+ "pool_builder_under_test": "collect_fact_numbers",
+ "probes_total": 30,
+ "probes_flagged_after_fix": 30,
+ "probes_accepted_under_prefix_pool": 30,
+ "narratives_total": 30,
+ "narratives_reproducing_stored_verdict": 30,
+ "field_rules_total": 3,
+ "field_rules_held": 3,
+ "checks_total": 4,
+ "checks_passed": 4,
+ "limits": "This is a replay of the frozen corpus, not a fresh campaign: it shows this hole closed, not the gate unbreakable, and the other attack classes the red team beat are unchanged by it.",
+ "checks": [
+  {
+   "check": "attacks rejected",
+   "passed": true,
+   "detail": "30 of 30 probes flagged",
+   "probes_total": 30,
+   "probes_flagged": 30
+  },
+  {
+   "check": "legitimate narratives unchanged",
+   "passed": true,
+   "detail": "30 of 30 reproduce their stored verdict",
+   "narratives_total": 30,
+   "narratives_unchanged": 30
+  },
+  {
+   "check": "field rules",
+   "passed": true,
+   "detail": "3 of 3 hold",
+   "field_rules_total": 3,
+   "field_rules_held": 3
+  },
+  {
+   "check": "test would fail on the pre-fix code",
+   "passed": true,
+   "detail": "30 of 30 probes flip to accepted under the string-scanning pool",
+   "probes_total": 30,
+   "probes_accepted_under_prefix_pool": 30
+  }
+ ]
+}

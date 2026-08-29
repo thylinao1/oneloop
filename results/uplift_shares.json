@@ -1,0 +1,70 @@
+{
+ "what_this_is": "The top-decile uplift headline restated as a share of the campaign's total incremental effect, which is the unit a budget owner works in. A restatement, not a new claim: it is the 5.9 times figure the page already prints, taken at one tenth of the reach.",
+ "derived_from": {
+  "file": "results/uplift.json",
+  "pointers": {
+   "top_decile_rate_uplift_ranking": "/criteo/targeting_at_k/outcomes/visit/k/10/cate_ranking/value",
+   "top_decile_rate_response_ranking": "/criteo/targeting_at_k/outcomes/visit/k/10/response_ranking/value",
+   "whole_holdout_average_effect": "/criteo/targeting_at_k/outcomes/visit/ate/value"
+  }
+ },
+ "generated_by": "scripts/uplift_shares.py",
+ "labels": [
+  "proxy",
+  "randomized-experiment"
+ ],
+ "reach_percent": 10,
+ "whole_holdout_average_effect": 0.010326204370991653,
+ "top_decile_rate_uplift_ranking": 0.061241385729474296,
+ "top_decile_rate_response_ranking": 0.05019284515448008,
+ "share_of_incremental_effect_uplift_ranking": 0.593067728753398,
+ "share_of_incremental_effect_response_ranking": 0.48607255242286024,
+ "share_percent_uplift_ranking": 59.306772875339796,
+ "share_percent_response_ranking": 48.60725524228602,
+ "share_gain_percentage_points": 10.699517633053773,
+ "decision_reversal": {
+  "what_this_is": "The two segments from the Hillstrom table that state the product in two rows: the one a response model buys whose randomized arms cannot tell its uplift from zero on either endpoint, and the one it skips whose visit uplift clears zero. Same committed table, same seed, no new run; stored under named keys so the page binds them without an array index. Intervals are the normal approximation on the stored standard error.",
+  "interval_method": "normal approximation, point plus or minus 1.96 standard errors",
+  "n_segments": 28,
+  "response_model_buys_this": {
+   "name": "4) $350 - $500 x recency 1-3m",
+   "response_rank": 5,
+   "n_treated": 937,
+   "measured_visit_uplift_pp": 2.3126,
+   "measured_visit_uplift_se_pp": 1.8173,
+   "measured_spend_uplift_usd": -0.6858,
+   "measured_spend_uplift_se_usd": 0.6791,
+   "measured_visit_uplift_ci95_pp": [
+    -1.2493079999999996,
+    5.8745080000000005
+   ],
+   "visit_interval_spans_zero": true,
+   "measured_spend_uplift_ci95_usd": [
+    -2.016836,
+    0.6452360000000001
+   ],
+   "spend_interval_spans_zero": true
+  },
+  "response_model_skips_this": {
+   "name": "1) $0 - $100 x recency 7-9m",
+   "response_rank": 26,
+   "n_treated": 1891,
+   "measured_visit_uplift_pp": 5.8157,
+   "measured_visit_uplift_se_pp": 0.9457,
+   "measured_spend_uplift_usd": -0.1426,
+   "measured_spend_uplift_se_usd": 0.289,
+   "measured_visit_uplift_ci95_pp": [
+    3.962128,
+    7.669271999999999
+   ],
+   "visit_interval_spans_zero": false,
+   "measured_spend_uplift_ci95_usd": [
+    -0.7090399999999999,
+    0.42383999999999994
+   ],
+   "spend_interval_spans_zero": true
+  }
+ },
+ "carries_the_same_caveat": "A ratio of point estimates with no interval of its own. The interval-bearing claim beside it is the paired difference between the two rankings at this depth, 0.011049 with a 95 percent interval of [0.008545, 0.014453], entirely above zero. The corpus is a public advertising experiment rather than card data, and visit was the pre-registered robustness endpoint, not the primary.",
+ "identity_check": "cate_over_ate x reach equals the uplift share exactly, which is what makes this a restatement of a figure already on the page rather than a second measurement."
+}
