@@ -19,7 +19,7 @@ flowchart LR
     H1 --> ML["Measurement layer<br/>randomized holdout behind<br/>every partner campaign"]
     H2 --> ML
     H3 --> ML
-    ML --> GOV["Governance<br/>privacy ladder · numeral gate ·<br/>red-teamed narrative layer"]
+    ML --> GOV["Governance<br/>privacy ladder, numeral gate,<br/>red-teamed narrative layer"]
     style BB fill:#131c38,color:#f2efe7
     style ML fill:#b8860b,color:#131c38
     style GOV fill:#efeadf,color:#131c38
