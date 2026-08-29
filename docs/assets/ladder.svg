@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 330" font-size="13">
+<rect width="880" height="330" rx="14" fill="#f7f4ee"/>
+<rect x="1" y="1" width="878" height="328" rx="13" fill="none" stroke="#d9d4c8"/>
+<text x="28" y="40" font-family="Georgia, 'Times New Roman', serif" font-size="19" fill="#131c38" font-weight="bold">The leakage ladder: the same checkpoint under four protocols</text>
+<text x="28" y="62" font-family="SFMono-Regular, Consolas, monospace" font-size="11.5" fill="#5b6479">next-category top-1 delta with entity-level paired intervals · results/ladder.json</text>
+<line x1="90" x2="820" y1="183.41739849097516" y2="183.41739849097516" stroke="#6b7280" stroke-dasharray="5 5"/>
+<text x="80" y="187.41739849097516" text-anchor="end" font-family="SFMono-Regular, Consolas, monospace" font-size="11" fill="#5b6479">0</text>
+<line x1="181.25" x2="181.25" y1="111.8149391476559" y2="100.46586039642531" stroke="#1f4fd8" stroke-width="3" stroke-linecap="round"/>
+<line x1="174.25" x2="188.25" y1="111.8149391476559" y2="111.8149391476559" stroke="#1f4fd8" stroke-width="2"/>
+<line x1="174.25" x2="188.25" y1="100.46586039642531" y2="100.46586039642531" stroke="#1f4fd8" stroke-width="2"/>
+<circle cx="181.25" cy="106.1793487653564" r="7" fill="#1f4fd8" stroke="#fffdf9" stroke-width="2"/>
+<text x="193.25" y="111.1793487653564" font-family="Georgia, 'Times New Roman', serif" font-size="14.5" fill="#131c38" font-weight="bold">+0.0590</text>
+<text x="181.25" y="270" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="11.5" fill="#131c38">L0</text>
+<text x="181.25" y="288" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="10.5" fill="#5b6479">Permissive,</text>
+<text x="181.25" y="302" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="10.5" fill="#5b6479">shared accounts</text>
+<line x1="363.75" x2="363.75" y1="232.15060470268102" y2="198.04095873570543" stroke="#a03f1e" stroke-width="3" stroke-linecap="round"/>
+<line x1="356.75" x2="370.75" y1="232.15060470268102" y2="232.15060470268102" stroke="#a03f1e" stroke-width="2"/>
+<line x1="356.75" x2="370.75" y1="198.04095873570543" y2="198.04095873570543" stroke="#a03f1e" stroke-width="2"/>
+<circle cx="363.75" cy="214.86730898223323" r="7" fill="#a03f1e" stroke="#fffdf9" stroke-width="2"/>
+<text x="375.75" y="219.86730898223323" font-family="Georgia, 'Times New Roman', serif" font-size="14.5" fill="#131c38" font-weight="bold">-0.0240</text>
+<text x="363.75" y="270" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="11.5" fill="#131c38">L1</text>
+<text x="363.75" y="288" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="10.5" fill="#5b6479">Entity-disjoint</text>
+<text x="363.75" y="302" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="10.5" fill="#5b6479">split</text>
+<line x1="546.25" x2="546.25" y1="173.2845303601596" y2="151.21271969362758" stroke="#1f4fd8" stroke-width="3" stroke-linecap="round"/>
+<line x1="539.25" x2="553.25" y1="173.2845303601596" y2="173.2845303601596" stroke="#1f4fd8" stroke-width="2"/>
+<line x1="539.25" x2="553.25" y1="151.21271969362758" y2="151.21271969362758" stroke="#1f4fd8" stroke-width="2"/>
+<circle cx="546.25" cy="162.66010870473164" r="7" fill="#1f4fd8" stroke="#fffdf9" stroke-width="2"/>
+<text x="558.25" y="167.66010870473164" font-family="Georgia, 'Times New Roman', serif" font-size="14.5" fill="#131c38" font-weight="bold">+0.0159</text>
+<text x="546.25" y="270" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="11.5" fill="#131c38">L2</text>
+<text x="546.25" y="288" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="10.5" fill="#5b6479">As-of</text>
+<text x="546.25" y="302" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="10.5" fill="#5b6479">embeddings</text>
+<line x1="728.75" x2="728.75" y1="169.94241609790163" y2="138.57835947156119" stroke="#b8860b" stroke-width="3" stroke-linecap="round"/>
+<line x1="721.75" x2="735.75" y1="169.94241609790163" y2="169.94241609790163" stroke="#b8860b" stroke-width="2"/>
+<line x1="721.75" x2="735.75" y1="138.57835947156119" y2="138.57835947156119" stroke="#b8860b" stroke-width="2"/>
+<circle cx="728.75" cy="154.84123883356892" r="7" fill="#b8860b" stroke="#fffdf9" stroke-width="2"/>
+<text x="740.75" y="159.84123883356892" font-family="Georgia, 'Times New Roman', serif" font-size="14.5" fill="#131c38" font-weight="bold">+0.0218</text>
+<text x="728.75" y="270" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="11.5" fill="#131c38">L3</text>
+<text x="728.75" y="288" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="10.5" fill="#5b6479">Baseline gets</text>
+<text x="728.75" y="302" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="10.5" fill="#5b6479">aggregates (shipped)</text>
+<text x="28" y="318" font-family="SFMono-Regular, Consolas, monospace" font-size="11" fill="#5b6479">The permissive protocol reports 2.7x the shipped gain; the guards, not the model, account for the difference.</text>
+</svg>

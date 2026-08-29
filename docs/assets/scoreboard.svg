@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 240" font-size="13">
+<rect width="880" height="240" rx="14" fill="#f7f4ee"/>
+<rect x="1" y="1" width="878" height="238" rx="13" fill="none" stroke="#d9d4c8"/>
+<text x="28" y="40" font-family="Georgia, 'Times New Roman', serif" font-size="19" fill="#131c38" font-weight="bold">27 pre-registered comparisons, one verdict each</text>
+<text x="28" y="62" font-family="SFMono-Regular, Consolas, monospace" font-size="11.5" fill="#5b6479">one row per registered metric, depth, seed and arm · results/protocol_value.json</text>
+<circle cx="54" cy="118" r="10" fill="#0e7c62"/>
+<circle cx="81" cy="118" r="10" fill="#0e7c62"/>
+<circle cx="108" cy="118" r="10" fill="#0e7c62"/>
+<circle cx="135" cy="118" r="10" fill="#0e7c62"/>
+<circle cx="162" cy="118" r="10" fill="#0e7c62"/>
+<circle cx="189" cy="118" r="10" fill="#0e7c62"/>
+<circle cx="216" cy="118" r="10" fill="#0e7c62"/>
+<text x="135" y="162" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#131c38" font-weight="bold">7</text>
+<text x="135" y="181" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="11" fill="#5b6479">Cleared zero</text>
+<circle cx="279" cy="118" r="10" fill="#a03f1e"/>
+<circle cx="306" cy="118" r="10" fill="#a03f1e"/>
+<circle cx="333" cy="118" r="10" fill="#a03f1e"/>
+<circle cx="360" cy="118" r="10" fill="#a03f1e"/>
+<circle cx="387" cy="118" r="10" fill="#a03f1e"/>
+<circle cx="414" cy="118" r="10" fill="#a03f1e"/>
+<circle cx="441" cy="118" r="10" fill="#a03f1e"/>
+<text x="360" y="162" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#131c38" font-weight="bold">7</text>
+<text x="360" y="181" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="11" fill="#5b6479">Wrong side of zero</text>
+<circle cx="504" cy="118" r="10" fill="#6b7280"/>
+<circle cx="531" cy="118" r="10" fill="#6b7280"/>
+<circle cx="558" cy="118" r="10" fill="#6b7280"/>
+<circle cx="585" cy="118" r="10" fill="#6b7280"/>
+<circle cx="612" cy="118" r="10" fill="#6b7280"/>
+<circle cx="639" cy="118" r="10" fill="#6b7280"/>
+<circle cx="666" cy="118" r="10" fill="#6b7280"/>
+<circle cx="693" cy="118" r="10" fill="#6b7280"/>
+<circle cx="720" cy="118" r="10" fill="#6b7280"/>
+<circle cx="747" cy="118" r="10" fill="#6b7280"/>
+<circle cx="774" cy="118" r="10" fill="#6b7280"/>
+<circle cx="801" cy="118" r="10" fill="#6b7280"/>
+<circle cx="828" cy="118" r="10" fill="#6b7280"/>
+<text x="666" y="162" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#131c38" font-weight="bold">13</text>
+<text x="666" y="181" text-anchor="middle" font-family="SFMono-Regular, Consolas, monospace" font-size="11" fill="#5b6479">Straddle zero</text>
+<text x="28" y="218" font-family="SFMono-Regular, Consolas, monospace" font-size="11" fill="#5b6479">The wrong side includes the offers exhibit's own pre-registered primary endpoint. All 27 are reported at one size.</text>
+</svg>

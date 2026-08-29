@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 320" font-size="13">
+<rect width="880" height="320" rx="14" fill="#f7f4ee"/>
+<rect x="1" y="1" width="878" height="318" rx="13" fill="none" stroke="#d9d4c8"/>
+<text x="28" y="40" font-family="Georgia, 'Times New Roman', serif" font-size="19" fill="#131c38" font-weight="bold">Three heads, the headline measurement of each</text>
+<text x="28" y="62" font-family="SFMono-Regular, Consolas, monospace" font-size="11.5" fill="#5b6479">offers on randomized Criteo · corridors on SingStat arrivals · protection on synthetic TabFormer</text>
+<text x="58.0" y="100" font-family="SFMono-Regular, Consolas, monospace" font-size="12" fill="#131c38" font-weight="bold" letter-spacing="2">OFFERS</text>
+<text x="58.0" y="125" font-family="SFMono-Regular, Consolas, monospace" font-size="10.5" fill="#5b6479">Uplift ranking</text>
+<rect x="58.0" y="132" width="226.7" height="14" rx="7" fill="#1f4fd8"/>
+<text x="288.7" y="144" font-family="Georgia, 'Times New Roman', serif" font-size="13.5" fill="#131c38" font-weight="bold">59.3%</text>
+<text x="58.0" y="177" font-family="SFMono-Regular, Consolas, monospace" font-size="10.5" fill="#5b6479">Response ranking</text>
+<rect x="58.0" y="184" width="185.8" height="14" rx="7" fill="#6b7280"/>
+<text x="247.8" y="196" font-family="Georgia, 'Times New Roman', serif" font-size="13.5" fill="#131c38" font-weight="bold">48.6%</text>
+<text x="58.0" y="292" font-family="SFMono-Regular, Consolas, monospace" font-size="9.5" fill="#5b6479">randomized holdout of 4,193,878 rows</text>
+<line x1="306.6666666666667" x2="306.6666666666667" y1="84" y2="296" stroke="#d9d4c8"/>
+<text x="324.6666666666667" y="100" font-family="SFMono-Regular, Consolas, monospace" font-size="12" fill="#131c38" font-weight="bold" letter-spacing="2">CORRIDORS</text>
+<text x="324.6666666666667" y="125" font-family="SFMono-Regular, Consolas, monospace" font-size="10.5" fill="#5b6479">Seasonal naive</text>
+<rect x="324.6666666666667" y="132" width="192.9" height="14" rx="7" fill="#6b7280"/>
+<text x="521.6" y="144" font-family="Georgia, 'Times New Roman', serif" font-size="13.5" fill="#131c38" font-weight="bold">0.5302</text>
+<text x="324.6666666666667" y="177" font-family="SFMono-Regular, Consolas, monospace" font-size="10.5" fill="#5b6479">Model alone</text>
+<rect x="324.6666666666667" y="184" width="226.7" height="14" rx="7" fill="#a03f1e"/>
+<text x="555.3" y="196" font-family="Georgia, 'Times New Roman', serif" font-size="13.5" fill="#131c38" font-weight="bold">0.623</text>
+<text x="324.6666666666667" y="229" font-family="SFMono-Regular, Consolas, monospace" font-size="10.5" fill="#5b6479">Naive + model blend</text>
+<rect x="324.6666666666667" y="236" width="184.1" height="14" rx="7" fill="#0e7c62"/>
+<text x="512.8" y="248" font-family="Georgia, 'Times New Roman', serif" font-size="13.5" fill="#131c38" font-weight="bold">0.5061</text>
+<text x="324.6666666666667" y="292" font-family="SFMono-Regular, Consolas, monospace" font-size="9.5" fill="#5b6479">blend pre-registered at fixed equal weights</text>
+<line x1="573.3333333333334" x2="573.3333333333334" y1="84" y2="296" stroke="#d9d4c8"/>
+<text x="591.3333333333334" y="100" font-family="SFMono-Regular, Consolas, monospace" font-size="12" fill="#131c38" font-weight="bold" letter-spacing="2">PROTECTION</text>
+<text x="591.3333333333334" y="125" font-family="SFMono-Regular, Consolas, monospace" font-size="10.5" fill="#5b6479">Counting alone</text>
+<rect x="591.3333333333334" y="132" width="88.2" height="14" rx="7" fill="#6b7280"/>
+<text x="683.5" y="144" font-family="Georgia, 'Times New Roman', serif" font-size="13.5" fill="#131c38" font-weight="bold">0.1282</text>
+<text x="591.3333333333334" y="177" font-family="SFMono-Regular, Consolas, monospace" font-size="10.5" fill="#5b6479">Model alone</text>
+<rect x="591.3333333333334" y="184" width="92.0" height="14" rx="7" fill="#1f4fd8"/>
+<text x="687.3" y="196" font-family="Georgia, 'Times New Roman', serif" font-size="13.5" fill="#131c38" font-weight="bold">0.1338</text>
+<text x="591.3333333333334" y="229" font-family="SFMono-Regular, Consolas, monospace" font-size="10.5" fill="#5b6479">Both together</text>
+<rect x="591.3333333333334" y="236" width="226.7" height="14" rx="7" fill="#0e7c62"/>
+<text x="822.0" y="248" font-family="Georgia, 'Times New Roman', serif" font-size="13.5" fill="#131c38" font-weight="bold">0.3296</text>
+<text x="591.3333333333334" y="292" font-family="SFMono-Regular, Consolas, monospace" font-size="9.5" fill="#5b6479">combination is post hoc, in no pre-registered count</text>
+</svg>
