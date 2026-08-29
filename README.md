@@ -2,9 +2,18 @@
 
 **One transaction backbone serving three growth heads, with a measurement layer that certifies lift instead of asserting it.**
 
-Entry for the AMEX AI Hackathon 2026 (Growth theme) by Team WGG, National University of Singapore. The interactive entry, with every figure bound to a committed results file, is published at **[thylinao1.github.io/oneloop-site-k7q2](https://thylinao1.github.io/oneloop-site-k7q2/)**.
+Entry for the AMEX AI Hackathon 2026 (Growth theme) by Team WGG, National University of Singapore.
+
+| | |
+|---|---|
+| **Project website** | [thylinao1.github.io/oneloop-site-k7q2](https://thylinao1.github.io/oneloop-site-k7q2/), the full report with every figure bound to a committed results file |
+| **The film** | [youtu.be/g0ptMP5NRPo](https://youtu.be/g0ptMP5NRPo), One Loop in ten minutes, animated |
+| **Podcast** | [the website, press Play](https://thylinao1.github.io/oneloop-site-k7q2/#podbox), an exploration and discussion of the project, 22 minutes |
+| **Link sheet** | [docs/OneLoop-Banner.pdf](docs/OneLoop-Banner.pdf), a one-page banner with all of the above as QR codes |
 
 This repository holds the pipeline that produced every number in the entry: the pretraining and evaluation code, the frozen result files, and the pre-registrations that were committed before the runs they govern.
+
+[![One Loop link sheet](docs/assets/banner.png)](docs/OneLoop-Banner.pdf)
 
 ---
 
@@ -94,7 +103,7 @@ prereg/     pre-registrations, committed before the runs they govern
 scripts/    the pipeline: backbone, heads, evaluation ladder, safety, narratives
 results/    frozen result files; every figure in the entry is bound to a path here
 citations.json  external claims with their sources
-docs/assets/    the charts embedded in this file, generated from results/
+docs/           the link sheet (OneLoop-Banner.pdf) and the charts embedded in this file
 ```
 
 - `prereg/` holds eight pre-registration documents. Each fixes its metrics, arms, splits and abort criteria before the first run, and each states that the result ships whichever way it lands.
